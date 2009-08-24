@@ -1,0 +1,77 @@
+
+- read emutime into local variable when possible and write back when done.
+
+
+- configure devices in xml (e.g. devices.xml contains all info to construct the memorymap and iomap for an fmpac)
+
+config.xml:
+
+<configuration>
+	<name>nms8080</name>
+	<insert>
+		<slot>1-1</slot>
+	  	<device name="fmpac">
+	</insert>
+</configuration>
+
+
+devices.xml:
+
+<devices>
+
+   <device>
+	<name>nowindInterface</name>
+	<memory begin=0x4000 end=0x6000>
+		<function>mapper</function
+	</memory>
+     
+   </device>
+  
+
+emutime:
+  - waarneer Uint32 voor emutime wordt gebruikt gaan berekeningen voor d(t) / offsets altijd goed, ook als 2^32 berijkt wordt.
+  
+  scheduleNextInterrupt:
+  
+  t1 = emutime
+  t2 = next_interrupt_time
+  dt = t2 - t1
+  
+  
+  check welke interrupt de volgende is:
+  - check welke interrupt de grootste dt heeft (dat is degene die als eerste uitgevoerd moet worden)
+  
+  - schedule een interrupt op tijd 2^32-1 zodat de bovenstaande check _altijd_ geldig is.
+  
+  
+  emutime = 20
+  
+  int1 = 10, dt = 20-10 = 10
+  int2 = 15, dt = 20-15 = 5
+  int3 = 25, dt = 20-25 = 
+  
+  
+  
+  
+
+- audio buffer:
+  -    
+  
+  
+create base-class for:
+
+EmuComponent {
+
+public:
+    EmuComponent();
+    virtual ~EmuComponent();
+    
+    virtual initialize();
+    
+    void loadState() abstract;
+    void saveState() abstract;
+
+protected:
+    Emulator* mEmulator;
+
+}
