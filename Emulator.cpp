@@ -6,7 +6,7 @@ Emulator::Emulator(void)
 {
 }
 
-Emulator* Emulator::Instance() 
+Emulator* Emulator::Instance()
 {
 	static Emulator lInstance;
 	return &lInstance;
