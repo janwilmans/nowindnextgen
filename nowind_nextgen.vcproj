@@ -199,15 +199,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Event.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Event.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FastDelegate.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Interrupt.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Interrupt.h"
 				>
 			</File>
 			<File
@@ -256,6 +256,18 @@
 			</File>
 			<File
 				RelativePath=".\cpu\Z80.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="tests"
+			>
+			<File
+				RelativePath=".\EventUnitTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EventUnitTest.h"
 				>
 			</File>
 		</Filter>
