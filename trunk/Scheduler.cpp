@@ -11,29 +11,29 @@ Scheduler::~Scheduler(void)
 {
 }
 
-Uint32 Scheduler::Range(emuTimeType aTime)
+void Scheduler::addEvent(emuTimeType aIntTime, EventDelegate aCallback)
 {
-    Uint32 lSizeOfRange = sizeof(emuTimeType);
-    printf("lSizeOfRange: %u\n", lSizeOfRange);
-    
-    return 4;
+    mEventList.push_back(Event(aIntTime, aCallback));
 }
 
-bool Scheduler::ExecuteInterrupt(emuTimeType aIntTime)
+void Scheduler::run()
 {
-    Uint32 lRangeInt = Range(aIntTime);
-    Uint32 lNextIntRange = (lRangeInt+1) & (Ranges-1);
-    Uint32 lRange = Range(mTime);
-
-    if (lRange == lNextIntRange ) return true;
-    if (lRangeInt == lRange && lRangeInt <= lRange) return true;
-    return false;
+    int t=0;
+    for (EventIterator i = mEventList.begin();i != mEventList.end(); i++)
+    {
+        t++;
+        Event& lEvent = *i;
+        printf("lEvent: %s\n", lEvent.ToString().c_str());
+        lEvent.Callback(t);
+    }
 }
 
-bool Scheduler::NextRange(emuTimeType aIntTime, emuTimeType aEmuTime)
+/*
+// moved to Schedule to prevent duplicated calculations
+bool Event::IsExpired(emuTimeType aEmuTime)
 {
-    Uint32 lRangeInt = Range(aIntTime);
-    Uint32 lNextIntRange = (lRangeInt+1) & (Ranges-1);
-    Uint32 lRangeEmu = Range(aEmuTime);
-    return lNextIntRange == lRangeEmu;
+    if (mHigh && (aEmuTime < lowerBound)) return true;
+    if (mTime < aEmuTime) return false;
+    return true;
 }
+*/

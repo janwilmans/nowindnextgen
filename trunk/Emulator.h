@@ -1,9 +1,9 @@
 #pragma once
 
 #include <list>
-#include "Interrupt.h"
+#include "Event.h"
 
-typedef std::list<Interrupt> InterruptList;
+typedef std::list<Event> EventList;
 
 //forward declarations
 class Scheduler;
@@ -21,6 +21,6 @@ public:
     void interruptTestMethod(emuTimeType aTime);
 private:
     Scheduler* mScheduler;
-    InterruptList mInterruptList;
+    EventList mEventList;
 
 };
