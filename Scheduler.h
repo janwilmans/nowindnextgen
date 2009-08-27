@@ -13,7 +13,8 @@ public:
     virtual ~Scheduler(void);
 
     void addEvent(emuTimeType aIntTime, EventDelegate aCallback);
-    void run();
+    bool getNextEvent(emuTimeType, Event&, emuTimeType&);
+    void testrun(emuTimeType, Uint32);
 protected:
     emuTimeType mTime;
     Uint32 mRange;

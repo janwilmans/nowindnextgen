@@ -14,11 +14,17 @@ typedef fastdelegate::FastDelegate1<emuTimeType> EventDelegate;   // returns voi
 class Event
 {
 public:
+    Event();
     Event(emuTimeType aTime, EventDelegate aDelegate);
     virtual ~Event(void);
 
     void Callback(emuTimeType aTime);
     std::string ToString();
+
+    emuTimeType GetTime();
+
+    // assignment operator
+    Event& operator= (const Event& other);
 
 protected:
     emuTimeType mTime;

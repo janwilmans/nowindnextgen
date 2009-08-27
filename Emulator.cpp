@@ -18,15 +18,23 @@ Emulator* Emulator::Instance()
 void Emulator::initialize(void)
 {
     mScheduler = new Scheduler();
+    mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(-6, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(0, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
 
-    mScheduler->run();
+    mScheduler->testrun(-10, 20);
 }
 
+void Emulator::endOfRangeEvent(emuTimeType aTime)
+{
+    printf("I am the endOfRangeEvent at emutime: %d\n", aTime);
+    mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
+}
 
 void Emulator::interruptTestMethod(emuTimeType aTime)
 {
-    printf("I am the interruptTestMethod with %d\n", aTime);
+    printf("I am the interruptTestMethod at emutime: %d\n", aTime);
 }
 
 Emulator::~Emulator(void)

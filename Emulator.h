@@ -16,6 +16,7 @@ public:
     static Emulator* Instance();
 
     void initialize();
+    void endOfRangeEvent(emuTimeType aTime);
 
     //test methods
     void interruptTestMethod(emuTimeType aTime);
