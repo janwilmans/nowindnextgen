@@ -1,4 +1,5 @@
 #include "Scheduler.h"
+#include "Debug.h"
 #include <stdio.h>
 
 static Uint32 Ranges = 4;
@@ -16,24 +17,40 @@ void Scheduler::addEvent(emuTimeType aIntTime, EventDelegate aCallback)
     mEventList.push_back(Event(aIntTime, aCallback));
 }
 
-void Scheduler::run()
+bool Scheduler::getNextEvent(emuTimeType aTime, Event& nextEvent, emuTimeType& nextTime)
 {
-    int t=0;
-    for (EventIterator i = mEventList.begin();i != mEventList.end(); i++)
+    if (mEventList.begin() == mEventList.end())
     {
-        t++;
-        Event& lEvent = *i;
-        printf("lEvent: %s\n", lEvent.ToString().c_str());
-        lEvent.Callback(t);
+        return false;
     }
-}
 
-/*
-// moved to Schedule to prevent duplicated calculations
-bool Event::IsExpired(emuTimeType aEmuTime)
-{
-    if (mHigh && (aEmuTime < lowerBound)) return true;
-    if (mTime < aEmuTime) return false;
+    nextEvent = *mEventList.begin();
+    nextTime = nextEvent.GetTime();
+    mEventList.pop_front();    
     return true;
 }
-*/
+
+void Scheduler::testrun(emuTimeType startTime, Uint32 aTimes)
+{
+    emuTimeType emuTime = startTime;
+
+    Event nextEvent;
+    emuTimeType nextEventTime = 0;
+    bool lResult = getNextEvent(startTime, nextEvent, nextEventTime);
+    NW_ASSERT(lResult);
+
+    Uint32 i = 0;
+    while (i < aTimes)
+    {
+        printf("Emutime: %u\n", emuTime);
+        while (nextEventTime >= emuTime)
+        {
+            printf("lEvent: %s\n", nextEvent.ToString().c_str());
+            nextEvent.Callback(i);
+            bool lResult = getNextEvent(startTime, nextEvent, nextEventTime);
+            NW_ASSERT(lResult);
+        }
+        i++;
+        emuTime++;
+    }
+}
