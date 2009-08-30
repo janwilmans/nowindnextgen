@@ -94,11 +94,6 @@ case 0x02:
         endOfExercise();
 		break;
 #endif
-#ifndef ZEXALL
-case 0x03:
-		nextInterrupt = emuTime;              // jan: wat is dit?
-		break;
-#endif
 
 // 8-bit load group
 case 0x57:      // ld a,i

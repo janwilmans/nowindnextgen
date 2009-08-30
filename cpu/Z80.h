@@ -51,7 +51,9 @@ typedef fastdelegate::FastDelegate2<nw_word, nw_byte> writeDelegate;   // return
 #define WRITEMEM writeMem
 #define WRITEMEM16 writeMem16
 
-class Z80 {
+#include "cpu/ICPU.h"
+
+class Z80 : public ICPU {
 
 public:
 	Z80();
@@ -105,12 +107,12 @@ private:
 	inline nw_byte	opcodeFetch(nw_word) inline_after;
 	void            debugInstuctionCounter();
 
-	void            writeIo(nw_word, nw_byte);
+	void            writeIo(nw_word, nw_word);
 	nw_byte         readIo(nw_word);
 
 	inline nw_byte	readMem(nw_word) inline_after;
 	inline nw_word	readMem16(nw_word) inline_after;
-	inline void     writeMem(nw_word,nw_byte) inline_after;
+	inline void     writeMem(nw_word,nw_word) inline_after;
 	inline void     writeMem16(nw_word,nw_word) inline_after;	
 	
 public:
@@ -119,7 +121,7 @@ public:
 	void 			writeMemPublic(nw_word address, nw_byte value);
 	void 			writeMem16Public(nw_word address, nw_word value);
 
-    emuTimeType     nextInterrupt;
+    //emuTimeType     nextInterrupt;
 	unsigned long   cpuFrequency;
 
 	nw_word         start_test_nr;
@@ -132,7 +134,7 @@ public:
 	void            intCPU(nw_byte);
 	void            start(nw_word);
 
-	void            executeInstructions();
+	void            ExecuteInstructionsUntil(emuTimeType endTime);
 
 	void            saveState();
 	void            loadState();

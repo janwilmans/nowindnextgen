@@ -17,6 +17,43 @@ void Scheduler::addEvent(emuTimeType aIntTime, EventDelegate aCallback)
     mEventList.push_back(Event(aIntTime, aCallback));
 }
 
+void Scheduler::runUsing(ICPU *aCpu)
+{
+    emuTimeType emuTime = 0;
+    EventIterator possibleNextEvent = mEventList.end();
+    bool lEndOfRangeEvent = true;
+    if (mEventList.begin() != mEventList.end())
+    {
+        // the event list is not empty
+        for (EventIterator i=mEventList.begin();i != mEventList.end();i++)
+        {
+            Event lEvent = *i;
+            emuTimeType eventEmuTime = lEvent.GetTime();
+            if (emuTime > upperBound && eventEmuTime < lowerBound)
+            {
+                // exceptional case where even though eventEmuTime < emuTime,
+                // it should not be executed. (emutime is nearing the end of its range)
+                continue;
+            }
+            if (eventEmuTime >= emuTime) 
+            {
+                if (possibleNextEvent == mEventList.end()) 
+                {
+                    possibleNextEvent = i;
+                }
+                else
+                {
+                    
+                }
+                // we have found an event we should execute, but it might not be the first / oldest
+
+            }
+            //if (lEvent.GetTime() >
+
+        }
+    }
+}
+
 bool Scheduler::getNextEvent(emuTimeType aTime, Event& nextEvent, emuTimeType& nextTime)
 {
     if (mEventList.begin() == mEventList.end())
@@ -47,7 +84,9 @@ void Scheduler::testrun(emuTimeType startTime, Uint32 aTimes)
         {
             printf("lEvent: %s\n", nextEvent.ToString().c_str());
             nextEvent.Callback(i);
-            bool lResult = getNextEvent(startTime, nextEvent, nextEventTime);
+            bool lResult = getNextEvent(emuTime, nextEvent, nextEventTime);
+            //if (nextEvent.isEndOfRange()) 
+  
             NW_ASSERT(lResult);
         }
         i++;
