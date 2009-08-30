@@ -235,6 +235,14 @@
 			Name="cpu"
 			>
 			<File
+				RelativePath=".\cpu\DummyCpu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpu\ICPU.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cpu\opcodes.inc"
 				>
 			</File>

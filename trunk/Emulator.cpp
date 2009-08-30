@@ -1,6 +1,7 @@
 #include "Emulator.h"
 #include "Scheduler.h"
 #include "Event.h"
+#include "cpu/DummyCpu.h"
 
 using namespace fastdelegate;
 
@@ -18,12 +19,15 @@ Emulator* Emulator::Instance()
 void Emulator::initialize(void)
 {
     mScheduler = new Scheduler();
+
+    DummyCpu* cpu = new DummyCpu();
+
     mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-6, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(0, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
 
-    mScheduler->testrun(-10, 20);
+    mScheduler->runUsing(cpu);
 }
 
 void Emulator::endOfRangeEvent(emuTimeType aTime)

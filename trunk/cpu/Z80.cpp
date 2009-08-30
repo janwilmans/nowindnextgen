@@ -213,7 +213,7 @@ void Z80::abortEmulator() {
 // todo: optimize this method by copying the emutime into a local variable, this will require
 // passing the actual emutime at every readMem/writeMem readIO/writeIO
 // put the localemutime back into global emutime at exit of executeInstructions()
-void Z80::executeInstructions() {
+void Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
 
 		//CheckSanity();
         // TODO: 1 instruction is always executed before the next interrupt occurs,
@@ -316,7 +316,7 @@ void Z80::executeInstructions() {
     			dumpCpuInfo();
     		}
     #endif
-    } while(emuTime < nextInterrupt);      // end of while-not-next-interrupt
+    } while(emuTime < endTime);      // end of while-not-next-interrupt
 }
 
 /*! \brief reads an 8 bit value from memory
@@ -402,7 +402,7 @@ inline nw_word Z80::readMem16(nw_word address) {
  *  This method also includes a check for writing to address 0xFFFF 
  *  that is used for selecting the sub-slot
  */
-inline void Z80::writeMem(nw_word address, nw_byte value) {
+inline void Z80::writeMem(nw_word address, nw_word value) {
 
     NW_ASSERT(value < 0x100);
 	NW_ASSERT(address < 0x10000);
@@ -443,7 +443,7 @@ nw_word	Z80::readMem16Public(nw_word address) { return readMem16(address); }
 void 	Z80::writeMemPublic(nw_word address, nw_byte value) { writeMem(address, value); }	
 void 	Z80::writeMem16Public(nw_word address, nw_word value) { writeMem16(address, value); }
 
-void Z80::writeIo(nw_word port, nw_byte value) {
+void Z80::writeIo(nw_word port, nw_word value) {
 
 	NW_ASSERT(port < 0x100);
 	NW_ASSERT(value < 0x100);
