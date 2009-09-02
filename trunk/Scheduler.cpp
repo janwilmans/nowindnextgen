@@ -14,44 +14,43 @@ Scheduler::~Scheduler(void)
 
 void Scheduler::addEvent(emuTimeType aIntTime, EventDelegate aCallback)
 {
+	// events can only be scheduled in the future!
+	NW_ASSERT (aIntTime > Emulator::emuTime);
+
     mEventList.push_back(Event(aIntTime, aCallback));
+	mEventList.sort();
 }
 
 void Scheduler::runUsing(ICPU *aCpu)
 {
-    emuTimeType emuTime = 0;
-    EventIterator possibleNextEvent = mEventList.end();
-    bool lEndOfRangeEvent = true;
-    if (mEventList.begin() != mEventList.end())
-    {
-        // the event list is not empty
-        for (EventIterator i=mEventList.begin();i != mEventList.end();i++)
-        {
-            Event lEvent = *i;
-            emuTimeType eventEmuTime = lEvent.GetTime();
-            if (emuTime > upperBound && eventEmuTime < lowerBound)
-            {
-                // exceptional case where even though eventEmuTime < emuTime,
-                // it should not be executed. (emutime is nearing the end of its range)
-                continue;
-            }
-            if (eventEmuTime >= emuTime) 
-            {
-                if (possibleNextEvent == mEventList.end()) 
-                {
-                    possibleNextEvent = i;
-                }
-                else
-                {
-                    
-                }
-                // we have found an event we should execute, but it might not be the first / oldest
+	emuTimeType nextEventTime = 0;
+	EventIterator previousEvent = mEventList.begin();
+	for (;;)  // for ever
+	{
+		// determine current event
+		EventIterator currentEvent = previousEvent;
+		currentEvent++;
 
-            }
-            //if (lEvent.GetTime() >
+		// execute event
+		currentEvent->Callback(Emulator::emuTime, currentEvent->GetTime());
 
-        }
-    }
+		// delete previous event
+		mEventList.erase(previousEvent);
+
+		previousEvent = currentEvent;
+		
+		// deteremine next event
+		EventIterator nextEvent = currentEvent;
+		nextEvent++;
+		if (nextEvent == mEventList.end()) {
+			nextEvent = mEventList.begin();
+		}
+
+		nextEventTime = nextEvent->GetTime();
+		Emulator::emuTime = aCpu->ExecuteInstructionsUntil(nextEventTime);
+		
+	}
+
 }
 
 bool Scheduler::getNextEvent(emuTimeType aTime, Event& nextEvent, emuTimeType& nextTime)
@@ -83,7 +82,7 @@ void Scheduler::testrun(emuTimeType startTime, Uint32 aTimes)
         while (nextEventTime >= emuTime)
         {
             printf("lEvent: %s\n", nextEvent.ToString().c_str());
-            nextEvent.Callback(i);
+            nextEvent.Callback(i,i);
             bool lResult = getNextEvent(emuTime, nextEvent, nextEventTime);
             //if (nextEvent.isEndOfRange()) 
   

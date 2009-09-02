@@ -213,7 +213,7 @@ void Z80::abortEmulator() {
 // todo: optimize this method by copying the emutime into a local variable, this will require
 // passing the actual emutime at every readMem/writeMem readIO/writeIO
 // put the localemutime back into global emutime at exit of executeInstructions()
-void Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
+emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
 
 		//CheckSanity();
         // TODO: 1 instruction is always executed before the next interrupt occurs,
@@ -317,6 +317,7 @@ void Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
     		}
     #endif
     } while(emuTime < endTime);      // end of while-not-next-interrupt
+	return emuTime;
 }
 
 /*! \brief reads an 8 bit value from memory

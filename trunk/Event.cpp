@@ -13,17 +13,20 @@ Event::Event(emuTimeType aTime, EventDelegate aDelegate)
 {
     mTime = aTime;
     mDelegate = aDelegate;
+
+	mDebugString = new char[100];
+	sprintf(mDebugString, "Event at: %i", mTime);
 }
 
 Event::~Event(void)
 {
 }
 
-void Event::Callback(emuTimeType aTime)
+void Event::Callback(emuTimeType emuTime, emuTimeType eventTime)
 {
     if (mDelegate != 0) 
     {
-        mDelegate(aTime);
+        mDelegate(emuTime, eventTime);
     }
 }
 
@@ -48,3 +51,9 @@ Event& Event::operator= (const Event& other)
     }
     return *this;
 }
+
+int Event::operator< (const Event& other)
+{
+    return mTime < other.mTime;
+}
+

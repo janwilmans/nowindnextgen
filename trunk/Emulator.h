@@ -14,12 +14,13 @@ public:
     Emulator(void);
     virtual ~Emulator(void);
     static Emulator* Instance();
+	static emuTimeType emuTime;
 
     void initialize();
-    void endOfRangeEvent(emuTimeType aTime);
+    void endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime);
 
     //test methods
-    void interruptTestMethod(emuTimeType aTime);
+    void interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime);
 private:
     Scheduler* mScheduler;
     EventList mEventList;

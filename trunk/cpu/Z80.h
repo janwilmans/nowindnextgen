@@ -134,7 +134,7 @@ public:
 	void            intCPU(nw_byte);
 	void            start(nw_word);
 
-	void            ExecuteInstructionsUntil(emuTimeType endTime);
+	emuTimeType		ExecuteInstructionsUntil(emuTimeType endTime);
 
 	void            saveState();
 	void            loadState();
