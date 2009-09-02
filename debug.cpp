@@ -45,7 +45,7 @@ void nw_debug(const char *cFormat, ...)
 	va_end (arg_list);
 
 	fprintf(stderr, scratch);
-#ifdef WIN32
+#ifdef _MSC_VER
     OutputDebugStringA(scratch);
 #endif
 
@@ -58,9 +58,9 @@ void nw_assert(const char* aFilename, int aLine, bool aAssertion, const char* aA
     {
         sprintf(scratch, "assertion '%s' failed at %s:%d\n", aAssertionText, aFilename, aLine);
         nw_debug(scratch);
-#ifdef WIN32
+#ifdef _MSC_VER
         MessageBoxA(0, scratch, "Assertion Failed!", MB_OK);
-        assert(false);
 #endif
+        assert(false);
     }
 }

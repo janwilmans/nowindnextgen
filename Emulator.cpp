@@ -5,6 +5,8 @@
 
 using namespace fastdelegate;
 
+emuTimeType Emulator::emuTime = 0;
+
 Emulator::Emulator(void)
 {
 }
@@ -22,23 +24,24 @@ void Emulator::initialize(void)
 
     DummyCpu* cpu = new DummyCpu();
 
-    mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
-    mScheduler->addEvent(-6, MakeDelegate(this, &Emulator::interruptTestMethod));
-    mScheduler->addEvent(0, MakeDelegate(this, &Emulator::interruptTestMethod));
-    mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
+	mScheduler->addEvent(1, MakeDelegate(this, &Emulator::interruptTestMethod));
+	mScheduler->addEvent(5, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(6, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(14, MakeDelegate(this, &Emulator::interruptTestMethod));
+    //mScheduler->addEvent(100, MakeDelegate(this, &Emulator::endOfRangeEvent));
 
     mScheduler->runUsing(cpu);
 }
 
-void Emulator::endOfRangeEvent(emuTimeType aTime)
+void Emulator::endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime)
 {
-    printf("I am the endOfRangeEvent at emutime: %d\n", aTime);
+	printf("I am the endOfRangeEvent for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
     mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
 }
 
-void Emulator::interruptTestMethod(emuTimeType aTime)
+void Emulator::interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime)
 {
-    printf("I am the interruptTestMethod at emutime: %d\n", aTime);
+	printf("I am the interruptTestMethod for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
 }
 
 Emulator::~Emulator(void)

@@ -2,9 +2,12 @@
 #ifndef ICPU_H
 #define ICPU_H
 
+#include "msxtypes.h" 
+
 class ICPU {
 
-    virtual void ExecuteInstructionsUntil(emuTimeType) = 0;
+public:
+    virtual emuTimeType ExecuteInstructionsUntil(emuTimeType) = 0;
 };
 
 #endif //ICPU_H
