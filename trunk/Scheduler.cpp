@@ -4,6 +4,8 @@
 
 static Uint32 Ranges = 4;
 
+using namespace fastdelegate;
+
 Scheduler::Scheduler()
 {
 }
@@ -12,16 +14,70 @@ Scheduler::~Scheduler(void)
 {
 }
 
-void Scheduler::addEvent(emuTimeType aIntTime, EventDelegate aCallback)
+void Scheduler::addEvent(emuTimeType aEventTime, EventDelegate aCallback)
 {
-	// events can only be scheduled in the future!
-	NW_ASSERT (aIntTime > Emulator::emuTime);
+	// events can (and should) only be scheduled in the future!
+	NW_ASSERT (aEventTime > Emulator::emuTime);
 
-    mEventList.push_back(Event(aIntTime, aCallback));
+    mEventList.push_back(Event(aEventTime, aCallback));
 	mEventList.sort();
 }
 
-void Scheduler::runUsing(ICPU *aCpu)
+void Scheduler::endOfRange(emuTimeType emuTime, emuTimeType aEventTime)
+{
+
+}
+
+void Scheduler::run(ICPU *aCpu)
+{
+    emuTimeType& emuTime = Emulator::emuTime;
+    Event endOfRangeEvent(-1, MakeDelegate(this, &Scheduler::endOfRange));
+    Event* currentEvent = 0;
+	emuTimeType nextEventTime = 0;
+	EventIterator current = mEventList.begin();
+	for (;;)  // for ever
+	{
+        if (currentEvent != 0) // is there an active event right now?
+        {
+            currentEvent->Callback(Emulator::emuTime, currentEvent->GetTime());
+            currentEvent = 0; // event callback done.
+            if (current != mEventList.end()) 
+            {
+                mEventList.erase(current);
+            }
+        }
+
+        // by default, schedule the end-of-range event
+        nextEventTime = endOfRangeEvent.GetTime();
+        currentEvent = &endOfRangeEvent;
+        current = mEventList.end();
+
+        for (EventIterator i=mEventList.begin();i != mEventList.end(); i++)
+        {
+            emuTimeType eventEmuTime = i->GetTime();
+            if (emuTime > upperBound && eventEmuTime < lowerBound)
+            {
+                // exceptional case where even though eventEmuTime < emuTime,
+                // it should not be executed. (emutime is nearing the end of its range)
+                continue;
+            }
+            if (eventEmuTime >= emuTime)
+            {
+                // found an expired event
+                if (eventEmuTime < nextEventTime) 
+                {
+                    nextEventTime = eventEmuTime;
+                    currentEvent = &(*i);
+                    current = i;
+                }
+
+            }
+        }
+		Emulator::emuTime = aCpu->ExecuteInstructionsUntil(nextEventTime);
+	}
+}
+
+void Scheduler::runNice(ICPU *aCpu)
 {
 	emuTimeType nextEventTime = 0;
 	EventIterator previousEvent = mEventList.begin();

@@ -24,13 +24,15 @@ void Emulator::initialize(void)
 
     DummyCpu* cpu = new DummyCpu();
 
-	mScheduler->addEvent(1, MakeDelegate(this, &Emulator::interruptTestMethod));
-	mScheduler->addEvent(5, MakeDelegate(this, &Emulator::interruptTestMethod));
-    mScheduler->addEvent(6, MakeDelegate(this, &Emulator::interruptTestMethod));
-    mScheduler->addEvent(14, MakeDelegate(this, &Emulator::interruptTestMethod));
-    //mScheduler->addEvent(100, MakeDelegate(this, &Emulator::endOfRangeEvent));
+	mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::interruptTestMethod));
+	mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(-6, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(-14, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(100, MakeDelegate(this, &Emulator::endOfRangeEvent));
 
-    mScheduler->runUsing(cpu);
+    Emulator::emuTime = -20;
+    mScheduler->run(cpu);
+    //mScheduler->runNice(cpu);
 }
 
 void Emulator::endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime)
