@@ -16,7 +16,9 @@ public:
     void addEvent(emuTimeType aIntTime, EventDelegate aCallback);
     bool getNextEvent(emuTimeType, Event&, emuTimeType&);
     void testrun(emuTimeType, Uint32);
-    void runUsing(ICPU*);
+    void endOfRange(emuTimeType emuTime, emuTimeType aEventTime);
+    void run(ICPU*);
+    void runNice(ICPU*);
 protected:
     emuTimeType mTime;
     Uint32 mRange;
