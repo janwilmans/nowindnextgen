@@ -41,14 +41,17 @@ void Emulator::initialize(void)
     mScheduler->addEvent(-14, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(10, MakeDelegate(this, &Emulator::endOfRangeEvent));
 
-    Emulator::emuTime = -20;
+    Emulator::emuTime = -2;
     Emulator::emuTime++;
     printf("Emulator::emuTime: %u\n", Emulator::emuTime);
     Emulator::emuTime++;
     printf("Emulator::emuTime: %u\n", Emulator::emuTime);
     Emulator::emuTime++;
+    printf("Emulator::emuTime: %u\n", Emulator::emuTime);
+    Emulator::emuTime++;
+    printf("Emulator::emuTime: %u\n", Emulator::emuTime);
 
-    printf("Emulator::emuTime: %u\n", Emulator::emuTime);
+    Emulator::emuTime = -20;
 
     mScheduler->run(cpu);
     //mScheduler->runNice(cpu);

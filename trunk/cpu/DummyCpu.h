@@ -11,7 +11,7 @@ class DummyCpu : public Z80
 		while (Emulator::emuTime < endTime)
         {
             Emulator::emuTime++;
-            printf("emuTime++: %u\n", Emulator::emuTime);
+                printf("emuTime++: %lu (%ld)\n", Emulator::emuTime, Emulator::emuTime);
         }
 		return Emulator::emuTime;
     }
