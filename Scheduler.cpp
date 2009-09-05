@@ -25,7 +25,11 @@ void Scheduler::addEvent(emuTimeType aEventTime, EventDelegate aCallback)
 
 void Scheduler::endOfRange(emuTimeType emuTime, emuTimeType aEventTime)
 {
-
+    // end of range, at execly the last number in the range?
+    if (emuTime == aEventTime)
+    {
+        Emulator::emuTime = 0;        
+    }
 }
 
 void Scheduler::run(ICPU *aCpu)

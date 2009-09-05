@@ -210,9 +210,10 @@ void Z80::abortEmulator() {
 // the amount of cycles actually executed can vary (with max. the cycles-1 of the biggest instruction)
 // because an instruction is always completely executed.
 
-// todo: optimize this method by copying the emutime into a local variable, this will require
-// passing the actual emutime at every readMem/writeMem readIO/writeIO
-// put the localemutime back into global emutime at exit of executeInstructions()
+// todo: optimize this method by copying the emutime into a local variable, 
+//   also add the 'register' compiler hint to 'endTime' and 'localEmuTime'
+//   this will require passing the actual emutime at every readMem/writeMem readIO/writeIO
+//   put the localemutime back into global emutime at exit of executeInstructions()
 emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
 
 		//CheckSanity();
@@ -316,7 +317,12 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
     			dumpCpuInfo();
     		}
     #endif
-    } while(emuTime < endTime);      // end of while-not-next-interrupt
+    } while((endTime - emuTime) > 0);      // end of while-not-next-interrupt
+
+        
+    // while(emuTime < endTime) will fail if the end-of-range event is not exactly reached!
+    // while((endTime - emuTime) > 0) will work even at the end of the range
+
 	return emuTime;
 }
 
