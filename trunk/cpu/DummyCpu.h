@@ -8,12 +8,13 @@ class DummyCpu : public Z80
 {
     virtual emuTimeType ExecuteInstructionsUntil(emuTimeType endTime) 
     {
-		while (Emulator::emuTime < endTime)
-        {
-            Emulator::emuTime++;
-                printf("emuTime++: %lu (%ld)\n", Emulator::emuTime, Emulator::emuTime);
+        emuTimeType localEmutime = Emulator::emuTime;
+        do {
+            localEmutime++;
+                printf("localEmutime++: %lu (%ld)\n", localEmutime, localEmutime);
         }
-		return Emulator::emuTime;
+		while((endTime - localEmutime) > 0);
+		return localEmutime;
     }
 };
 

@@ -39,7 +39,7 @@ void Emulator::initialize(void)
 	mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-6, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-14, MakeDelegate(this, &Emulator::interruptTestMethod));
-    mScheduler->addEvent(10, MakeDelegate(this, &Emulator::endOfRangeEvent));
+    mScheduler->addEvent(10, MakeDelegate(this, &Emulator::interruptTestMethod));
 
     Emulator::emuTime = -2;
     Emulator::emuTime++;
