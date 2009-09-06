@@ -25,58 +25,46 @@ void Scheduler::addEvent(emuTimeType aEventTime, EventDelegate aCallback)
 
 void Scheduler::endOfRange(emuTimeType emuTime, emuTimeType aEventTime)
 {
-    // end of range, at execly the last number in the range?
-    if (emuTime == aEventTime)
-    {
-        Emulator::emuTime = 0;        
-    }
+   // no longer needed?
 }
 
 void Scheduler::run(ICPU *aCpu)
 {
     emuTimeType& emuTime = Emulator::emuTime;
-    Event endOfRangeEvent(-1, MakeDelegate(this, &Scheduler::endOfRange));
-    Event* currentEvent = 0;
-	emuTimeType nextEventTime = 0;
-	EventIterator current = mEventList.begin();
 	for (;;)  // for ever
 	{
-        if (currentEvent != 0) // is there an active event right now?
-        {
-            currentEvent->Callback(Emulator::emuTime, currentEvent->GetTime());
-            currentEvent = 0; // event callback done.
-            if (current != mEventList.end()) 
-            {
-                mEventList.erase(current);
-            }
-        }
-
-        // by default, schedule the end-of-range event
-        nextEventTime = endOfRangeEvent.GetTime();
-        currentEvent = &endOfRangeEvent;
-        current = mEventList.end();
-
+        // default to end-of-range
+        emuTimeType nextEventTime = emuTime + 2000;
+        Sint32 diff = 0;
         for (EventIterator i=mEventList.begin();i != mEventList.end(); i++)
         {
             emuTimeType eventEmuTime = i->GetTime();
-            if (emuTime > upperBound && eventEmuTime < lowerBound)
+            diff = eventEmuTime - emuTime;
+            DBERR(" eventEmuTime: %u (%i), diff: %i\n", eventEmuTime, eventEmuTime, diff);
+
+            if (diff > 0)
             {
-                // exceptional case where even though eventEmuTime < emuTime,
-                // it should not be executed. (emutime is nearing the end of its range)
-                continue;
-            }
-            if (eventEmuTime >= emuTime)
-            {
-                // found an expired event
-                if (eventEmuTime < nextEventTime) 
+                // found an upcoming event
+                Sint32 diff2 = nextEventTime - eventEmuTime;
+                DBERR("diff2: %i\n", diff2);
+                if (diff2 > 0) 
                 {
                     nextEventTime = eventEmuTime;
-                    currentEvent = &(*i);
-                    current = i;
+                    DBERR("possible next event: %u continue...\n", nextEventTime);
+                    continue;
                 }
+                continue;
+            }
+            if (diff > -2000)
+            {
+                // found expired event
+                DBERR("exipired event found: %u, execute!\n", emuTime);
 
+                i->Callback(emuTime, i->GetTime());
+                i = mEventList.erase(i);
             }
         }
+        DBERR("execute from %u (%i) until: %u (%i)\n", emuTime, emuTime, nextEventTime, nextEventTime);
 		Emulator::emuTime = aCpu->ExecuteInstructionsUntil(nextEventTime);
 	}
 }
