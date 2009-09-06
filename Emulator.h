@@ -2,13 +2,14 @@
 
 #include <list>
 #include "Event.h"
+#include "Component.h"
 
 typedef std::list<Event> EventList;
 
 //forward declarations
 class Scheduler;
 
-class Emulator
+class Emulator //: public Component
 {
 public:
     Emulator(void);
@@ -17,6 +18,7 @@ public:
 	static emuTimeType emuTime;
 
     void initialize();
+    void test();
     void endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime);
 
     //test methods

@@ -14,6 +14,11 @@ Scheduler::~Scheduler(void)
 {
 }
 
+void Scheduler::initialize(void)
+{
+}
+
+
 void Scheduler::addEvent(emuTimeType aEventTime, EventDelegate aCallback)
 {
 	// events can (and should) only be scheduled in the future!
@@ -46,7 +51,6 @@ void Scheduler::run(ICPU *aCpu)
             {
                 // found an upcoming event
                 Sint32 diff2 = nextEventTime - eventEmuTime;
-                DBERR("diff2: %i\n", diff2);
                 if (diff2 > 0) 
                 {
                     nextEventTime = eventEmuTime;

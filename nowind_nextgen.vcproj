@@ -183,6 +183,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Component.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component.h"
+				>
+			</File>
+			<File
 				RelativePath=".\debug.cpp"
 				>
 			</File>
