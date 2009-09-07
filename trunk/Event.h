@@ -33,7 +33,7 @@ protected:
     bool mHigh;
 
 	// debug
-	char* mDebugString;
+	char mDebugString[100];
 
     // exposed callback to allow bind()
     EventDelegate mDelegate;

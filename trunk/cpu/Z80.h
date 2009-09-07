@@ -51,12 +51,12 @@ typedef fastdelegate::FastDelegate2<nw_word, nw_byte> writeDelegate;   // return
 #define WRITEMEM writeMem
 #define WRITEMEM16 writeMem16
 
-#include "cpu/ICPU.h"
+#include "cpu/CPU.h"
 
-class Z80 : public ICPU {
+class Z80 : public CPU {
 
 public:
-	Z80();
+	Z80(AddressBus& addressBus, IOBus& ioBus);
 	virtual ~Z80();
 private:
     Emulator* mEmulator;

@@ -33,7 +33,7 @@ void Scheduler::endOfRange(emuTimeType emuTime, emuTimeType aEventTime)
    // no longer needed?
 }
 
-void Scheduler::run(ICPU *aCpu)
+void Scheduler::run(CPU *aCpu)
 {
     emuTimeType& emuTime = Emulator::emuTime;
 	for (;;)  // for ever
@@ -73,7 +73,7 @@ void Scheduler::run(ICPU *aCpu)
 	}
 }
 
-void Scheduler::runNice(ICPU *aCpu)
+void Scheduler::runNice(CPU *aCpu)
 {
 	emuTimeType nextEventTime = 0;
 	EventIterator previousEvent = mEventList.begin();
@@ -130,10 +130,10 @@ void Scheduler::testrun(emuTimeType startTime, Uint32 aTimes)
     Uint32 i = 0;
     while (i < aTimes)
     {
-        printf("Emutime: %u\n", emuTime);
+        DBERR("Emutime: %u\n", emuTime);
         while (nextEventTime >= emuTime)
         {
-            printf("lEvent: %s\n", nextEvent.ToString().c_str());
+            DBERR("lEvent: %s\n", nextEvent.ToString().c_str());
             nextEvent.Callback(i,i);
             bool lResult = getNextEvent(emuTime, nextEvent, nextEventTime);
             //if (nextEvent.isEndOfRange()) 

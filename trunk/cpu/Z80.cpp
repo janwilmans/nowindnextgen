@@ -10,7 +10,7 @@
 using namespace std;
 using namespace fastdelegate;
 
-Z80::Z80() 
+Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 {
     DBERR("Z80 constructor...\n");
 
