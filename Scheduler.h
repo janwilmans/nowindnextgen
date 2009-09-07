@@ -19,8 +19,8 @@ public:
     bool getNextEvent(emuTimeType, Event&, emuTimeType&);
     void testrun(emuTimeType, Uint32);
     void endOfRange(emuTimeType emuTime, emuTimeType aEventTime);
-    void run(ICPU*);
-    void runNice(ICPU*);
+    void run(CPU*);
+    void runNice(CPU*);
 protected:
     emuTimeType mTime;
     Uint32 mRange;

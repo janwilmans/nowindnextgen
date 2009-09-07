@@ -13,8 +13,6 @@ Event::Event(emuTimeType aTime, EventDelegate aDelegate)
 {
     mTime = aTime;
     mDelegate = aDelegate;
-
-	mDebugString = new char[100];
 	sprintf(mDebugString, "Event at: %i", mTime);
 }
 
