@@ -27,7 +27,8 @@ void Emulator::initialize(void)
 
     AddressBus* addressBus = new AddressBus();
     IOBus* ioBus = new IOBus();
-    CPU* cpu = new Z80(*addressBus, *ioBus);
+    Z80* cpu = new Z80(*addressBus, *ioBus);
+    cpu->reset();
     mScheduler->run(cpu);
     //mScheduler->runNice(cpu);
 
@@ -70,6 +71,7 @@ void Emulator::test(void)
 
     Emulator::emuTime = -20;
 
+    cpu->reset();
     mScheduler->run(cpu);
 }
 

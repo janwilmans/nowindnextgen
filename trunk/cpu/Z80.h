@@ -62,7 +62,7 @@ private:
     Emulator* mEmulator;
 
     // for testing only
-    char memblock[64*1024];
+    nw_byte memblock[64*1024];
 
     float opcodeCounter[256];
     float opcodeCounterCB[256];

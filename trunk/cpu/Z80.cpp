@@ -36,6 +36,18 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 
 	bdosCount = 0;
 
+
+	ifstream romfile("cpu/zexall/zexall.com", ios::binary);
+	NW_ASSERT(!romfile.fail());
+
+	romfile.seekg(0, ios::end);
+	unsigned long fileSize = romfile.tellg();
+	DBERR("size of zexall.com: %u\n", fileSize); 
+	romfile.seekg(0);
+    romfile.read((char*)memblock, fileSize);
+	romfile.close();
+
+
     DBERR("Z80 constructor finished.\n");
 }
 
