@@ -61,6 +61,9 @@ public:
 private:
     Emulator* mEmulator;
 
+    // for testing only
+    char memblock[64*1024];
+
     float opcodeCounter[256];
     float opcodeCounterCB[256];
     float opcodeCounterDD[256];

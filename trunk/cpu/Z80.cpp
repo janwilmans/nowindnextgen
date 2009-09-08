@@ -35,6 +35,7 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 	}
 
 	bdosCount = 0;
+
     DBERR("Z80 constructor finished.\n");
 }
 
@@ -319,136 +320,33 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
     #endif
     } while((endTime - emuTime) > 0);      // end of while-not-next-interrupt
 
-        
     // while(emuTime < endTime) will fail if the end-of-range event is not exactly reached!
-    // while((endTime - emuTime) > 0) will work even at the end of the range
 
 	return emuTime;
 }
 
-/*! \brief reads an 8 bit value from memory
- *
- *  \address 16-bit addres to read from
- *  \return the value read
- *
- *  with readMem(nw_word) it's possible to read the 
- *  current sub-slot selection from address 0xffff
- * 
- *  this method can be inlined for speed
- */
-inline nw_byte Z80::readMem(nw_word address) {
+nw_byte Z80::readMem(nw_word address) {
 
-    NW_ASSERT(address < 0x10000);
-/*
-
-    if ((address == 0xffff) && slotSelector->possibleSubslotRead()) {
-        return (~slotSelector->getSubSlotSelection(3)) & 0xff;
-    } 
-
-    // for usbInterface testing...
-    if (slotSelector->usbInterface != 0) {
-        if (slotSelector->usbInterface->isEnabled(address)) {
-            return slotSelector->usbInterface->read(address);
-        }
-    }
-
-    // for WD279X testing...
-    if (slotSelector->wd279x != 0) {
-        if (slotSelector->wd279x->isEnabled(address)) {
-            return slotSelector->wd279x->read(address);
-        }
-    }    
-    
-    return readBlock[address >> 13][address&0x1FFF] & 0xff;
-*/
-    return 0;
-
+    return memblock[address];
 }
 
-
-/*! \brief writes a 16 bit value to memory 
- *
- *  \address 16-bit address to write to
- *  \value 16-bit value that should be written
- *
- *  This method may at some time in future also include a check for writing to address 0xFFFF 
- *  that is used for selecting the sub-slot
- * 
- * this method can be inlined for speed
- */
-inline nw_word Z80::readMem16(nw_word address) {
-
-		NW_ASSERT(address < 0x10000);
-
-#ifndef FULL_SPEED_ON
-	/* hier ook rekening houden met FFFF */
-    if (address == 0xfffe || address == 0xffff) {
-	   DBERR ("16 bits reading of address FFFF not implemented !!\n");
-//	   NW_ASSERT(false);
-	}
-#endif	
-
-// Het volgende is alleen voor de 16 bit read van de usb interface.
-// De read bevindt zich op 0x2000 - 0x3fff en is gemirrord in page 2 (0x8000 - 0x9fff)
-    if (((address >= 0x2000) && (address < 0x4000)) || ((address >= 0x8000) && (address < 0xa000))) {
-		nw_word addressHigh = (address+1) & 0xffff;
-		return readMem(address) | (readMem(addressHigh) << 8);
-    }
-
+nw_word Z80::readMem16(nw_word address)
+{
 	nw_word addressHigh = (address+1) & 0xffff;
-	return readBlock[address >> 13][address&0x1FFF] |
-		   (readBlock[addressHigh >> 13][addressHigh&0x1FFF] << 8);
+	return readMem(address) | (readMem(addressHigh) << 8);
 }
 
-
-/*! \brief writes a 8 bit value to memory (cpu space)
- *
- *  \address 16-bit addres to write to
- *  \value 8-bit value that should be written
- *
- *  This method also includes a check for writing to address 0xFFFF 
- *  that is used for selecting the sub-slot
- */
-inline void Z80::writeMem(nw_word address, nw_word value) {
-
-    NW_ASSERT(value < 0x100);
-	NW_ASSERT(address < 0x10000);
-	
-/*
-    if ((address == 0xffff) && slotSelector->possibleSubslotRead()) {
-		// only affect subslot-selection if the currently selected slot of page 3 is expanded!
-        slotSelector->setSubSlot(value);
-        return;
-    }
-	writeFunc[address >> 13](address, value);
-*/
+void Z80::writeMem(nw_word address, nw_word value) 
+{
+    memblock[address] = value;
 }
 
-/*! \brief writes a 16 bit value to memory (cpu space)
- *
- *  \address 16-bit addres to write to
- *  \value 16-bit value that should be written
- *
- * cpu space refers to the fact the this routine does not write to memory 
- * directly but as a real z80 would, namely accessing 64 KB at one time
- * through 4 pages of 16kb 
- *
- */
-inline void Z80::writeMem16(nw_word address, nw_word value) {
-
-    NW_ASSERT(value < 0x10000);
-    
-	// this will happen when sp is decremented and the result is below 0
-    NW_ASSERT(address < 0x10000);
-	nw_word addressHigh = (address+1) & 0xffff;
-	writeFunc[address >> 13](address, value & 0xff);
-	writeFunc[addressHigh >> 13](addressHigh, value >> 8);	
+void Z80::writeMem16(nw_word address, nw_word value) 
+{
+    nw_word addressHigh = (address+1) & 0xffff;
+    writeMem(address, value & 0xff);
+    writeMem(addressHigh, value >> 8);
 }
-
-nw_byte	Z80::readMemPublic(nw_word address) { return readMem(address); }
-nw_word	Z80::readMem16Public(nw_word address) { return readMem16(address); }
-void 	Z80::writeMemPublic(nw_word address, nw_byte value) { writeMem(address, value); }	
-void 	Z80::writeMem16Public(nw_word address, nw_word value) { writeMem16(address, value); }
 
 void Z80::writeIo(nw_word port, nw_word value) {
 

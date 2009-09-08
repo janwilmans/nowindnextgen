@@ -53,6 +53,7 @@ void Scheduler::run(CPU *aCpu)
                 Sint32 diff2 = nextEventTime - eventEmuTime;
                 if (diff2 > 0) 
                 {
+                    // event closer then current next-event
                     nextEventTime = eventEmuTime;
                     DBERR("possible next event: %u continue...\n", nextEventTime);
                     continue;
@@ -62,7 +63,7 @@ void Scheduler::run(CPU *aCpu)
             if (diff > -2000)
             {
                 // found expired event
-                DBERR("exipired event found: %u, execute!\n", emuTime);
+                DBERR("expired event found: %u, execute!\n", emuTime);
 
                 i->Callback(emuTime, i->GetTime());
                 i = mEventList.erase(i);

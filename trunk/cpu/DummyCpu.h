@@ -16,7 +16,7 @@ public:
         emuTimeType localEmutime = Emulator::emuTime;
         do {
             localEmutime++;
-                DBERR("localEmutime++: %lu (%ld)\n", localEmutime, localEmutime);
+            DBERR("localEmutime++: %lu (%ld)\n", localEmutime, localEmutime);
         }
 		while((endTime - localEmutime) > 0);
 		return localEmutime;
