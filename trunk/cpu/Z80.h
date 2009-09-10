@@ -145,7 +145,6 @@ public:
 	emuTimeType     mEmuTime;
 
 	void            hijackBdos();
-	unsigned long   bdosCount;
 	void            dumpPages();
 	void            dumpSlotSelection();
 	void            dumpCpuInfo();		

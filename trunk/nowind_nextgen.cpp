@@ -6,10 +6,14 @@
 #include <tchar.h>
 
 #include "Event.h"
+#include "debug.h"
 #include "Emulator.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+
+	//SDL_Init(SDL_INIT_TIMER);
+    
     Emulator::Instance()->initialize();
     system("pause");
 	return 0;
