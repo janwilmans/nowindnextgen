@@ -1,18 +1,5 @@
 //! opcodesED.inc
 // included in Z80.cc
-
-/*
-// MAGWEG:
-// extra eigen instructie voor DISK-IO
-case 0x00:
-    {
-        nw_word reg_pc_was = reg_pc-2;
-        if ((reg_pc_was == 0x4010 || reg_pc_was == 0x4013 || reg_pc_was == 0x4016 || reg_pc_was == 0x4019 || reg_pc_was == 0x401c || reg_pc_was == 0x401f)) {
-            disk->diskIO();
-        }
-    }
-    break;
-*/
     	
 case 0x01:
     {
@@ -85,22 +72,13 @@ case 0x0d:{
 	DBERR("\n");
     break;
 }
-#ifdef ZEXALL
-// extra eigen instructie voor console mode, not used
-case 0x01: 
-        hijackBdos(reg_c,reg_de);
-		break;
-case 0x02: 
-        endOfExercise();
-		break;
-#endif
 
 // 8-bit load group
 case 0x57:      // ld a,i
 {
 		TS(9);
   		emuTimeType n = 0; //Emulator::Instance()->getNextCPUInterruptTime();
-  		if (emuTime >= n) {
+  		if (mEmuTime >= n) {
 			IFF2 = false;
 		}
         reg_a = reg_i;
@@ -111,7 +89,7 @@ case 0x5F:      // ld a,r
 {
   		TS(9);
   		emuTimeType n = 0; //Emulator::Instance()->getNextCPUInterruptTime();
-  		if (emuTime >= n) {
+  		if (mEmuTime >= n) {
 			IFF2 = false;
 		}
         reg_a = (reg_r & 0x80) | (refreshCounter & 0x7f);
