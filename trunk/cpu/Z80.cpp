@@ -6,6 +6,7 @@
 #include "debug.h"
 #include <SDL.h>
 
+#define CONSOLE_DEBUGGING_ON
 
 using namespace std;
 using namespace fastdelegate;
@@ -38,13 +39,14 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 
 
 	ifstream romfile("cpu/zexall/zexall.com", ios::binary);
-	NW_ASSERT(!romfile.fail());
+	bool failed = romfile.fail();
+    NW_ASSERT(!failed);
 
 	romfile.seekg(0, ios::end);
 	unsigned long fileSize = romfile.tellg();
-	DBERR("size of zexall.com: %u\n", fileSize); 
+	DBERR("loaded zexall.com (%u bytes)\n", fileSize); 
 	romfile.seekg(0);
-    romfile.read((char*)memblock, fileSize);
+    romfile.read((char*)&memblock[0x100], fileSize);
 	romfile.close();
 
 
@@ -97,6 +99,11 @@ void Z80::reset()
 		refreshCounter = 0;
 }
 
+void Z80::setPC(nw_word regpc)
+{
+    reg_pc = regpc;
+}
+
 void Z80::nmiCPU() 
 {
 	// aantal klokpulsen???
@@ -143,7 +150,7 @@ void Z80::intCPU(nw_byte interruptVectorOnDataBus)
 		
 		switch (interruptMode) {
 		case 0:
-			emuTime += 14;
+			mEmuTime += 14;
 		
 			// the instruction can be any 1 byte instruction, usually this will be rst.
 			// TODO: hoeveel states...
@@ -166,11 +173,11 @@ void Z80::intCPU(nw_byte interruptVectorOnDataBus)
 	 		// 11 (rst $38) + 2 (wait states in special M1) + 1 (MSX-engine) = 14
 			// TODO: dit is onze (stellig) aanname, maar klopt dit ook werkelijk? De redenatie
 			// komt overeen met die van Sean met als toevoeging 1 extra state door de engine.
-			emuTime += 14;
+			mEmuTime += 14;
 			reg_pc = 0x38;
 			break;
 		case 2:
-			emuTime += 20;
+			mEmuTime += 20;
 			reg_pc = readMem16(interruptVectorOnDataBus|(reg_i<<8));
 			break;
 		default:
@@ -181,7 +188,7 @@ void Z80::intCPU(nw_byte interruptVectorOnDataBus)
 
 inline nw_byte Z80::opcodeFetch(nw_word address) {
 
-/*
+    /*
 	// Meer info over extra M1 wait-state:
 	// http://www.funet.fi/pub/msx/mirrors/hanso/service_manuals/yamahacx5myis503ts.pdf
 	
@@ -204,9 +211,11 @@ inline nw_byte Z80::opcodeFetch(nw_word address) {
 //    if (reg_pc == 0xc01e) DBERR("EXEC BOOTSECTOR!\n");
 
 	return readBlock[address >> 13][address&0x1FFF];
+    */
 
-*/
-    return 0;
+    nw_byte oc = readMem(address);
+    DBERR("0x%04X  0x%02X\n", address, oc);
+    return oc;
 }
 
 void Z80::abortEmulator() {
@@ -227,128 +236,130 @@ void Z80::abortEmulator() {
 //   also add the 'register' compiler hint to 'endTime' and 'localEmuTime'
 //   this will require passing the actual emutime at every readMem/writeMem readIO/writeIO
 //   put the localemutime back into global emutime at exit of executeInstructions()
-emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType endTime) {
+emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType endTime) {
+    mEmuTime = startTime;
 
-		//CheckSanity();
-        // TODO: 1 instruction is always executed before the next interrupt occurs,
-        // this is sometimes usefull, but not accurate.. why did we do that ?
-        // see also Emulator::setCPUInterrupt
+    //CheckSanity();
+    // TODO: 1 instruction is always executed before the next interrupt occurs,
+    // this is sometimes usefull, but not accurate.. why did we do that ?
+    // see also Emulator::setCPUInterrupt
 
-		do {
-    		nw_word reg1 = 0;
-    		nw_word reg2 = 0;
-    		nw_word opcode = 0;
+    do {
+	    nw_word reg1 = 0;
+	    nw_word reg2 = 0;
+	    nw_word opcode = 0;
 
     #ifdef CONSOLE_DEBUGGING_ON
-    		if (reg_pc == 5) hijackBdos();
+	    if (reg_pc == 5) hijackBdos();
     #endif
 
-    		opcode = opcodeFetch(reg_pc);
-    
+	    opcode = opcodeFetch(reg_pc);
+
     #ifdef INSTRUCTIONS_ON
-    		if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
-    			string disasm = string(Disassembler::Instance()->disAsm(reg_pc, readMem16(reg_pc), readMem16(reg_pc+2)));
-    			DBERR("%04X %-15s ", reg_pc, disasm.c_str());
-    		}
+	    if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
+		    string disasm = string(Disassembler::Instance()->disAsm(reg_pc, readMem16(reg_pc), readMem16(reg_pc+2)));
+		    DBERR("%04X %-15s ", reg_pc, disasm.c_str());
+	    }
     #endif
-    
-    		++reg_pc;
-            //profiler->count(opcode, readMem(reg_pc));
 
-    		// execute opcode
-			switch (opcode) {
-     
-    		#include "opcodes.inc"
-    
-    		case 0xcb:
-    				switch(opcodeFetch(reg_pc++)) {
-    				#include "opcodesCB.inc"
-    				}
-    				break;
-    		case 0xed:
-					opcode = opcodeFetch(reg_pc++);
-    				switch(opcode) {
-        			#include "opcodesED.inc"
-    				}
-    				break;
-    		case 0xdd:
-			case 0xfd:
-					reg2 = 0;
-					do {
-						reg2++;
-						reg1 = opcode;
-						opcode = opcodeFetch(reg_pc++);
-						NW_ASSERT(opcode != 0xed); // TODO: deze situatie kan voorkomen, er moet dan naar opcodeED gesprongen worden (dd en fd worden dan dus genegeerd)
-						NW_ASSERT(reg2 == 1); // TODO: eruit halen als het een keer is voorgekomen! reg2 dan ook dus
-					} while ((opcode == 0xdd) || (opcode == 0xfd));
-										
-					switch (reg1) {
-					case 0xdd:
-    					switch(opcode) {
-						#define REGIX reg_ix
-						#include "opcodesDD.inc"		
-						}
-						break;
-	    			case 0xfd:
-	        			switch(opcode) {
-						#undef REGIX
-	    				#define REGIX reg_iy
-	    				#include "opcodesDD.inc"
-	    				}
-	    				break;
-	    			default: NW_ASSERT(false);
-					}
-					break;
-	    	default:
-    			NW_ASSERT(false); // opcode > 255 ?!
-    			break;
-    		}
+	    ++reg_pc;
+        //profiler->count(opcode, readMem(reg_pc));
+
+	    // execute opcode
+	    switch (opcode) {
+
+	    #include "opcodes.inc"
+
+	    case 0xcb:
+			    switch(opcodeFetch(reg_pc++)) {
+			    #include "opcodesCB.inc"
+			    }
+			    break;
+	    case 0xed:
+			    opcode = opcodeFetch(reg_pc++);
+			    switch(opcode) {
+			    #include "opcodesED.inc"
+			    }
+			    break;
+	    case 0xdd:
+	    case 0xfd:
+			    reg2 = 0;
+			    do {
+				    reg2++;
+				    reg1 = opcode;
+				    opcode = opcodeFetch(reg_pc++);
+				    NW_ASSERT(opcode != 0xed); // TODO: deze situatie kan voorkomen, er moet dan naar opcodeED gesprongen worden (dd en fd worden dan dus genegeerd)
+				    NW_ASSERT(reg2 == 1); // TODO: eruit halen als het een keer is voorgekomen! reg2 dan ook dus
+			    } while ((opcode == 0xdd) || (opcode == 0xfd));
+    								
+			    switch (reg1) {
+			    case 0xdd:
+				    switch(opcode) {
+				    #define REGIX reg_ix
+				    #include "opcodesDD.inc"		
+				    }
+				    break;
+			    case 0xfd:
+    			    switch(opcode) {
+				    #undef REGIX
+				    #define REGIX reg_iy
+				    #include "opcodesDD.inc"
+				    }
+				    break;
+			    default: NW_ASSERT(false);
+			    }
+			    break;
+	    default:
+		    NW_ASSERT(false); // opcode > 255 ?!
+		    break;
+	    }
 
     #ifndef FULL_SPEED_ON
-    
-    		NW_ASSERT (reg_a<256);
-    		NW_ASSERT (reg_f<256);
-    		NW_ASSERT (reg_b<256);
-    		NW_ASSERT (reg_c<256);
-    		NW_ASSERT (reg_de<0x10000);
-    		NW_ASSERT (reg_hl<0x10000);
-    		NW_ASSERT (reg_ix<0x10000);
-    		NW_ASSERT (reg_iy<0x10000);
-    		NW_ASSERT (reg_pc<0x10000);
-    		NW_ASSERT (reg_sp<0x10000);
 
-//    		NW_ASSERT (reg_sp != 0x0fffe);		// duidt op een stack overflow, vaak wordt dat veroorzaakt door een eerder probleem
-//    		NW_ASSERT (reg_sp != 1);  			// komt voor in zexall!
-//    		NW_ASSERT (reg_sp != 2);           // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
-                                            // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
-    
-    		//Disassembler::Instance()->triggerDisassembler();
+	    NW_ASSERT (reg_a<256);
+	    NW_ASSERT (reg_f<256);
+	    NW_ASSERT (reg_b<256);
+	    NW_ASSERT (reg_c<256);
+	    NW_ASSERT (reg_de<0x10000);
+	    NW_ASSERT (reg_hl<0x10000);
+	    NW_ASSERT (reg_ix<0x10000);
+	    NW_ASSERT (reg_iy<0x10000);
+	    NW_ASSERT (reg_pc<0x10000);
+	    NW_ASSERT (reg_sp<0x10000);
+
+    //    		NW_ASSERT (reg_sp != 0x0fffe);		// duidt op een stack overflow, vaak wordt dat veroorzaakt door een eerder probleem
+    //    		NW_ASSERT (reg_sp != 1);  			// komt voor in zexall!
+    //    		NW_ASSERT (reg_sp != 2);           // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
+                                        // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
+
+	    //Disassembler::Instance()->triggerDisassembler();
     #endif
-    
+
     #ifdef INSTRUCTIONS_ON
-    		if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
-    			dumpCpuInfo();
-    		}
+	    if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
+		    dumpCpuInfo();
+	    }
     #endif
-    } while((endTime - emuTime) > 0);      // end of while-not-next-interrupt
+        //DBERR("emuTime: %d\n", mEmuTime);
+    } while((endTime - mEmuTime) > 0);      // end of while-not-next-interrupt
 
-    // while(emuTime < endTime) will fail if the end-of-range event is not exactly reached!
+    // while(emuTime < mEmuTime) will fail if the end-of-range event is not exactly reached!
 
-	return emuTime;
+    return mEmuTime;
 }
 
 nw_byte Z80::readMem(nw_word address) {
 
-    return memblock[address];
+    return memblock[address] & 0xff;
 }
 
 nw_word Z80::readMem16(nw_word address)
 {
 	nw_word addressHigh = (address+1) & 0xffff;
-	return readMem(address) | (readMem(addressHigh) << 8);
+	return readMem(address) & 0xff | (readMem(addressHigh) << 8);
 }
 
-void Z80::writeMem(nw_word address, nw_word value) 
+void Z80::writeMem(nw_word address, nw_byte value) 
 {
     memblock[address] = value;
 }
@@ -574,23 +585,24 @@ nw_word Z80::getSP() {
 
 void Z80::hijackBdos() {
 
-	long seconds = SDL_GetTicks()/1000;
+    long seconds = SDL_GetTicks()/1000;
 
-	++bdosCount;
-	if (bdosCount > 1) {
-		if (reg_c == 2) DBERR("time: %u s                 BDOS 2: ", seconds, reg_e);
+    ++bdosCount;
+    //if (bdosCount > 1) 
+    {
+	    if (reg_c == 2) DBERR("time: %us, BDOS 2: ", seconds, reg_e);
 
-		if (reg_c == 9) {
-			DBERR("time: %u s                 BDOS 9: ", seconds);
-			nw_word de = reg_de;
-			while (1) {
-				nw_byte c = readMem(de++);
-				if (c == 0x0D) continue;
-				if (c == 0x0A) continue;
-				if (c == 0x24) break;
-				DBERR("%c", c);
-			}
-			DBERR("\n");
-		}
-	}
+	    if (reg_c == 9) {
+		    DBERR("time: %us, BDOS 9: ", seconds);
+		    nw_word de = reg_de;
+		    while (1) {
+			    nw_byte c = readMem(de++);
+			    if (c == 0x0D) continue;
+			    if (c == 0x0A) continue;
+			    if (c == 0x24) break;
+			    DBERR("%c", c);
+		    }
+		    DBERR("\n");
+	    }
+    }
 }

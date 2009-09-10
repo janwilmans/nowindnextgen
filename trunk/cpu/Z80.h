@@ -25,7 +25,7 @@ typedef fastdelegate::FastDelegate2<nw_word, nw_byte> writeDelegate;   // return
 /* all of these macros are using in opcodes*.inc so they are easely be adapted
    to used on different platforms and in different configurations */
 
-#define TS(states) emuTime += states
+#define TS(states) mEmuTime += states
 
 #define reg_af ((reg_a << 8) | reg_f)
 #define reg_bc ((reg_b << 8) | reg_c)
@@ -115,8 +115,8 @@ private:
 
 	inline nw_byte	readMem(nw_word) inline_after;
 	inline nw_word	readMem16(nw_word) inline_after;
-	inline void     writeMem(nw_word,nw_word) inline_after;
-	inline void     writeMem16(nw_word,nw_word) inline_after;	
+	inline void     writeMem(nw_word, nw_byte) inline_after;
+	inline void     writeMem16(nw_word, nw_word) inline_after;	
 	
 public:
 	nw_byte			readMemPublic(nw_word address);
@@ -135,14 +135,14 @@ public:
 	void            nmiCPU();
 	bool			getIFF1();
 	void            intCPU(nw_byte);
-	void            start(nw_word);
+	void            setPC(nw_word);
 
-	emuTimeType		ExecuteInstructionsUntil(emuTimeType endTime);
+	emuTimeType		ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType endTime);
 
 	void            saveState();
 	void            loadState();
 
-	emuTimeType     emuTime;
+	emuTimeType     mEmuTime;
 
 	void            hijackBdos();
 	unsigned long   bdosCount;

@@ -18,7 +18,7 @@ class CPU {
 public:
     CPU(AddressBus& addressBus, IOBus& ioBus);
     virtual ~CPU() {}
-    virtual emuTimeType ExecuteInstructionsUntil(emuTimeType) = 0;
+    virtual emuTimeType ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType endTime) = 0;
 
 protected:
         AddressBus& mAddressBus;
