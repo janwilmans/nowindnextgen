@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Winmm.lib Sdl.lib"
+				AdditionalDependencies="winmm.lib Sdl.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SolutionDir)\sdlstatic"
 				IgnoreDefaultLibraryNames="libcmt"
@@ -139,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" Sdl.lib"
+				AdditionalDependencies="winmm.lib Sdl.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SolutionDir)\sdlstatic"
 				IgnoreDefaultLibraryNames="libcmt"

@@ -35,9 +35,8 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 		flagDec[i] = flagSZsub[i] | ((i==0x7F) ? PFLAG:0) | ((i ^ (i+1)) & HFLAG);
 	}
 
-	bdosCount = 0;
 
-
+    // load zexall.com at 0x100 (testing only)
 	ifstream romfile("cpu/zexall/zexall.com", ios::binary);
 	bool failed = romfile.fail();
     NW_ASSERT(!failed);
@@ -48,7 +47,6 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 	romfile.seekg(0);
     romfile.read((char*)&memblock[0x100], fileSize);
 	romfile.close();
-
 
     DBERR("Z80 constructor finished.\n");
 }
@@ -214,7 +212,7 @@ inline nw_byte Z80::opcodeFetch(nw_word address) {
     */
 
     nw_byte oc = readMem(address);
-    DBERR("0x%04X  0x%02X\n", address, oc);
+    //DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 
@@ -249,11 +247,17 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
 	    nw_word reg2 = 0;
 	    nw_word opcode = 0;
 
+        opcode = opcodeFetch(reg_pc);
+
     #ifdef CONSOLE_DEBUGGING_ON
-	    if (reg_pc == 5) hijackBdos();
+	    if (reg_pc == 5) 
+        {
+            hijackBdos();
+            opcode = 0xC9; // ret
+        }
     #endif
 
-	    opcode = opcodeFetch(reg_pc);
+	    
 
     #ifdef INSTRUCTIONS_ON
 	    if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
@@ -586,23 +590,18 @@ nw_word Z80::getSP() {
 void Z80::hijackBdos() {
 
     long seconds = SDL_GetTicks()/1000;
+    if (reg_c == 2) DBERR("time: %u s, BDOS 2: ", seconds, reg_e);
 
-    ++bdosCount;
-    //if (bdosCount > 1) 
-    {
-	    if (reg_c == 2) DBERR("time: %us, BDOS 2: ", seconds, reg_e);
-
-	    if (reg_c == 9) {
-		    DBERR("time: %us, BDOS 9: ", seconds);
-		    nw_word de = reg_de;
-		    while (1) {
-			    nw_byte c = readMem(de++);
-			    if (c == 0x0D) continue;
-			    if (c == 0x0A) continue;
-			    if (c == 0x24) break;
-			    DBERR("%c", c);
-		    }
-		    DBERR("\n");
+    if (reg_c == 9) {
+	    DBERR("time: %u s, BDOS 9: ", seconds);
+	    nw_word de = reg_de;
+	    while (1) {
+		    nw_byte c = readMem(de++);
+		    if (c == 0x0D) continue;
+		    if (c == 0x0A) continue;
+		    if (c == 0x24) break;
+		    DBERR("%c", c);
 	    }
+	    DBERR("\n");
     }
 }
