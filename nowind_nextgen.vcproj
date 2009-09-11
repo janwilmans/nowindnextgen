@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)..\SDL-1.2.13\include;$(ProjectDir)"
+				AdditionalIncludeDirectories="$(SolutionDir);$(SolutionDir)\SDL\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,10 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib Sdl.lib"
+				AdditionalDependencies="Sdl.lib $(NOINHERIT)  SDLmain.lib user32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SolutionDir)\sdlstatic"
-				IgnoreDefaultLibraryNames="libcmt"
+				AdditionalLibraryDirectories="$(SolutionDir)\SDL\lib"
+				IgnoreDefaultLibraryNames="msvcrt"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -119,7 +119,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(SolutionDir)..\SDL-1.2.13\include;$(ProjectDir)"
+				FavorSizeOrSpeed="1"
+				AdditionalIncludeDirectories="$(SolutionDir);$(SolutionDir)\SDL\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -139,10 +140,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib Sdl.lib"
+				AdditionalDependencies="Sdl.lib $(NOINHERIT)  SDLmain.lib user32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SolutionDir)\sdlstatic"
-				IgnoreDefaultLibraryNames="libcmt"
+				AdditionalLibraryDirectories="$(SolutionDir)\SDL\lib"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"

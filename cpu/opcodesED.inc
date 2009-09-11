@@ -12,7 +12,7 @@ case 0x01:
 
 case 0x02:
     {
-        nw_word addr = readMem16(reg_pc);
+        word addr = readMem16(reg_pc);
         DBERR("0x%04X: ", addr);
         reg_pc += 2;
         int len = readMem(reg_pc++);
@@ -70,6 +70,11 @@ case 0x0d:{
         count--;
 	}
 	DBERR("\n");
+    break;
+}
+
+case 0x0e:{
+	hijackBdos();
     break;
 }
 

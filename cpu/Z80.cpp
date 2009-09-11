@@ -28,7 +28,7 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 
 		flagSZ[i] = (i & (SFLAG|XFLAG|YFLAG)) | ((i==0) ? ZFLAG:0);
 		flagSZsub[i] = flagSZ[i] | NFLAG;
-		nw_byte p=1;
+		byte p=1;
 		for (int j=0;j<8;++j) p^=((i>>j)&1);
 		flagSZP[i] = flagSZ[i] | (p<<2);
 		flagInc[i] = flagSZ[i] | ((i==0x80) ? PFLAG:0) | ((i ^ (i-1)) & HFLAG);
@@ -47,6 +47,11 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 	romfile.seekg(0);
     romfile.read((char*)&memblock[0x100], fileSize);
 	romfile.close();
+
+    // patch bdos call 0x0005
+    memblock[0x0005] = 0xED;
+    memblock[0x0006] = 0x0E;
+    memblock[0x0007] = 0xC9;
 
     DBERR("Z80 constructor finished.\n");
 }
@@ -97,7 +102,7 @@ void Z80::reset()
 		refreshCounter = 0;
 }
 
-void Z80::setPC(nw_word regpc)
+void Z80::setPC(word regpc)
 {
     reg_pc = regpc;
 }
@@ -121,7 +126,7 @@ bool Z80::getIFF1()
 	 return IFF1;
 }
 
-void Z80::intCPU(nw_byte interruptVectorOnDataBus) 
+void Z80::intCPU(byte interruptVectorOnDataBus) 
 {
 
 #ifndef FULL_SPEED_ON
@@ -184,7 +189,7 @@ void Z80::intCPU(nw_byte interruptVectorOnDataBus)
 		}
 }
 
-inline nw_byte Z80::opcodeFetch(nw_word address) {
+inline byte Z80::opcodeFetch(word address) {
 
     /*
 	// Meer info over extra M1 wait-state:
@@ -211,7 +216,7 @@ inline nw_byte Z80::opcodeFetch(nw_word address) {
 	return readBlock[address >> 13][address&0x1FFF];
     */
 
-    nw_byte oc = readMem(address);
+    byte oc = readMem(address);
     //DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
@@ -243,12 +248,14 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
     // see also Emulator::setCPUInterrupt
 
     do {
-	    nw_word reg1 = 0;
-	    nw_word reg2 = 0;
-	    nw_word opcode = 0;
+	    word reg1 = 0;
+	    word reg2 = 0;
+	    word opcode = 0;
 
         opcode = opcodeFetch(reg_pc);
 
+    /*
+    // dit kan weg, ter referentie: test met of zonder deze code is vrijwel even snel!!!
     #ifdef CONSOLE_DEBUGGING_ON
 	    if (reg_pc == 5) 
         {
@@ -256,8 +263,7 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
             opcode = 0xC9; // ret
         }
     #endif
-
-	    
+    */
 
     #ifdef INSTRUCTIONS_ON
 	    if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
@@ -352,30 +358,30 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
     return mEmuTime;
 }
 
-nw_byte Z80::readMem(nw_word address) {
+byte Z80::readMem(word address) {
 
     return memblock[address] & 0xff;
 }
 
-nw_word Z80::readMem16(nw_word address)
+word Z80::readMem16(word address)
 {
-	nw_word addressHigh = (address+1) & 0xffff;
+	word addressHigh = (address+1) & 0xffff;
 	return readMem(address) & 0xff | (readMem(addressHigh) << 8);
 }
 
-void Z80::writeMem(nw_word address, nw_byte value) 
+void Z80::writeMem(word address, byte value) 
 {
     memblock[address] = value;
 }
 
-void Z80::writeMem16(nw_word address, nw_word value) 
+void Z80::writeMem16(word address, word value) 
 {
-    nw_word addressHigh = (address+1) & 0xffff;
+    word addressHigh = (address+1) & 0xffff;
     writeMem(address, value & 0xff);
     writeMem(addressHigh, value >> 8);
 }
 
-void Z80::writeIo(nw_word port, nw_word value) {
+void Z80::writeIo(word port, word value) {
 
 	NW_ASSERT(port < 0x100);
 	NW_ASSERT(value < 0x100);
@@ -396,7 +402,7 @@ void Z80::writeIo(nw_word port, nw_word value) {
 
 //	case 0x7c: fmpac->writeAddress(value); break;
 //	case 0x7d: fmpac->writeData(value); break;
-	case 0x91: break; //DBERR("write to PRINTER PORT not implemented: " << (nw_word) value << endl); break;
+	case 0x91: break; //DBERR("write to PRINTER PORT not implemented: " << (word) value << endl); break;
 
 	case 0x98: vdp->writeVram(value); break;
 	case 0x99: vdp->writeControlRegister(value); break;
@@ -450,7 +456,7 @@ void Z80::writeIo(nw_word port, nw_word value) {
 */
 } 
 
-nw_byte Z80::readIo(nw_word port) {
+byte Z80::readIo(word port) {
 
     NW_ASSERT(port < 0x100);
 /*
@@ -583,7 +589,7 @@ void Z80::loadState() {
 	//mapper->loadState();
 }
 
-nw_word Z80::getSP() {
+word Z80::getSP() {
     return reg_sp;   
 }
 
@@ -594,9 +600,9 @@ void Z80::hijackBdos() {
 
     if (reg_c == 9) {
 	    DBERR("time: %u s, BDOS 9: ", seconds);
-	    nw_word de = reg_de;
+	    word de = reg_de;
 	    while (1) {
-		    nw_byte c = readMem(de++);
+		    byte c = readMem(de++);
 		    if (c == 0x0D) continue;
 		    if (c == 0x0A) continue;
 		    if (c == 0x24) break;

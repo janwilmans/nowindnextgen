@@ -38,8 +38,9 @@ void Scheduler::run(CPU *aCpu)
     emuTimeType& emuTime = Emulator::emuTime;
 	for (;;)  // for ever
 	{
-        // default to end-of-range
-        emuTimeType nextEventTime = emuTime + 2000;
+        // default to (emuTime + x) where x is a 'while' into the future,
+        // todo: verify if 2^31-1 is a good default
+        emuTimeType nextEventTime = emuTime + 200000;
         Sint32 diff = 0;
         for (EventIterator i=mEventList.begin();i != mEventList.end(); i++)
         {
@@ -60,6 +61,8 @@ void Scheduler::run(CPU *aCpu)
                 }
                 continue;
             }
+            // -2000 is arbitrary, it must be at least -(x+1) where x is the maximum 
+            // instruction size in tstates / emutime
             if (diff > -2000)
             {
                 // found expired event
