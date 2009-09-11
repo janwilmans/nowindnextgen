@@ -1,7 +1,6 @@
 
+- online compiling and code editing, central compile server and download test-executable. (roms?)
 - read emutime into local variable when possible and write back when done.
-
-
 - configure devices in xml (e.g. devices.xml contains all info to construct the memorymap and iomap for an fmpac)
 
 config.xml:
@@ -30,6 +29,7 @@ devices.xml:
 
 emutime:
   - waarneer Uint32 voor emutime wordt gebruikt gaan berekeningen voor d(t) / offsets altijd goed, ook als 2^32 berijkt wordt.
+    > dus bij alle limit-checks "(t2-t1) > 0" - type vergelijkingen gebruiken ipv "t1 > t2".
   
   scheduleNextInterrupt:
   
@@ -41,7 +41,9 @@ emutime:
   check welke interrupt de volgende is:
   - check welke interrupt de grootste dt heeft (dat is degene die als eerste uitgevoerd moet worden)
   
-  - schedule een interrupt op tijd 2^32-1 zodat de bovenstaande check _altijd_ geldig is.
+  x (FOUT) schedule een interrupt op tijd 2^32-1 zodat de bovenstaande check _altijd_ geldig is. 
+    > werkt niet omdat emutime niet altijd precies op 2^32-1 uit zal komen, en eerder scheduling
+      is geen optie, omdat de d(t) berekeningen dan niet meer goed gaan.
   
   
   emutime = 20
@@ -55,7 +57,9 @@ emutime:
   
 
 - audio buffer:
-  -    
+  - update de audio voor elke port1 access
+  - 
+  - psg-sample output (precalcVolume / 3?) sounds much better 
   
   
 create base-class for:

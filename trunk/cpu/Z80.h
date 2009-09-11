@@ -19,7 +19,7 @@
 // class functies nooit inline ?
 // mogelijke speed-up: readmem etc. uit de class halen? 
 
-typedef fastdelegate::FastDelegate2<nw_word, nw_byte> writeDelegate;   // returns void 
+typedef fastdelegate::FastDelegate2<word, byte> writeDelegate;   // returns void 
 
 
 /* all of these macros are using in opcodes*.inc so they are easely be adapted
@@ -62,7 +62,7 @@ private:
     Emulator* mEmulator;
 
     // for testing only
-    nw_byte memblock[64*1024];
+    byte memblock[64*1024];
 
     float opcodeCounter[256];
     float opcodeCounterCB[256];
@@ -71,71 +71,71 @@ private:
     float opcodeCounterFD[256];
     
     /* new memory layout */
-    const nw_byte   *readBlock[8];
+    const byte   *readBlock[8];
     writeDelegate   writeFunc[8];
 
 	/* interne z80 registers */
-	nw_word			reg_a;
-	nw_word			reg_f;
-	nw_word			reg_b;
-	nw_word			reg_c;
+	word			reg_a;
+	word			reg_f;
+	word			reg_b;
+	word			reg_c;
 	
-	nw_word		    reg_i;
-	nw_word    		reg_r;
-	nw_word			reg_de;		// TODO: uitzoeken of DE vaker als 8 bits registers wordt gebruikt
-	nw_word			reg_hl;
-	nw_word    		reg_pc;
-	nw_word    		reg_sp;
-	nw_word    		reg_ix;
-    nw_word    		reg_iy;
-	nw_word			reg_wz;
+	word		    reg_i;
+	word    		reg_r;
+	word			reg_de;		// TODO: uitzoeken of DE vaker als 8 bits registers wordt gebruikt
+	word			reg_hl;
+	word    		reg_pc;
+	word    		reg_sp;
+	word    		reg_ix;
+    word    		reg_iy;
+	word			reg_wz;
 
-	nw_word    		shadow_af;
-	nw_word   		shadow_b;
-	nw_word			shadow_c;
-	nw_word    		shadow_de;
-	nw_word    		shadow_hl;
+	word    		shadow_af;
+	word   		shadow_b;
+	word			shadow_c;
+	word    		shadow_de;
+	word    		shadow_hl;
 
 	bool            IFF1;
 	bool            IFF2;
-	nw_word    		interruptMode;
-	nw_word			refreshCounter;
+	word    		interruptMode;
+	word			refreshCounter;
 
-	nw_word    		flagSZ[256];
-	nw_word    		flagSZsub[256];
-	nw_word    		flagSZP[256];
-	nw_word    		flagInc[256];
-	nw_word    		flagDec[256];
+	word    		flagSZ[256];
+	word    		flagSZsub[256];
+	word    		flagSZP[256];
+	word    		flagInc[256];
+	word    		flagDec[256];
 
-	inline nw_byte	opcodeFetch(nw_word) inline_after;
+	inline byte	opcodeFetch(word) inline_after;
 	void            debugInstuctionCounter();
 
-	void            writeIo(nw_word, nw_word);
-	nw_byte         readIo(nw_word);
+	void            writeIo(word, word);
+	byte         readIo(word);
 
-	inline nw_byte	readMem(nw_word) inline_after;
-	inline nw_word	readMem16(nw_word) inline_after;
-	inline void     writeMem(nw_word, nw_byte) inline_after;
-	inline void     writeMem16(nw_word, nw_word) inline_after;	
+	inline byte	readMem(word) inline_after;
+	inline word	readMem16(word) inline_after;
+	inline void     writeMem(word, byte) inline_after;
+	inline void     writeMem16(word, word) inline_after;	
 	
 public:
-	nw_byte			readMemPublic(nw_word address);
-	nw_word			readMem16Public(nw_word address);
-	void 			writeMemPublic(nw_word address, nw_byte value);
-	void 			writeMem16Public(nw_word address, nw_word value);
+	byte			readMemPublic(word address);
+	word			readMem16Public(word address);
+	void 			writeMemPublic(word address, byte value);
+	void 			writeMem16Public(word address, word value);
 
     //emuTimeType     nextInterrupt;
 	unsigned long   cpuFrequency;
 
-	nw_word         start_test_nr;
+	word         start_test_nr;
 	void            initialize();
 
 	void            reset();
 	void            hardReset();
 	void            nmiCPU();
 	bool			getIFF1();
-	void            intCPU(nw_byte);
-	void            setPC(nw_word);
+	void            intCPU(byte);
+	void            setPC(word);
 
 	emuTimeType		ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType endTime);
 
@@ -149,7 +149,7 @@ public:
 	void            dumpSlotSelection();
 	void            dumpCpuInfo();		
     void            abortEmulator();
-	nw_word         getSP();
+	word         getSP();
 };
 
 #endif

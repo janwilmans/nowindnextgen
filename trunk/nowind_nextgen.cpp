@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <tchar.h>
+#include <SDL.h>
 
 #include "Event.h"
 #include "debug.h"
@@ -11,8 +12,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-
-	//SDL_Init(SDL_INIT_TIMER);
+	SDL_Init(SDL_INIT_TIMER);
     
     Emulator::Instance()->initialize();
     system("pause");
