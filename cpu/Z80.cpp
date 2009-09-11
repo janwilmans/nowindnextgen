@@ -252,29 +252,8 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
 	    word reg1 = 0;
 	    word reg2 = 0;
 	    word opcode = 0;
-
         opcode = opcodeFetch(reg_pc);
-
-    /*
-    // dit kan weg, ter referentie: test met of zonder deze code is vrijwel even snel!!!
-    #ifdef CONSOLE_DEBUGGING_ON
-	    if (reg_pc == 5) 
-        {
-            hijackBdos();
-            opcode = 0xC9; // ret
-        }
-    #endif
-    */
-
-    #ifdef INSTRUCTIONS_ON
-	    if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
-		    string disasm = string(Disassembler::Instance()->disAsm(reg_pc, readMem16(reg_pc), readMem16(reg_pc+2)));
-		    DBERR("%04X %-15s ", reg_pc, disasm.c_str());
-	    }
-    #endif
-
 	    ++reg_pc;
-        //profiler->count(opcode, readMem(reg_pc));
 
 	    // execute opcode
 	    switch (opcode) {
@@ -325,8 +304,7 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
 		    break;
 	    }
 
-    #ifndef FULL_SPEED_ON
-
+    #ifdef _DEBUG
 	    NW_ASSERT (reg_a<256);
 	    NW_ASSERT (reg_f<256);
 	    NW_ASSERT (reg_b<256);
@@ -338,23 +316,13 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
 	    NW_ASSERT (reg_pc<0x10000);
 	    NW_ASSERT (reg_sp<0x10000);
 
-    //    		NW_ASSERT (reg_sp != 0x0fffe);		// duidt op een stack overflow, vaak wordt dat veroorzaakt door een eerder probleem
-    //    		NW_ASSERT (reg_sp != 1);  			// komt voor in zexall!
-    //    		NW_ASSERT (reg_sp != 2);           // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
-                                        // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
-
-	    //Disassembler::Instance()->triggerDisassembler();
+    //    		NW_ASSERT (reg_sp != 0x0fffe);  // duidt op een stack overflow, vaak wordt dat veroorzaakt door een eerder probleem
+    //    		NW_ASSERT (reg_sp != 1);        // komt voor in zexall!
+    //    		NW_ASSERT (reg_sp != 2)         // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
+                                                // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
     #endif
 
-    #ifdef INSTRUCTIONS_ON
-	    if (Debug::Instance()->RUNTIME_INSTRUCTIONS_ON) {
-		    dumpCpuInfo();
-	    }
-    #endif
-        //DBERR("emuTime: %d\n", mEmuTime);
     } while((endTime - mEmuTime) > 0);      // end of while-not-next-interrupt
-
-    // while(emuTime < mEmuTime) will fail if the end-of-range event is not exactly reached!
 
     return mEmuTime;
 }
