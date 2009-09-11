@@ -7,6 +7,7 @@
 #include <SDL.h>
 
 #define CONSOLE_DEBUGGING_ON
+#define FULL_SPEED_ON
 
 using namespace std;
 using namespace fastdelegate;
