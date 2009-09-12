@@ -1,5 +1,10 @@
 
-#define NW_ASSERT(assertion) nw_assert(__FILE__, __LINE__, assertion, #assertion);
+#ifdef _DEBUG
+    #define NW_ASSERT(assertion) nw_assert(__FILE__, __LINE__, assertion, #assertion);
+#else
+    #define NW_ASSERT(assertion) //
+#endif 
+
 #define DBERR nw_debug
 
 void nw_debug(const char *cFormat, ...);
