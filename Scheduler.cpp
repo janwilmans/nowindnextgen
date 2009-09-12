@@ -73,7 +73,7 @@ void Scheduler::run(CPU *aCpu)
             }
         }
         //DBERR("execute from %u (%i) until: %u (%i)\n", emuTime, emuTime, nextEventTime, nextEventTime);
-        emuTime = aCpu->ExecuteInstructionsUntil(emuTime, nextEventTime);
+        emuTime = aCpu->ExecuteInstructions(emuTime, nextEventTime);
     }
 }
 
@@ -104,8 +104,7 @@ void Scheduler::runNice(CPU *aCpu)
         }
 
         nextEventTime = nextEvent->GetTime();
-        Emulator::emuTime = aCpu->ExecuteInstructionsUntil(Emulator::emuTime, nextEventTime);
-
+        Emulator::emuTime = aCpu->ExecuteInstructions(Emulator::emuTime, nextEventTime);
     }
 
 }

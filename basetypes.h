@@ -1,6 +1,6 @@
-//! msxtypes.h
-#ifndef MSXTYPES_H
-#define MSXTYPES_H
+//! basetypes.h
+#ifndef BASETYPES_H
+#define BASETYPES_H
 
 #include "SDL_types.h"
 
@@ -20,7 +20,7 @@ typedef Uint32 msTimeType;      // should be (at least) an 32 bit type
 
 }
 
-#endif
+#endif // BASETYPES_H
 
 // todo: use SDL types for Uint16/Uint32 through out the emulator
 //       instead of windows specific types or unsigned long / unsigned int

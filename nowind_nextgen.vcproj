@@ -118,8 +118,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="$(SolutionDir);$(SolutionDir)\SDL\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
@@ -182,6 +180,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\basetypes.h"
+				>
+			</File>
+			<File
 				RelativePath=".\briljant_ideas.txt"
 				>
 			</File>
@@ -222,7 +224,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\msxtypes.h"
+				RelativePath=".\MemoryDevice.h"
 				>
 			</File>
 			<File

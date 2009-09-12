@@ -11,9 +11,9 @@ public:
     // find out why this is needed!!
     DummyCpu(AddressBus& addressBus, IOBus& ioBus) : Z80(addressBus, ioBus) {}
 
-    virtual emuTimeType ExecuteInstructionsUntil(emuTimeType endTime) 
+    virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) 
     {
-        emuTimeType localEmutime = Emulator::emuTime;
+        emuTimeType localEmutime = startTime;
         do {
             localEmutime++;
             DBERR("localEmutime++: %lu (%ld)\n", localEmutime, localEmutime);
