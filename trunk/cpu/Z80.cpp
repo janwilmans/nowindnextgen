@@ -163,30 +163,14 @@ void Z80::intCPU(byte interruptVectorOnDataBus)
         // TODO: hoeveel states...
         switch (interruptVectorOnDataBus)
         {
-        case 0xc7:
-            reg_pc = 0x0000;
-            break;
-        case 0xcf:
-            reg_pc = 0x0008;
-            break;
-        case 0xd7:
-            reg_pc = 0x0010;
-            break;
-        case 0xdf:
-            reg_pc = 0x0018;
-            break;
-        case 0xe7:
-            reg_pc = 0x0020;
-            break;
-        case 0xef:
-            reg_pc = 0x0028;
-            break;
-        case 0xf7:
-            reg_pc = 0x0030;
-            break;
-        case 0xff:
-            reg_pc = 0x0038;
-            break;
+        case 0xc7: reg_pc = 0x0000; break;
+        case 0xcf: reg_pc = 0x0008; break;
+        case 0xd7: reg_pc = 0x0010; break;
+        case 0xdf: reg_pc = 0x0018; break;
+        case 0xe7: reg_pc = 0x0020; break;
+        case 0xef: reg_pc = 0x0028; break;
+        case 0xf7: reg_pc = 0x0030; break;
+        case 0xff: reg_pc = 0x0038; break;
         default:
             reg_pc = 0x0038; // just in case...
             DBERR("Alleen RST-instr. van een interrupt-device worden ondersteund!\n");
@@ -329,7 +313,7 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType aEn
 //      NW_ASSERT (reg_sp != 0x0fffe);  // duidt op een stack overflow, vaak wordt dat veroorzaakt door een eerder probleem
 //      NW_ASSERT (reg_sp != 1);        // komt voor in zexall!
 //      NW_ASSERT (reg_sp != 2)         // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
-                                        // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
+        // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
 
     }
     while ((mEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
