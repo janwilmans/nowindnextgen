@@ -9,7 +9,7 @@ typedef std::list<Event>::iterator EventIterator;
 
 class Scheduler
 {
-public:
+    public:
     Scheduler();
     virtual ~Scheduler(void);
 
@@ -21,7 +21,7 @@ public:
     void endOfRange(emuTimeType emuTime, emuTimeType aEventTime);
     void run(CPU*);
     void runNice(CPU*);
-protected:
+    protected:
     emuTimeType mTime;
     Uint32 mRange;
 

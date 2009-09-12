@@ -26,7 +26,7 @@ int nw_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 }
 #endif // _MSC_VER
 
-int nw_snprintf(char* str, size_t size, const char* format, ...) 
+int nw_snprintf(char* str, size_t size, const char* format, ...)
 {
     size_t count;
     va_list ap;
@@ -38,16 +38,16 @@ int nw_snprintf(char* str, size_t size, const char* format, ...)
 
 void nw_debug(const char *cFormat, ...)
 {
-	va_list arg_list;
-	char scratch[MAXMSG];
-	va_start (arg_list, cFormat);  
-	nw_vsnprintf(scratch, MAXMSG, cFormat, arg_list);
-	va_end (arg_list);
+    va_list arg_list;
+    char scratch[MAXMSG];
+    va_start (arg_list, cFormat);
+    nw_vsnprintf(scratch, MAXMSG, cFormat, arg_list);
+    va_end (arg_list);
 
-	fprintf(stderr, scratch);
-#ifdef _MSC_VER
+    fprintf(stderr, scratch);
+    #ifdef _MSC_VER
     OutputDebugStringA(scratch);
-#endif
+    #endif
 
 }
 
@@ -58,9 +58,9 @@ void nw_assert(const char* aFilename, int aLine, bool aAssertion, const char* aA
     {
         sprintf(scratch, "assertion '%s' failed at %s:%d\n", aAssertionText, aFilename, aLine);
         nw_debug(scratch);
-#ifdef _MSC_VER
+        #ifdef _MSC_VER
         MessageBoxA(0, scratch, "Assertion Failed!", MB_OK);
-#endif
+        #endif
         assert(false);
     }
 }
