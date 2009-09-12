@@ -15,12 +15,11 @@
 
 //#define inline  __forceinline
 //#define inline_after __attribute__((always_inline))
-#define inline_after ;//
+#define inline_after ;          //
 // class functies nooit inline ?
 // mogelijke speed-up: readmem etc. uit de class halen? 
 
-typedef fastdelegate::FastDelegate2<word, byte> writeDelegate;   // returns void 
-
+typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // returns void 
 
 /* all of these macros are using in opcodes*.inc so they are easely be adapted
    to used on different platforms and in different configurations */
@@ -53,99 +52,100 @@ typedef fastdelegate::FastDelegate2<word, byte> writeDelegate;   // returns void
 
 #include "cpu/CPU.h"
 
-class Z80 : public CPU {
+class Z80:public CPU {
 
-public:
-	Z80(AddressBus& addressBus, IOBus& ioBus);
-	virtual ~Z80();
-private:
-    Emulator* mEmulator;
+  public:
+    Z80(AddressBus & addressBus, IOBus & ioBus);
+    virtual ~ Z80();
+  private:
+    Emulator * mEmulator;
 
     // for testing only
-    byte memblock[64*1024];
+    byte memblock[64 * 1024];
 
     float opcodeCounter[256];
     float opcodeCounterCB[256];
     float opcodeCounterDD[256];
     float opcodeCounterED[256];
     float opcodeCounterFD[256];
-    
+
     /* new memory layout */
-    const byte   *readBlock[8];
-    writeDelegate   writeFunc[8];
+    const byte *readBlock[8];
+    writeDelegate writeFunc[8];
 
-	/* interne z80 registers */
-	word			reg_a;
-	word			reg_f;
-	word			reg_b;
-	word			reg_c;
-	
-	word		    reg_i;
-	word    		reg_r;
-	word			reg_de;		// TODO: uitzoeken of DE vaker als 8 bits registers wordt gebruikt
-	word			reg_hl;
-	word    		reg_pc;
-	word    		reg_sp;
-	word    		reg_ix;
-    word    		reg_iy;
-	word			reg_wz;
+    /* interne z80 registers */
+    word reg_a;
+    word reg_f;
+    word reg_b;
+    word reg_c;
 
-	word    		shadow_af;
-	word   		    shadow_b;
-	word			shadow_c;
-	word    		shadow_de;
-	word    		shadow_hl;
+    word reg_i;
+    word reg_r;
+    word reg_de;                // TODO: uitzoeken of DE vaker als 8 bits registers wordt gebruikt
+    word reg_hl;
+    word reg_pc;
+    word reg_sp;
+    word reg_ix;
+    word reg_iy;
+    word reg_wz;
 
-	bool            IFF1;
-	bool            IFF2;
-	word    		interruptMode;
-	word			refreshCounter;
+    word shadow_af;
+    word shadow_b;
+    word shadow_c;
+    word shadow_de;
+    word shadow_hl;
 
-	word    		flagSZ[256];
-	word    		flagSZsub[256];
-	word    		flagSZP[256];
-	word    		flagInc[256];
-	word    		flagDec[256];
+    bool IFF1;
+    bool IFF2;
+    word interruptMode;
+    word refreshCounter;
 
-	inline byte	opcodeFetch(word) inline_after;
-	void            debugInstuctionCounter();
+    word flagSZ[256];
+    word flagSZsub[256];
+    word flagSZP[256];
+    word flagInc[256];
+    word flagDec[256];
 
-	void            writeIo(word, word);
-	byte            readIo(word);
+    inline byte opcodeFetch(word) inline_after;
+    void debugInstuctionCounter();
 
-	inline byte	readMem(word) inline_after;
-	inline word	readMem16(word) inline_after;
-	inline void writeMem(word, byte) inline_after;
-	inline void writeMem16(word, word) inline_after;	
-	
-public:
-	byte readMemPublic(word address);
-	word readMem16Public(word address);
-	void writeMemPublic(word address, byte value);
-	void writeMem16Public(word address, word value);
+    void writeIo(word, word);
+    byte readIo(word);
 
-	unsigned long   cpuFrequency;
-	word            start_test_nr;
-	void            initialize();
+    inline byte readMem(word) inline_after;
+    inline word readMem16(word) inline_after;
+    inline void writeMem(word, byte) inline_after;
+    inline void writeMem16(word, word) inline_after;
 
-	void            reset();
-	void            nmiCPU();
-	bool			getIFF1();
-	void            intCPU(byte);
-	void            setPC(word);
+  public:
+    byte readMemPublic(word address);
+    word readMem16Public(word address);
+    void writeMemPublic(word address, byte value);
+    void writeMem16Public(word address, word value);
 
-	emuTimeType		ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType endTime);
+    unsigned long cpuFrequency;
+    word start_test_nr;
+    void initialize();
 
-	void            saveState();
-	void            loadState();
+    void reset();
+    void nmiCPU();
+    bool getIFF1();
+    void intCPU(byte);
+    void setPC(word);
 
-	emuTimeType     mEndTime;
+    emuTimeType ExecuteInstructionsUntil(emuTimeType startTime,
+                                         emuTimeType endTime);
 
-	void            hijackBdos();
-	void            dumpPages();
-	void            dumpSlotSelection();
-	void            dumpCpuInfo();		
-	word            getSP();
+    void saveState();
+    void loadState();
+
+    emuTimeType mEndTime;
+
+    void hijackBdos();
+    void dumpPages();
+    void dumpSlotSelection();
+    void dumpCpuInfo();
+    word getSP();
 };
 
 #endif

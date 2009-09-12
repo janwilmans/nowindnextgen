@@ -13,11 +13,11 @@ class Scheduler;
 
 class Emulator //: public Component
 {
-public:
+    public:
     Emulator(void);
     virtual ~Emulator(void);
     static Emulator* Instance();
-	static emuTimeType emuTime;
+    static emuTimeType emuTime;
 
     void initialize();
     void test();
@@ -25,7 +25,7 @@ public:
 
     //test methods
     void interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime);
-private:
+    private:
     Scheduler* mScheduler;
     EventList mEventList;
 

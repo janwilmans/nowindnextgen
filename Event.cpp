@@ -13,7 +13,7 @@ Event::Event(emuTimeType aTime, EventDelegate aDelegate)
 {
     mTime = aTime;
     mDelegate = aDelegate;
-	sprintf(mDebugString, "Event at: %i", mTime);
+    sprintf(mDebugString, "Event at: %i", mTime);
 }
 
 Event::~Event(void)
@@ -22,7 +22,7 @@ Event::~Event(void)
 
 void Event::Callback(emuTimeType emuTime, emuTimeType eventTime)
 {
-    if (mDelegate != 0) 
+    if (mDelegate != 0)
     {
         mDelegate(emuTime, eventTime);
     }
@@ -40,7 +40,7 @@ emuTimeType Event::GetTime()
     return mTime;
 }
 
-Event& Event::operator= (const Event& other)
+Event& Event::operator= (const Event & other)
 {
     if (this != &other) // prevent self-assignment
     {

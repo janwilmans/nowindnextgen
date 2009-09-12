@@ -13,8 +13,8 @@ Emulator::Emulator(void)
 
 Emulator* Emulator::Instance()
 {
-	static Emulator lInstance;
-	return &lInstance;
+    static Emulator lInstance;
+    return &lInstance;
 }
 
 // create and initialize _everything_
@@ -40,13 +40,13 @@ void Emulator::initialize(void)
 // create and initialize _everything_
 void Emulator::test(void)
 {
-    Uint32 a=1;
-    Uint32 b=3000000000;
+    Uint32 a = 1;
+    Uint32 b = 3000000000;
     Sint32 c = a - b;
     DBERR("test c, should be -2999999999, but will fail: %d\n", c);
 
-    Uint64 d=1;
-    Uint64 e=3000000000;
+    Uint64 d = 1;
+    Uint64 e = 3000000000;
     Sint64 f = d - e;
     DBERR("test f, should be -2999999999: %lld\n", f);
 
@@ -54,8 +54,8 @@ void Emulator::test(void)
     IOBus* ioBus = new IOBus();
     DummyCpu* cpu = new DummyCpu(*addressBus, *ioBus);
 
-	mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::interruptTestMethod));
-	mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::interruptTestMethod));
+    mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-6, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-14, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(10, MakeDelegate(this, &Emulator::interruptTestMethod));
@@ -78,13 +78,13 @@ void Emulator::test(void)
 
 void Emulator::endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime)
 {
-	DBERR("I am the endOfRangeEvent for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
+    DBERR("I am the endOfRangeEvent for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
     mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
 }
 
 void Emulator::interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime)
 {
-	DBERR("I am the interruptTestMethod for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
+    DBERR("I am the interruptTestMethod for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
 }
 
 Emulator::~Emulator(void)
