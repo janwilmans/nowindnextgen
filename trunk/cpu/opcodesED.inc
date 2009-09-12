@@ -82,8 +82,8 @@ case 0x0e:{
 case 0x57:      // ld a,i
 {
 		TS(9);
-  		emuTimeType n = 0; //Emulator::Instance()->getNextCPUInterruptTime();
-  		if (mEmuTime >= n) {
+  		if (localEmuTime >= mEndTime) 
+        {
 			IFF2 = false;
 		}
         reg_a = reg_i;
@@ -93,8 +93,8 @@ case 0x57:      // ld a,i
 case 0x5F:      // ld a,r
 {
   		TS(9);
-  		emuTimeType n = 0; //Emulator::Instance()->getNextCPUInterruptTime();
-  		if (mEmuTime >= n) {
+  		if (localEmuTime >= mEndTime) 
+        {
 			IFF2 = false;
 		}
         reg_a = (reg_r & 0x80) | (refreshCounter & 0x7f);

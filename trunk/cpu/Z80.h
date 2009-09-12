@@ -25,7 +25,7 @@ typedef fastdelegate::FastDelegate2<word, byte> writeDelegate;   // returns void
 /* all of these macros are using in opcodes*.inc so they are easely be adapted
    to used on different platforms and in different configurations */
 
-#define TS(states) mEmuTime += states
+#define TS(states) localEmuTime += states
 
 #define reg_af ((reg_a << 8) | reg_f)
 #define reg_bc ((reg_b << 8) | reg_c)
@@ -139,7 +139,7 @@ public:
 	void            saveState();
 	void            loadState();
 
-	emuTimeType     mEmuTime;
+	emuTimeType     mEndTime;
 
 	void            hijackBdos();
 	void            dumpPages();

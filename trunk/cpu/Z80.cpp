@@ -11,6 +11,7 @@
 
 using namespace std;
 using namespace fastdelegate;
+using namespace nowind;
 
 Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 {
@@ -45,9 +46,19 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 	romfile.seekg(0, ios::end);
 	unsigned long fileSize = romfile.tellg();
 	DBERR("loaded zexall.com (%u bytes)\n", fileSize); 
+
+    char* temp = new char[fileSize];
 	romfile.seekg(0);
-    romfile.read((char*)&memblock[0x100], fileSize);
+    romfile.read(temp, fileSize);
 	romfile.close();
+
+    // dont read files into memory directly
+    // memory locations are not guaranteed to be '1 byte' locations
+    for (Uint16 i=0;i<fileSize;i++)
+    {
+        memblock[0x100+i] = temp[i];
+    }
+    delete temp;
 
     // patch bdos call 0x0005
     memblock[0x0005] = 0xED;
@@ -146,7 +157,7 @@ void Z80::intCPU(byte interruptVectorOnDataBus)
 	
 	switch (interruptMode) {
 	case 0:
-		mEmuTime += 14;
+		//mEmuTime += 14;
 	
 		// the instruction can be any 1 byte instruction, usually this will be rst.
 		// TODO: hoeveel states...
@@ -169,11 +180,11 @@ void Z80::intCPU(byte interruptVectorOnDataBus)
  		// 11 (rst $38) + 2 (wait states in special M1) + 1 (MSX-engine) = 14
 		// TODO: dit is onze (stellig) aanname, maar klopt dit ook werkelijk? De redenatie
 		// komt overeen met die van Sean met als toevoeging 1 extra state door de engine.
-		mEmuTime += 14;
+		//mEmuTime += 14;
 		reg_pc = 0x38;
 		break;
 	case 2:
-		mEmuTime += 20;
+		//mEmuTime += 20;
 		reg_pc = readMem16(interruptVectorOnDataBus|(reg_i<<8));
 		break;
 	default:
@@ -209,8 +220,9 @@ inline byte Z80::opcodeFetch(word address) {
 //   also add the 'register' compiler hint to 'endTime' and 'localEmuTime'
 //   this will require passing the actual emutime at every readMem/writeMem readIO/writeIO
 //   put the localemutime back into global emutime at exit of executeInstructions()
-emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType endTime) {
-    mEmuTime = startTime;
+emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType aEndTime) {
+    emuTimeType localEmuTime = startTime;
+    mEndTime = aEndTime;
 
     // TODO: 1 instruction is always executed before the next interrupt occurs,
     // this is sometimes usefull, but not accurate.. why did we do that ?
@@ -290,9 +302,9 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType end
 //    	NW_ASSERT (reg_sp != 2)         // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
                                         // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
 
-    } while((endTime - mEmuTime) > 0);  // end of while-not-next-interrupt
+    } while((mEndTime - localEmuTime) > 0);  // end of while-not-next-interrupt
 
-    return mEmuTime;
+    return localEmuTime;
 }
 
 byte Z80::readMem(word address) {
