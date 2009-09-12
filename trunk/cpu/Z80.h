@@ -91,7 +91,7 @@ private:
 	word			reg_wz;
 
 	word    		shadow_af;
-	word   		shadow_b;
+	word   		    shadow_b;
 	word			shadow_c;
 	word    		shadow_de;
 	word    		shadow_hl;
@@ -111,27 +111,24 @@ private:
 	void            debugInstuctionCounter();
 
 	void            writeIo(word, word);
-	byte         readIo(word);
+	byte            readIo(word);
 
 	inline byte	readMem(word) inline_after;
 	inline word	readMem16(word) inline_after;
-	inline void     writeMem(word, byte) inline_after;
-	inline void     writeMem16(word, word) inline_after;	
+	inline void writeMem(word, byte) inline_after;
+	inline void writeMem16(word, word) inline_after;	
 	
 public:
-	byte			readMemPublic(word address);
-	word			readMem16Public(word address);
-	void 			writeMemPublic(word address, byte value);
-	void 			writeMem16Public(word address, word value);
+	byte readMemPublic(word address);
+	word readMem16Public(word address);
+	void writeMemPublic(word address, byte value);
+	void writeMem16Public(word address, word value);
 
-    //emuTimeType     nextInterrupt;
 	unsigned long   cpuFrequency;
-
-	word         start_test_nr;
+	word            start_test_nr;
 	void            initialize();
 
 	void            reset();
-	void            hardReset();
 	void            nmiCPU();
 	bool			getIFF1();
 	void            intCPU(byte);
@@ -148,8 +145,7 @@ public:
 	void            dumpPages();
 	void            dumpSlotSelection();
 	void            dumpCpuInfo();		
-    void            abortEmulator();
-	word         getSP();
+	word            getSP();
 };
 
 #endif
