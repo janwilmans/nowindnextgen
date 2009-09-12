@@ -4,8 +4,8 @@
 case 0x01:
     {
         DBERR("0x%04X: ", reg_hl);
-        int len = readMem(reg_pc++);
-        for (int i=0;i<len;i++) DBERR("0x%02x ", readMem(reg_hl+i));
+        int len = READMEM(reg_pc++);
+        for (int i=0;i<len;i++) DBERR("0x%02x ", READMEM(reg_hl+i));
         DBERR("\n");
     }
     break;
@@ -15,8 +15,8 @@ case 0x02:
         word addr = readMem16(reg_pc);
         DBERR("0x%04X: ", addr);
         reg_pc += 2;
-        int len = readMem(reg_pc++);
-        for (int i=0;i<len;i++) DBERR("0x%02x ", readMem(addr+i));
+        int len = READMEM(reg_pc++);
+        for (int i=0;i<len;i++) DBERR("0x%02x ", READMEM(addr+i));
         DBERR("\n");
     }
     break;
@@ -62,9 +62,9 @@ case 0x0c:
     
 case 0x0d:{
 	Uint32 address = reg_de;
-	Uint8 count = readMem(reg_pc++);
+	Uint8 count = READMEM(reg_pc++);
     char c;
-	while (((c = readMem(address)) != 0) || (count == 0)) {
+	while (((c = READMEM(address)) != 0) || (count == 0)) {
 		DBERR("%c", c);
         address++;
         count--;
@@ -82,7 +82,7 @@ case 0x0e:{
 case 0x57:      // ld a,i
 {
 		TS(9);
-  		if (localEmuTime >= mEndTime) 
+  		if (localEmuTime >= aEndTime) 
         {
 			IFF2 = false;
 		}
@@ -93,7 +93,7 @@ case 0x57:      // ld a,i
 case 0x5F:      // ld a,r
 {
   		TS(9);
-  		if (localEmuTime >= mEndTime) 
+  		if (localEmuTime >= aEndTime) 
         {
 			IFF2 = false;
 		}

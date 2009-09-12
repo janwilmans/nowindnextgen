@@ -1,6 +1,6 @@
 #pragma once
 
-#include "msxtypes.h"
+#include "basetypes.h"
 #include "FastDelegate.h"
 #include <string>
 

@@ -9,15 +9,9 @@
 #include <map>
 #include <stdlib.h>
 
-#include "msxtypes.h"
+#include "basetypes.h"
 #include "FastDelegate.h"
 #include "Emulator.h"
-
-//#define inline  __forceinline
-//#define inline_after __attribute__((always_inline))
-#define inline_after ;          //
-// class functies nooit inline ?
-// mogelijke speed-up: readmem etc. uit de class halen? 
 
 typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // returns void 
 
@@ -45,7 +39,10 @@ typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // retur
 #define CFLAG 0x01
 
 /* memory read/write macros */
-#define READMEM readMem
+
+#define READMEM readPage[0]
+//#define READMEM readMem
+
 #define READMEM16 readMem16
 #define WRITEMEM writeMem
 #define WRITEMEM16 writeMem16
@@ -106,16 +103,16 @@ class Z80:public CPU {
     word flagInc[256];
     word flagDec[256];
 
-    inline byte opcodeFetch(word) inline_after;
+    byte opcodeFetch(word);
     void debugInstuctionCounter();
 
     void writeIo(word, word);
     byte readIo(word);
 
-    inline byte readMem(word) inline_after;
-    inline word readMem16(word) inline_after;
-    inline void writeMem(word, byte) inline_after;
-    inline void writeMem16(word, word) inline_after;
+    byte readMem(word);
+    word readMem16(word);
+    void writeMem(word, byte);
+    void writeMem16(word, word);
 
   public:
     byte readMemPublic(word address);
@@ -123,7 +120,7 @@ class Z80:public CPU {
     void writeMemPublic(word address, byte value);
     void writeMem16Public(word address, word value);
 
-    unsigned long cpuFrequency;
+    Uint32 cpuFrequency;
     word start_test_nr;
     void initialize();
 
@@ -133,7 +130,7 @@ class Z80:public CPU {
     void intCPU(byte);
     void setPC(word);
 
-    emuTimeType ExecuteInstructionsUntil(emuTimeType startTime,
+    emuTimeType ExecuteInstructions(emuTimeType startTime,
                                          emuTimeType endTime);
 
     void saveState();

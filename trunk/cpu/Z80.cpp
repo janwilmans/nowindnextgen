@@ -13,6 +13,8 @@ using namespace std;
 using namespace fastdelegate;
 using namespace nowind;
 
+//  create read/write mem fp's
+
 Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
 {
     DBERR("Z80 constructor...\n");
@@ -43,7 +45,7 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
     NW_ASSERT(!failed);
 
     romfile.seekg(0, ios::end);
-    unsigned long fileSize = romfile.tellg();
+    Uint32 fileSize = romfile.tellg();
     DBERR("loaded zexall.com (%u bytes)\n", fileSize);
 
     char* temp = new char[fileSize];
@@ -63,6 +65,18 @@ Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
     memblock[0x0005] = 0xED;
     memblock[0x0006] = 0x0E;
     memblock[0x0007] = 0xC9;
+
+    //
+    readPage[0] = MakeDelegate(this, &Z80::readMem);
+    readPage[1] = MakeDelegate(this, &Z80::readMem);
+    readPage[2] = MakeDelegate(this, &Z80::readMem);
+    readPage[3] = MakeDelegate(this, &Z80::readMem);
+/*
+    writePage[0] = MakeDelegate(this, &Z80::writeMem);
+    writePage[1] = MakeDelegate(this, &Z80::writeMem);
+    writePage[2] = MakeDelegate(this, &Z80::writeMem);
+    writePage[3] = MakeDelegate(this, &Z80::writeMem);
+*/
 
     DBERR("Z80 constructor finished.\n");
 }
@@ -120,7 +134,7 @@ void Z80::nmiCPU()
     IFF1 = false;
 
     // cpu weer wakker maken na een HALT
-    if (readMem(reg_pc) == 0x76) reg_pc++;
+    if (READMEM(reg_pc) == 0x76) reg_pc++;
 
     reg_sp -= 2;
     writeMem16(reg_sp, reg_pc); //TODO: volgens de documentatie wordt er maar een M1 uitgevoerd???
@@ -134,17 +148,17 @@ bool Z80::getIFF1()
 
 void Z80::intCPU(byte interruptVectorOnDataBus)
 {
+    // ignore interrupt if they are disabled
+    if (!IFF1) return;
+
     NW_ASSERT(reg_pc < 0x10000);
-    NW_ASSERT(IFF1);   // if ints are disabled, when should never be called
 
     // When an interrupt is accepted, the Z80 clears IFF1 and IFF2
     IFF1 = false;
     IFF2 = false;
 
-    //mEmulator-> call something to de-schedule new cpu-interupts
-
     // cpu weer wakker maken na een HALT
-    if (unlikely(readMem(reg_pc) == 0x76)) reg_pc++;
+    if (unlikely(READMEM(reg_pc) == 0x76)) reg_pc++;
 
     // Interrupt Acknowledge Cycle
     // The Z80 generates a special (NOT AN EXTRA) M1 cycle and adds two wait states to
@@ -206,26 +220,16 @@ inline byte Z80::opcodeFetch(word address)
     refreshCounter++;
     */
 
-    byte oc = readMem(address);
+    byte oc = READMEM(address);
     //DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 
-
-// execute instructions until the "nextInterrupt" time, nextInterrupt is a member variable so
-// DI/EI can effect it! (via emulator::setCPUInterrupt())
-//
 // the amount of cycles actually executed can vary (with max. the cycles-1 of the biggest instruction)
 // because an instruction is always completely executed.
-
-// todo: optimize this method by copying the emutime into a local variable,
-//   also add the 'register' compiler hint to 'endTime' and 'localEmuTime'
-//   this will require passing the actual emutime at every readMem/writeMem readIO/writeIO
-//   put the localemutime back into global emutime at exit of executeInstructions()
-emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType aEndTime)
+emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime)
 {
     emuTimeType localEmuTime = startTime;
-    mEndTime = aEndTime;
 
     // TODO: 1 instruction is always executed before the next interrupt occurs,
     // this is sometimes usefull, but not accurate.. why did we do that ?
@@ -235,7 +239,7 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType aEn
 
     do
     {
-        word reg1 = 0;
+        word reg1 = 0;      // define reg1/reg2 locally! defining them here prevents use of registers!
         word reg2 = 0;
         word opcode = 0;
         opcode = opcodeFetch(reg_pc);
@@ -244,9 +248,7 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType aEn
         // execute opcode
         switch (opcode)
         {
-
             #include "opcodes.inc"
-
         case 0xcb:
             switch (opcodeFetch(reg_pc++))
             {
@@ -316,21 +318,20 @@ emuTimeType Z80::ExecuteInstructionsUntil(emuTimeType startTime, emuTimeType aEn
         // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
 
     }
-    while ((mEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
+    while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
 
     return localEmuTime;
 }
 
 byte Z80::readMem(word address)
 {
-
     return memblock[address] & 0xff;
 }
 
 word Z80::readMem16(word address)
 {
     word addressHigh = (address + 1) & 0xffff;
-    return readMem(address) & 0xff | (readMem(addressHigh) << 8);
+    return READMEM(address) & 0xff | (READMEM(addressHigh) << 8);
 }
 
 void Z80::writeMem(word address, byte value)
@@ -474,7 +475,7 @@ void Z80::hijackBdos()
         word de = reg_de;
         while (1)
         {
-            byte c = readMem(de++);
+            byte c = READMEM(de++);
             if (c == 0x0A)
             {
                 DBERR(" (time: %us)\n", seconds);

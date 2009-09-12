@@ -29,10 +29,10 @@ case 0x51: TS(4); reg_de = LREG(reg_de)|(reg_c<<8); break;           // ld d,c
 case 0x52: {                                                         // ld d,d 
         // blueMSX debuginfo
         TS(4);
-        if (readMem(reg_pc) == 0x18) {
-            int len = readMem(reg_pc+1);
+        if (READMEM(reg_pc) == 0x18) {
+            int len = READMEM(reg_pc+1);
             char text[255];
-            for (int i=0;i<len;i++) text[i] = readMem(reg_pc+i+2);
+            for (int i=0;i<len;i++) text[i] = READMEM(reg_pc+i+2);
             text[len] = 0;
             DBERR("[LDD,D] %s\n", text);
         }
@@ -427,7 +427,6 @@ case 0xF3: // di
         TS(4);
 		IFF1 = false;
 		IFF2 = false;
-		//Emulator::Instance()->setCPUInterrupt(false);
 		
 #ifdef STACKTRACK_ON
 	    DBERR("DI" << endl);
@@ -437,10 +436,6 @@ case 0xFB: // ei
 		TS(4); 
 		IFF1 = true;
 		IFF2 = true;
-			  
-		// IFF1 is set immediately, but the next interrupt is scheduled at emuTime + 1
-		// This way the interrupt is enabled after the instruction following EI
-		// Emulator::Instance()->setCPUInterrupt(true);
 		   
 #ifdef STACKTRACK_ON
     	DBERR("EI" << endl);
