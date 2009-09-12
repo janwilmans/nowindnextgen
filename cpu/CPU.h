@@ -3,9 +3,7 @@
 #define CPU_H
 
 #include "basetypes.h" 
-#include "FastDelegate.h"
 
-using namespace fastdelegate;
 using namespace nowind;
 
 // for testing only, move to separate files....
@@ -16,9 +14,6 @@ class AddressBus {
 class IOBus {
 
 };
-
-typedef fastdelegate::FastDelegate1<word, byte> MemReadDelegate;   // 1 parameter, returns byte 
-typedef fastdelegate::FastDelegate2<word, byte> MemWriteDelegate;   // 2 parameters, returns void 
 
 class CPU {
 

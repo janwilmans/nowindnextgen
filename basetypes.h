@@ -3,7 +3,9 @@
 #define BASETYPES_H
 
 #include "SDL_types.h"
-
+#include "SDL_types.h"
+#include "FastDelegate.h"
+ 
 namespace nowind
 {
 
@@ -17,6 +19,9 @@ typedef Uint32 word;            // should be (at least) an 16 bit type
 
 typedef Uint32 emuTimeType;     // should be (at least) an 32 bit type
 typedef Uint32 msTimeType;      // should be (at least) an 32 bit type
+
+typedef fastdelegate::FastDelegate1<word, byte> MemReadDelegate;   // 1 parameter, returns byte 
+typedef fastdelegate::FastDelegate2<word, byte> MemWriteDelegate;   // 2 parameters, returns void 
 
 }
 
