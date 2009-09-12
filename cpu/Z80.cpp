@@ -208,7 +208,7 @@ void Z80::intCPU(byte interruptVectorOnDataBus)
     }
 }
 
-inline byte Z80::opcodeFetch(word address)
+byte Z80::opcodeFetch(word address)
 {
 
     /*
@@ -227,19 +227,14 @@ inline byte Z80::opcodeFetch(word address)
 
 // the amount of cycles actually executed can vary (with max. the cycles-1 of the biggest instruction)
 // because an instruction is always completely executed.
+// if we are called the scheduler has determined that at least 1 instruction needs to be executed.
 emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime)
 {
     emuTimeType localEmuTime = startTime;
-
-    // TODO: 1 instruction is always executed before the next interrupt occurs,
-    // this is sometimes usefull, but not accurate.. why did we do that ?
-    // see also Emulator::setCPUInterrupt
-    // jan: if we are called the scheduler has determined that at least 1 instruction _needs_
-    //      to be executed, so the behaviour is correct. we need to document these rationales somewhere.
-
     do
     {
-        word reg1 = 0;      // define reg1/reg2 locally! defining them here prevents use of registers!
+        // define reg1/reg2 more locally! defining them here could prevent use of registers!
+        word reg1 = 0;      
         word reg2 = 0;
         word opcode = 0;
         opcode = opcodeFetch(reg_pc);
