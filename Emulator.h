@@ -6,6 +6,8 @@
 
 typedef std::list<Event> EventList;
 
+using namespace nowind;
+
 //forward declarations
 class Scheduler;
 

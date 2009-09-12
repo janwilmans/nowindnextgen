@@ -4,6 +4,8 @@
 
 #include "msxtypes.h" 
 
+using namespace nowind;
+
 // for testing only, move to separate files....
 class AddressBus {
 

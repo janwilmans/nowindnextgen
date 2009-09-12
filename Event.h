@@ -4,6 +4,8 @@
 #include "FastDelegate.h"
 #include <string>
 
+using namespace nowind;
+
 static const Uint32 emuTimeSize = sizeof(emuTimeType);
 static const Uint32 emuHalfTime = 2^((8*emuTimeSize)/2);
 static const Uint32 lowerBound = emuHalfTime/2;
