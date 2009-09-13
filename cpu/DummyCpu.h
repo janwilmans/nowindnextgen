@@ -9,7 +9,7 @@ class DummyCpu : public Z80
 {
 public:
     // find out why this is needed!!
-    DummyCpu(AddressBus& addressBus, IOBus& ioBus) : Z80(addressBus, ioBus) {}
+    DummyCpu(Bus& bus) : Z80(bus) {}
 
     virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) 
     {

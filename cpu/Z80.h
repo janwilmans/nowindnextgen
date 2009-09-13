@@ -52,7 +52,7 @@ typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // retur
 class Z80:public CPU {
 
   public:
-    Z80(AddressBus & addressBus, IOBus & ioBus);
+    Z80(Bus& aBus);
     virtual ~ Z80();
   private:
     Emulator * mEmulator;

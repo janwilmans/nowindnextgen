@@ -15,7 +15,7 @@ using namespace nowind;
 
 //  create read/write mem fp's
 
-Z80::Z80(AddressBus& addressBus, IOBus& ioBus) : CPU(addressBus, ioBus)
+Z80::Z80(Bus& bus) : CPU(bus)
 {
     DBERR("Z80 constructor...\n");
 

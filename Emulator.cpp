@@ -2,6 +2,7 @@
 #include "Scheduler.h"
 #include "Event.h"
 #include "cpu/DummyCpu.h"
+#include "Bus.h"
 
 using namespace fastdelegate;
 
@@ -25,9 +26,8 @@ void Emulator::initialize(void)
     mScheduler = new Scheduler();
     mScheduler->initialize();
 
-    AddressBus* addressBus = new AddressBus();
-    IOBus* ioBus = new IOBus();
-    Z80* cpu = new Z80(*addressBus, *ioBus);
+    Bus* bus = new Bus();
+    Z80* cpu = new Z80(*bus);
     cpu->reset();
     cpu->setPC(0x100);
     mScheduler->run(cpu);
@@ -50,9 +50,8 @@ void Emulator::test(void)
     Sint64 f = d - e;
     DBERR("test f, should be -2999999999: %lld\n", f);
 
-    AddressBus* addressBus = new AddressBus();
-    IOBus* ioBus = new IOBus();
-    DummyCpu* cpu = new DummyCpu(*addressBus, *ioBus);
+    Bus* bus = new Bus();
+    DummyCpu* cpu = new DummyCpu(*bus);
 
     mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));

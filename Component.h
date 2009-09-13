@@ -17,7 +17,7 @@ public:
     // stop threads...etc.
     virtual void prepare_shutdown() = 0;
 
-    // the destructor should release any allocated resources (memory/filehandles etc.. during runtime 
+    // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Component() {}
 };
 
