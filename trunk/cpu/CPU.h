@@ -6,25 +6,17 @@
 
 using namespace nowind;
 
-// for testing only, move to separate files....
-class AddressBus {
-
-};
-
-class IOBus {
-
-};
+class Bus;
 
 class CPU {
 
 public:
-    CPU(AddressBus& addressBus, IOBus& ioBus);
+    CPU(Bus& aBus);
     virtual ~CPU() {}
     virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) = 0;
 
 protected:
-        AddressBus& mAddressBus;
-        IOBus& mIOBus;
+        Bus& mBus;
 
         MemReadDelegate readPage[4];
         MemReadDelegate writePage[4];
