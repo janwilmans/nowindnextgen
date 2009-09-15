@@ -1,24 +1,30 @@
-#pragma once
+//! Mapper.h
+#ifndef MAPPER_H
+#define MAPPER_H
 
-// a Component is an emulated object that exists in the real world
-class Component 
+#include "BusComponent.h"
+
+class Mapper : public BusComponent
 {
+private:
+    Uint8 mBanks;
 public:
-    Component() {}
+    Mapper(Bus& bus, Uint8 banks);
 
     // the prepare method should create all objects and register them with the broker
-    virtual void prepare() = 0;
+    virtual void prepare();
 
     // the initialize method should create relations to other objects 
     // it can assume that 'prepare' has been called on all existing objects in the broker.
-    virtual void initialize() = 0;
+    virtual void initialize();
 
     // should do any actions needed before the destructor 
     // can be savely called, such as: unregister objects from the broker,
     // stop threads...etc.
-    virtual void prepare_shutdown() = 0;
+    virtual void prepare_shutdown();
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
-    virtual ~Component() {}
+    virtual ~Mapper();
 };
 
+#endif // MAPPER_H

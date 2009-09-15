@@ -196,6 +196,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BusComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BusComponent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Component.cpp"
 				>
 			</File>
@@ -229,6 +237,14 @@
 			</File>
 			<File
 				RelativePath=".\FastDelegate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Mapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Mapper.h"
 				>
 			</File>
 			<File

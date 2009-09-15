@@ -18,9 +18,12 @@ public:
 protected:
         Bus& mBus;
 
+        // to be deleted....
         MemReadDelegate readPage[4];
         MemReadDelegate writePage[4];
-        
+
+        MemReadDelegate readSection[constSections];
+        MemWriteDelegate writeSection[constSections];        
 };
 
 #endif //CPU_H

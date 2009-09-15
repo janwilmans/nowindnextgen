@@ -1,3 +1,6 @@
+//! Debug.h
+#ifndef DEBUG_H
+#define DEBUG_H
 
 #ifdef _DEBUG
     #define NW_ASSERT(assertion) nw_assert(__FILE__, __LINE__, assertion, #assertion);
@@ -17,3 +20,5 @@ void nw_assert(const char* aFilename, int aLine, bool aAssertion, const char* aA
     #define likely(x)       (x)
     #define unlikely(x)     (x)
 #endif
+
+#endif // DEBUG_H
