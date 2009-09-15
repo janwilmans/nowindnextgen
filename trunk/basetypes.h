@@ -28,10 +28,10 @@ typedef fastdelegate::FastDelegate2<word, byte> MemWriteDelegate;   // 2 paramet
 //  4 KB     16     4
 //  8 KB     8      3
 
-static const Uint32 constBankSize = 8*1024;
-static const Uint32 constBanks = (64*1024) / constBankSize;
+static const Uint32 constSectionSize = 8*1024;
+static const Uint32 constSections = (64*1024) / constSectionSize;
 static const Uint32 constOnes = 3;      // amount of 1's in (constBanks-1)
-static const Uint32 constBankShift = 16-constOnes;  // amount to shift >> to convert absolute address to bank address
+static const Uint32 constSectionShift = 16-constOnes;  // amount to shift >> to convert absolute address to bank address
 
 }
 

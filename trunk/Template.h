@@ -1,24 +1,26 @@
-#pragma once
+//! Template.h
+#ifndef TEMPLATE_H
+#define TEMPLATE_H
 
-// a Component is an emulated object that exists in the real world
-class Component 
+class Template 
 {
 public:
-    Component() {}
+    Template();
 
     // the prepare method should create all objects and register them with the broker
-    virtual void prepare() = 0;
+    virtual void prepare();
 
     // the initialize method should create relations to other objects 
     // it can assume that 'prepare' has been called on all existing objects in the broker.
-    virtual void initialize() = 0;
+    virtual void initialize();
 
     // should do any actions needed before the destructor 
     // can be savely called, such as: unregister objects from the broker,
     // stop threads...etc.
-    virtual void prepare_shutdown() = 0;
+    virtual void prepare_shutdown();
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
-    virtual ~Component() {}
+    virtual ~Template() {}
 };
 
+#endif // TEMPLATE_H
