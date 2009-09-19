@@ -4,6 +4,8 @@
 
 #include "BusComponent.h"
 
+namespace nowind {
+
 class Mapper : public BusComponent
 {
 private:
@@ -26,5 +28,7 @@ public:
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Mapper();
 };
+
+} // namespace nowind
 
 #endif // MAPPER_H

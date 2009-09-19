@@ -248,10 +248,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MemoryDevice.h"
-				>
-			</File>
-			<File
 				RelativePath=".\nowind_nextgen.cpp"
 				>
 			</File>

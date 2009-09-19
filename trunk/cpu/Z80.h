@@ -48,8 +48,12 @@ typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // retur
 #define WRITEMEM16 writeMem16
 
 #include "cpu/CPU.h"
+#include "Bus.h"
 
-class Z80:public CPU {
+
+namespace nowind {
+
+class Z80 : public nowind::CPU {
 
   public:
     Z80(Bus& aBus);
@@ -144,5 +148,7 @@ class Z80:public CPU {
     void dumpCpuInfo();
     word getSP();
 };
+
+} // namespace nowind
 
 #endif

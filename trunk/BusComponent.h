@@ -5,6 +5,8 @@
 #include "Component.h"
 #include "Bus.h"
 
+namespace nowind {
+
 // an abstract class that defines methods to allow Components to attach to a Bus
 class BusComponent : public Component 
 {
@@ -40,5 +42,7 @@ public:
     virtual void prepare_shutdown() = 0;
 
 };
+
+} // namespace nowind
 
 #endif // BUSCOMPONENT_H

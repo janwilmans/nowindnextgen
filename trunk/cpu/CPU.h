@@ -4,7 +4,7 @@
 
 #include "basetypes.h" 
 
-using namespace nowind;
+namespace nowind {
 
 class Bus;
 
@@ -13,7 +13,7 @@ class CPU {
 public:
     CPU(Bus& aBus);
     virtual ~CPU() {}
-    virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) = 0;
+    virtual nowind::emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) = 0;
 
 protected:
         Bus& mBus;
@@ -25,5 +25,7 @@ protected:
         MemReadDelegate readSection[constSections];
         MemWriteDelegate writeSection[constSections];        
 };
+
+} // namespace nowind
 
 #endif //CPU_H

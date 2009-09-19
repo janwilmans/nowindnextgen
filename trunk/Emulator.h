@@ -1,4 +1,6 @@
-#pragma once
+//! Emulator.h
+#ifndef EMULATOR_H
+#define EMULATOR_H
 
 #include <list>
 #include "Event.h"
@@ -6,7 +8,7 @@
 
 typedef std::list<Event> EventList;
 
-using namespace nowind;
+namespace nowind {
 
 //forward declarations
 class Scheduler;
@@ -30,3 +32,7 @@ class Emulator //: public Component
     EventList mEventList;
 
 };
+
+} // namespace nowind
+
+#endif // EMULATOR_H
