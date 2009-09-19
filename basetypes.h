@@ -22,6 +22,9 @@ typedef Uint32 msTimeType;      // should be (at least) an 32 bit type
 typedef fastdelegate::FastDelegate1<word, byte> MemReadDelegate;   // 1 parameter, returns byte 
 typedef fastdelegate::FastDelegate2<word, byte> MemWriteDelegate;   // 2 parameters, returns void 
 
+typedef fastdelegate::FastDelegate1<word, byte> IOReadDelegate;   // 1 parameter, returns byte 
+typedef fastdelegate::FastDelegate2<word, byte> IOWriteDelegate;   // 2 parameters, returns void 
+
 // banksize  banks  ones 
 //  1 KB     64     6
 //  2 KB     32     5

@@ -1,4 +1,6 @@
-#pragma once
+//! Scheduler.h
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 
 #include "basetypes.h"
 #include "Event.h"
@@ -6,6 +8,8 @@
 #include <list>
 
 typedef std::list<Event>::iterator EventIterator;
+
+namespace nowind {
 
 class Scheduler
 {
@@ -28,3 +32,7 @@ class Scheduler
     std::list<Event> mEventList;
 
 };
+
+} // namespace nowind
+
+#endif // SCHEDULER_H

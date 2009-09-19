@@ -5,6 +5,7 @@
 #include "cpu/Z80.h"
 #include "debug.h"
 #include <SDL.h>
+#include "Bus.h"
 
 #define CONSOLE_DEBUGGING_ON
 #define FULL_SPEED_ON

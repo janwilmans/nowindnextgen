@@ -26,7 +26,11 @@ void Emulator::initialize(void)
     mScheduler = new Scheduler();
     mScheduler->initialize();
 
-    Bus* bus = new Bus();
+    // testing rule: 
+    // if you pass the ownership of an object, use a pointer
+    // if you want to pass access to an object, use a reference
+
+    Bus* bus = new Bus(*mScheduler);
     Z80* cpu = new Z80(*bus);
     cpu->reset();
     cpu->setPC(0x100);
@@ -50,7 +54,7 @@ void Emulator::test(void)
     Sint64 f = d - e;
     DBERR("test f, should be -2999999999: %lld\n", f);
 
-    Bus* bus = new Bus();
+    Bus* bus = new Bus(*mScheduler);
     DummyCpu* cpu = new DummyCpu(*bus);
 
     mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::interruptTestMethod));
