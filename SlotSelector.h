@@ -42,6 +42,7 @@ public:
     void setPage(Uint8 page, Uint8 slot, Uint8 subslot);
 
 private:
+    void addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot);
 
     // contains the currently active mainslot and slotsub for each page
     Uint8 mSelectedMainSlot[4];

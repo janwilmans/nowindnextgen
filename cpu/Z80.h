@@ -72,7 +72,7 @@ protected:
     {
         NW_ASSERT(address < 0x10000);
         if (address == 0xffff) return readSSSR();
-        return readSection[address >> constSectionShift](address & constSectionMask);
+        return readSection[address >> constSectionShift](address);
     }
 
     inline void writeByte(word address, byte value)
@@ -85,7 +85,7 @@ protected:
         }
         else
         {
-            writeSection[address >> constSectionShift](address & constSectionMask, value);
+            writeSection[address >> constSectionShift](address, value);
         }   
     }
 

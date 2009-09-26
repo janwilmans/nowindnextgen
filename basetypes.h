@@ -8,8 +8,8 @@
 namespace nowind
 {
 
-typedef Uint32 byte;            // should be (at least) an 8 bit type
-typedef Uint32 word;            // should be (at least) an 16 bit type
+typedef Uint8 byte;            // should be (at least) an 8 bit type
+typedef Uint16 word;            // should be (at least) an 16 bit type
 
 // 'typedef Uint8 byte' is 'safer' but slightly slower
 // if only Uint8 works someone is making assumptions about the
@@ -51,6 +51,7 @@ static const Uint32 constOnes = 3;      // amount of 1's in (constSections-1)
 static const Uint32 constSectionShift = 16-constOnes;  // amount to shift >> to convert absolute address to section number
 static const Uint32 constSectionMask = constSectionSize-1;   // AND mask to convert absolute address to section address
 static const Uint32 constSections = (64*1024) / constSectionSize;
+static const Uint32 constMaxSection = constSections-1;
 
 } // namespace nowind
 
