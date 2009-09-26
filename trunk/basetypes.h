@@ -8,8 +8,8 @@
 namespace nowind
 {
 
-typedef Uint8 byte;            // should be (at least) an 8 bit type
-typedef Uint16 word;            // should be (at least) an 16 bit type
+typedef Uint32 byte;            // should be (at least) an 8 bit type
+typedef Uint32 word;            // should be (at least) an 16 bit type
 
 // 'typedef Uint8 byte' is 'safer' but slightly slower
 // if only Uint8 works someone is making assumptions about the
