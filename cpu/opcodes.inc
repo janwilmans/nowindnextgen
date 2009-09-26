@@ -613,9 +613,9 @@ case 0xFF: TS(11); RST(0x0038); break;  // rst 0x38
 case 0xDB: // in a,(n)
 		TS(9);
 		reg_wz = READMEM(reg_pc++);
-		reg_a = readIo(reg_wz);
+		reg_a = readIO(reg_wz);
 		reg_wz += (reg_a<<8) + 1;
 		TS(2);
 		break;
 		
-case 0xD3: TS(9); writeIo(READMEM(reg_pc++), reg_a); TS(2); break; // out (n),a
+case 0xD3: TS(9); writeIO(READMEM(reg_pc++), reg_a); TS(2); break; // out (n),a

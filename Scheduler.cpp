@@ -5,6 +5,7 @@
 static Uint32 Ranges = 4;
 
 using namespace fastdelegate;
+using namespace nowind;
 
 Scheduler::Scheduler()
 {

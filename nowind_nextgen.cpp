@@ -10,6 +10,8 @@
 #include "debug.h"
 #include "Emulator.h"
 
+using namespace nowind;
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	SDL_Init(SDL_INIT_TIMER);

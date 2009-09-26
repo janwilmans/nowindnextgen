@@ -5,6 +5,8 @@
 #include "debug.h"
 #include "cpu/Z80.h"
 
+namespace nowind {
+
 class DummyCpu : public Z80
 {
 public:
@@ -22,5 +24,7 @@ public:
 		return localEmutime;
     }
 };
+
+} // namespace nowind
 
 #endif //DUMMY_CPU_H

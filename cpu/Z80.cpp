@@ -1,8 +1,8 @@
 // Z80.cpp
 
+#include "cpu/Z80.h"
 #include <iostream>
 #include <fstream>
-#include "cpu/Z80.h"
 #include "debug.h"
 #include <SDL.h>
 #include "Bus.h"
@@ -19,9 +19,7 @@ using namespace nowind;
 Z80::Z80(Bus& bus) : CPU(bus)
 {
     DBERR("Z80 constructor...\n");
-
-    mEmulator = Emulator::Instance();
-
+     
     /* set the CPU frequency to MSX's normal 3,57 Mhz */
     cpuFrequency = 3579545;
 
@@ -39,6 +37,22 @@ Z80::Z80(Bus& bus) : CPU(bus)
         flagInc[i] = flagSZ[i] | ((i == 0x80) ? PFLAG : 0) | ((i ^ (i - 1)) & HFLAG);
         flagDec[i] = flagSZsub[i] | ((i == 0x7F) ? PFLAG : 0) | ((i ^ (i + 1)) & HFLAG);
     }
+
+    DBERR("Z80 constructor finished.\n");
+}
+
+void Z80::prepare()
+{
+
+}
+
+void Z80::initialize()
+{
+    // move this elsewhere!!!!
+    writeIO(0xFC, 3);
+    writeIO(0xFD, 2);
+    writeIO(0xFE, 1);
+    writeIO(0xFF, 0);
 
     // load zexall.com at 0x100 (testing only)
     ifstream romfile("cpu/zexall/zexall.com", ios::binary);
@@ -58,33 +72,19 @@ Z80::Z80(Bus& bus) : CPU(bus)
     // memory locations are not guaranteed to be '1 byte' locations
     for (Uint16 i = 0;i < fileSize;i++)
     {
-        memblock[0x100+i] = temp[i];
+        writeByte(0x100+i, temp[i]);
     }
     delete temp;
 
     // patch bdos call 0x0005
-    memblock[0x0005] = 0xED;
-    memblock[0x0006] = 0x0E;
-    memblock[0x0007] = 0xC9;
-
-    //
-    readPage[0] = MakeDelegate(this, &Z80::readMem);
-    readPage[1] = MakeDelegate(this, &Z80::readMem);
-    readPage[2] = MakeDelegate(this, &Z80::readMem);
-    readPage[3] = MakeDelegate(this, &Z80::readMem);
-/*
-    writePage[0] = MakeDelegate(this, &Z80::writeMem);
-    writePage[1] = MakeDelegate(this, &Z80::writeMem);
-    writePage[2] = MakeDelegate(this, &Z80::writeMem);
-    writePage[3] = MakeDelegate(this, &Z80::writeMem);
-*/
-
-    DBERR("Z80 constructor finished.\n");
+    writeByte(0x0005, 0xED);
+    writeByte(0x0006, 0x0E);
+    writeByte(0x0007, 0xC9);
 }
 
-void Z80::initialize()
+void Z80::prepare_shutdown()
 {
-    DBERR("Cpu initialized...\n");
+
 }
 
 Z80::~Z80()
@@ -98,9 +98,9 @@ void Z80::reset()
 {
     DBERR("start of Z80 RESET\n");
 
-    /* rom inschakelen */
-    writeIo(0xa8, 0);
-    writeMem(0xffff, 0);
+    // todo: remove this, initialize this where it is suppose to be done!
+    writeIO(0xa8, 0);
+    writeByte(0xffff, 0);
 
     IFF1 = IFF2 = false;  // disable interrupts
     interruptMode = 0;
@@ -138,7 +138,7 @@ void Z80::nmiCPU()
     if (READMEM(reg_pc) == 0x76) reg_pc++;
 
     reg_sp -= 2;
-    writeMem16(reg_sp, reg_pc); //TODO: volgens de documentatie wordt er maar een M1 uitgevoerd???
+    WRITEMEM16(reg_sp, reg_pc); //TODO: volgens de documentatie wordt er maar een M1 uitgevoerd???
     reg_pc = 0x0066;
 }
 
@@ -167,7 +167,7 @@ void Z80::intCPU(byte interruptVectorOnDataBus)
 
     refreshCounter++;
     reg_sp -= 2;
-    writeMem16(reg_sp, reg_pc);
+    WRITEMEM16(reg_sp, reg_pc);
 
     switch (interruptMode)
     {
@@ -201,7 +201,7 @@ void Z80::intCPU(byte interruptVectorOnDataBus)
         break;
     case 2:
         //mEmuTime += 20;
-        reg_pc = readMem16(interruptVectorOnDataBus | (reg_i << 8));
+        reg_pc = READMEM16(interruptVectorOnDataBus | (reg_i << 8));
         break;
     default:
         // unknownd interrupt mode, this should never happen
@@ -319,43 +319,6 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
     return localEmuTime;
 }
 
-byte Z80::readMem(word address)
-{
-    return memblock[address] & 0xff;
-}
-
-word Z80::readMem16(word address)
-{
-    word addressHigh = (address + 1) & 0xffff;
-    return READMEM(address) & 0xff | (READMEM(addressHigh) << 8);
-}
-
-void Z80::writeMem(word address, byte value)
-{
-    memblock[address] = value;
-}
-
-void Z80::writeMem16(word address, word value)
-{
-    word addressHigh = (address + 1) & 0xffff;
-    writeMem(address, value & 0xff);
-    writeMem(addressHigh, value >> 8);
-}
-
-void Z80::writeIo(word port, word value)
-{
-
-    NW_ASSERT(port < 0x100);
-    NW_ASSERT(value < 0x100);
-}
-
-byte Z80::readIo(word port)
-{
-
-    NW_ASSERT(port < 0x100);
-    return 0xff;
-}
-
 void Z80::dumpCpuInfo()
 {
 
@@ -414,12 +377,12 @@ void Z80::dumpSlotSelection()
     */
 }
 
+/*
 void Z80::dumpPages()
 {
-
     string filename("dumppages.bin");
 
-    /* delete the existing? file */
+    // delete the existing? file
     ofstream ofs_delete(filename.c_str(), ios::trunc);
     ofs_delete.close();
 
@@ -436,15 +399,16 @@ void Z80::dumpPages()
     }
     ofs.close();
 }
+*/
 
 void Z80::saveState()
 {
-    //mapper->saveState();
+    //MemoryMapper->saveState();
 }
 
 void Z80::loadState()
 {
-    //mapper->loadState();
+    //MemoryMapper->loadState();
 }
 
 word Z80::getSP()
@@ -454,7 +418,6 @@ word Z80::getSP()
 
 void Z80::hijackBdos()
 {
-
     long seconds = SDL_GetTicks() / 1000;
 
     switch (reg_c)
@@ -486,4 +449,14 @@ void Z80::hijackBdos()
         // no nothing
         break;
     }
+}
+
+inline byte Z80::readIO(word port)
+{
+    return mBus.readIO(port);
+}
+
+inline void Z80::writeIO(word port, byte value)
+{
+    mBus.writeIO(port, value);
 }

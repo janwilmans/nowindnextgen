@@ -1,6 +1,15 @@
-#pragma once
+//! Component.h
+#ifndef COMPONENT_H
+#define COMPONENT_H
+
+#include "basetypes.h"
+
+namespace nowind {
 
 // a Component is an emulated object that exists in the real world
+// it has a name and can provide a descriptive 'state-string'
+// these are probably the objects that are going to need 'persistancy' for
+// creating snapshots. 
 class Component 
 {
 public:
@@ -22,3 +31,6 @@ public:
     virtual ~Component() {}
 };
 
+} // namespace nowind
+
+#endif //COMPONENT_H

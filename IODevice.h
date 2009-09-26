@@ -1,6 +1,6 @@
-//! BusComponent.h
-#ifndef BUSCOMPONENT_H
-#define BUSCOMPONENT_H
+//! IODevice.h
+#ifndef IODEVICE_H
+#define IODEVICE_H
 
 #include "Component.h"
 #include "Bus.h"
@@ -9,18 +9,23 @@ namespace nowind {
 
 class SlotSelector;
 
-// an abstract class that defines methods to allow Components to attach to a Bus
-class BusComponent : public Component 
+// an abstract class that defines methods to allow Components to 
+// be attached to a Bus to provide IO-bus-I/O
+class IODevice : public Component
 {
 protected:
     Bus& mBus;
-    bool mIsMemoryMapped;
-
 public:
-    BusComponent(Bus& bus);
+    IODevice(Bus& bus);
+
+    // used to attach this component to the Bus
+    virtual void attachIO() {}
+
+    // used to detach this component from the Bus
+    virtual void detachIO() {}
 
     // release any allocated resources (memory/filehandles etc.) during runtime 
-    virtual ~BusComponent() {}
+    virtual ~IODevice() {}
 
     // inherited from Component but not implemented
 
@@ -40,4 +45,4 @@ public:
 
 } // namespace nowind
 
-#endif // BUSCOMPONENT_H
+#endif // IODEVICE_H

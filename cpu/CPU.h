@@ -3,27 +3,26 @@
 #define CPU_H
 
 #include "basetypes.h" 
+#include "Component.h"
 
 namespace nowind {
 
 class Bus;
 
-class CPU {
-
+class CPU : public Component
+{
 public:
     CPU(Bus& aBus);
     virtual ~CPU() {}
-    virtual nowind::emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) = 0;
+    virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) = 0;
 
 protected:
-        Bus& mBus;
+    Bus& mBus;
 
-        // to be deleted....
-        MemReadDelegate readPage[4];
-        MemReadDelegate writePage[4];
-
-        MemReadDelegate readSection[constSections];
-        MemWriteDelegate writeSection[constSections];        
+    // not implemented
+    virtual void prepare() = 0;
+    virtual void initialize() = 0;
+    virtual void prepare_shutdown() = 0;       
 };
 
 } // namespace nowind
