@@ -10,19 +10,24 @@ NullDevice::NullDevice(Bus& bus) : IODevice(bus), MemoryDevice(bus)
 
 NullDevice::~NullDevice()
 {
-
 }
 
 void NullDevice::prepare()
 {
-
 }
 void NullDevice::initialize()
 {
-
 }
 
 void NullDevice::prepare_shutdown()
+{
+}
+
+void NullDevice::attachIO()
+{
+}
+
+void NullDevice::detachIO()
 {
 
 }

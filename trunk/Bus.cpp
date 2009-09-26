@@ -10,7 +10,7 @@ using namespace fastdelegate;
 Bus::Bus(Scheduler& aScheduler) :  
 mScheduler(aScheduler)
 {
-    NullDevice* nullDevice = new NullDevice(*this);
+    NullDevice* nullDevice = new NullDevice(*this);     // leaked
     for (Uint16 port=0; port<256; port++)
     {
         registerReadIO(port, MakeDelegate(nullDevice, &NullDevice::readIO));

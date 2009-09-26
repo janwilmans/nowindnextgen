@@ -14,16 +14,13 @@ class SlotSelector : public IODevice, public MemoryDevice
 public:
     SlotSelector(Bus& bus);
 
-    // the prepare method should create all objects and register them with the broker
+    // IODevice methods
+    virtual void attachIO();
+    virtual void detachIO();
+
+    // Component methods    
     virtual void prepare();
-
-    // the initialize method should create relations to other objects 
-    // it can assume that 'prepare' has been called on all existing objects in the broker.
     virtual void initialize();
-
-    // should do any actions needed before the destructor 
-    // can be savely called, such as: unregister objects from the broker,
-    // stop threads...etc.
     virtual void prepare_shutdown();
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
@@ -39,9 +36,13 @@ public:
     byte readSSSR();
     void writeSSSR(byte);
 
-    void setPage(Uint8 page, Uint8 slot, Uint8 subslot);
+    byte readIO(word port);
+    void writeIO(word port, byte value);
+
+    void activatePage(Uint8 page, Uint8 slot, Uint8 subslot);
 
 private:
+    void activateCurrent();
     void addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot);
 
     // contains the currently active mainslot and slotsub for each page
@@ -52,6 +53,9 @@ private:
     bool mSlotExpanded[4];
 
     MemoryDevice* slotLayout[4][4][constSections]; 
+    byte mA8Value;
+    byte mSSSR[4];
+    
 };
 
 } // namespace nowind
