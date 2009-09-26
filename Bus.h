@@ -11,7 +11,6 @@
 
 namespace nowind {
 
-class BusComponent;
 class Scheduler;
 class IODevice;
 
@@ -20,16 +19,32 @@ class Bus
 public:
     Bus(Scheduler&);
 
-    // add an IO-mapped only device
+    // add an IO-mapped device
     void addIODevice(IODevice * aIODevice);
     
-    // BusComponents use this to register
+    // IODevices use this to register
     void registerReadIO(Uint8 port, IOReadDelegate aDelegate);
     void registerWriteIO(Uint8 port, IOWriteDelegate aDelegate);
 
-    // called by the CPU or other bus controller
+    // directory called by the CPU or other bus controller
     byte readIO(Uint8 port);
     void writeIO(Uint8 port, byte value);
+
+    // the cpu registers its memory delegates with these methods
+    void registerMemRead(Uint8 section, MemReadDelegate* aDelegate);
+    void registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate);
+
+    // called by the MemoryDevices (the SlotSelector calls MemoryDevice::activate)
+    void activateMemReadSection(Uint8 section, MemReadDelegate aDelegate); 
+    void activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate);     
+
+    // the cpu registers its SSSR delegates with these methods
+    void registerSSSRRead(SSSRReadDelegate* aDelegate);
+    void registerSSSRWrite(SSSRWriteDelegate* aDelegate);
+
+    // called by the MemoryDevices (the SlotSelector calls MemoryDevice::activate)
+    void activateSSSRRead(SSSRReadDelegate aDelegate); 
+    void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Bus();
@@ -42,8 +57,8 @@ private:
     MemWriteDelegate* mMemWrite[constSections];
 
     // subslot selector access
-    MemReadDelegate* mSSSRRead;
-    MemWriteDelegate* mSSSRWrite;
+    SSSRReadDelegate* mSSSRRead;
+    SSSRWriteDelegate* mSSSRWrite;
 
     // I/O access
     IOReadDelegate mIORead[256];

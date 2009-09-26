@@ -35,7 +35,6 @@ void Emulator::initialize(void)
 
     Bus* bus = new Bus(*mScheduler);
     Z80* cpu = new Z80(*bus);
-    cpu->initialize();
 
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
     SlotSelector* slotSelector = new SlotSelector(*bus);
@@ -45,6 +44,14 @@ void Emulator::initialize(void)
 
     slotSelector->addMemoryDevice(mapper, 3, 2);     // mapper in slot 3-2 
 
+    cpu->prepare();
+    // for testing only, the z80 should do this?
+    slotSelector->setPage(0, 3, 2);
+    slotSelector->setPage(1, 3, 2);
+    slotSelector->setPage(2, 3, 2);
+    slotSelector->setPage(3, 3, 2);
+
+    cpu->initialize();  // load rom, everything should be ready before initialize is called
     cpu->reset();
     cpu->setPC(0x100);
     mScheduler->run(cpu);

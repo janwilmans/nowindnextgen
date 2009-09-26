@@ -3,6 +3,7 @@
 #include "MemoryDevice.h"
 
 using namespace nowind;
+using namespace fastdelegate;
 
 MemoryMapper::MemoryMapper(Bus& bus, Uint16 kilobytes) : IODevice(bus), MemoryDevice(bus)
 {
@@ -33,6 +34,34 @@ MemoryMapper::~MemoryMapper()
 
 
 void MemoryMapper::activate(Uint8 section)
+{
+    DBERR("MemoryMapper::activate, for section: %d\n", section);
+    MemoryDevice::mBus.activateMemReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
+    MemoryDevice::mBus.activateMemWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
+
+    if (section == constSections)
+    {
+        MemoryDevice::mBus.activateSSSRRead(MakeDelegate(this, &MemoryMapper::readSSSR));
+        MemoryDevice::mBus.activateSSSRWrite(MakeDelegate(this, &MemoryMapper::writeSSSR));
+    }
+}
+
+byte MemoryMapper::readByte(word address)
+{
+    return memory[address];
+}
+
+void MemoryMapper::writeByte(word address, byte value)
+{
+    memory[address] = value;
+}
+
+byte MemoryMapper::readSSSR()
+{
+    return 0xFF;
+}
+
+void MemoryMapper::writeSSSR(byte value)
 {
 
 }
