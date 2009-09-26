@@ -31,6 +31,14 @@ public:
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~MemoryMapper();
 
+    // for testing
+    byte memory[64*1024];
+
+    byte readByte(word address);
+    void writeByte(word address, byte value);
+
+    byte readSSSR();
+    void writeSSSR(byte value);
 };
 
 } // namespace nowind

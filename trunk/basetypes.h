@@ -41,9 +41,12 @@ Uint32 GetOnes(word size) {
 }
 */
 
+// there are always 4x16KB pages in total
+static const Uint32 constPages = 4;
+
 // if constSectionSize is changed, also change constOnes accordingly!
 static const Uint32 constSectionSize = 8*1024;
-static const Uint32 constOnes = 3;      // amount of 1's in (constBanks-1)
+static const Uint32 constOnes = 3;      // amount of 1's in (constSections-1)
 
 static const Uint32 constSectionShift = 16-constOnes;  // amount to shift >> to convert absolute address to section number
 static const Uint32 constSectionMask = constSectionSize-1;   // AND mask to convert absolute address to section address

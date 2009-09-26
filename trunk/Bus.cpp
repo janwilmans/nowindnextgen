@@ -28,15 +28,57 @@ void Bus::registerWriteIO(Uint8 port, IOWriteDelegate aDelegate)
 
 byte Bus::readIO(Uint8 port)
 {
-    return 0xff; //mIORead[port]();
+    return mIORead[port](port);
 }
 
 void Bus::writeIO(Uint8 port, byte value)
 {
-    //mIOWrite[port](value);
+    mIOWrite[port](port, value);
 }
 
 void Bus::addIODevice(IODevice * aIODevice)
 {
     aIODevice->attachIO();
+}
+
+void Bus::registerMemRead(Uint8 section, MemReadDelegate* aDelegate)
+{
+    mMemRead[section] = aDelegate;
+}
+
+void Bus::registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate)
+{
+    mMemWrite[section] = aDelegate;
+}
+
+void Bus::activateMemReadSection(Uint8 section, MemReadDelegate aDelegate)
+{
+    MemReadDelegate& temp = *mMemRead[section];
+    temp = aDelegate;
+    //(*mMemRead[section]) = aDelegate;
+}
+
+void Bus::activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate)
+{
+    (*mMemWrite[section]) = aDelegate;
+}
+
+void Bus::registerSSSRRead(SSSRReadDelegate* aDelegate)
+{
+    mSSSRRead = aDelegate;
+}
+
+void Bus::registerSSSRWrite(SSSRWriteDelegate* aDelegate)
+{
+    mSSSRWrite = aDelegate;
+}
+
+void Bus::activateSSSRRead(SSSRReadDelegate aDelegate)
+{
+   (*mSSSRRead) = aDelegate;
+}
+
+void Bus::activateSSSRWrite(SSSRWriteDelegate aDelegate)
+{
+   (*mSSSRWrite) = aDelegate;
 }

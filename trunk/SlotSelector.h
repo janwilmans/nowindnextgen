@@ -39,6 +39,8 @@ public:
     byte readSSSR();
     void writeSSSR(byte);
 
+    void setPage(Uint8 page, Uint8 slot, Uint8 subslot);
+
 private:
 
     // contains the currently active mainslot and slotsub for each page
@@ -48,7 +50,7 @@ private:
     // whether a slot is expanded or not
     bool mSlotExpanded[4];
 
-    BusComponent* slotLayout[4][4][constSections]; 
+    MemoryDevice* slotLayout[4][4][constSections]; 
 };
 
 } // namespace nowind

@@ -43,7 +43,14 @@ Z80::Z80(Bus& bus) : CPU(bus)
 
 void Z80::prepare()
 {
+    for (Uint8 section=0; section<constSections; section++)
+    {
+        mBus.registerMemRead(section, &readSection[section]);
+        mBus.registerMemWrite(section, &writeSection[section]);
+    }
 
+    mBus.registerSSSRRead(&readSSSR);
+    mBus.registerSSSRWrite(&writeSSSR);
 }
 
 void Z80::initialize()
@@ -72,7 +79,8 @@ void Z80::initialize()
     // memory locations are not guaranteed to be '1 byte' locations
     for (Uint16 i = 0;i < fileSize;i++)
     {
-        writeByte(0x100+i, temp[i]);
+        byte value = temp[i] & 0xff;    // todo: find out why this fails without the & 0xff!!
+        writeByte(0x100+i, value);
     }
     delete temp;
 
