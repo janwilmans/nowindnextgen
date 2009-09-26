@@ -188,22 +188,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Bus.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Bus.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Component.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Component.h"
-				>
-			</File>
-			<File
 				RelativePath=".\debug.cpp"
 				>
 			</File>
@@ -212,67 +196,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Emulator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Emulator.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Event.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Event.h"
-				>
-			</File>
-			<File
 				RelativePath=".\FastDelegate.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IODevice.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IODevice.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MemoryDevice.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MemoryDevice.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MemoryMapper.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MemoryMapper.h"
-				>
-			</File>
-			<File
 				RelativePath=".\nowind_nextgen.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NullDevice.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NullDevice.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scheduler.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scheduler.h"
 				>
 			</File>
 		</Filter>
@@ -312,14 +240,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SlotSelector.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SlotSelector.h"
-				>
-			</File>
-			<File
 				RelativePath=".\cpu\Z80.cpp"
 				>
 			</File>
@@ -337,6 +257,94 @@
 			</File>
 			<File
 				RelativePath=".\EventUnitTest.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Components"
+			>
+			<File
+				RelativePath=".\MemoryMapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryMapper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NullDevice.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NullDevice.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scheduler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scheduler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SlotSelector.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SlotSelector.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Infrastructure"
+			>
+			<File
+				RelativePath=".\Bus.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Bus.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Emulator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Emulator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Event.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Event.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IODevice.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IODevice.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryDevice.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryDevice.h"
 				>
 			</File>
 		</Filter>
