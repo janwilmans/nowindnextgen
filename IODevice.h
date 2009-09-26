@@ -7,8 +7,6 @@
 
 namespace nowind {
 
-class SlotSelector;
-
 // an abstract class that defines methods to allow Components to 
 // be attached to a Bus to provide IO-bus-I/O
 class IODevice : public Component
@@ -19,10 +17,10 @@ public:
     IODevice(Bus& bus);
 
     // used to attach this component to the Bus
-    virtual void attachIO() {}
+    virtual void attachIO() = 0;
 
     // used to detach this component from the Bus
-    virtual void detachIO() {}
+    virtual void detachIO() = 0;
 
     // release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~IODevice() {}

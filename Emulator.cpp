@@ -46,10 +46,10 @@ void Emulator::initialize(void)
 
     cpu->prepare();
     // for testing only, the setPage method should be deleted
-    slotSelector->setPage(0, 0, 0);
-    slotSelector->setPage(1, 0, 0);
-    slotSelector->setPage(2, 0, 0);
-    slotSelector->setPage(3, 0, 0);
+    slotSelector->activatePage(0, 0, 0);
+    slotSelector->activatePage(1, 0, 0);
+    slotSelector->activatePage(2, 0, 0);
+    slotSelector->activatePage(3, 0, 0);
 
     cpu->initialize();  // loads rom, everything should be ready before initialize is called
     cpu->reset();
