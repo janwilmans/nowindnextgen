@@ -37,14 +37,30 @@ void SlotSelector::writeSSSR(byte)
    
 }
 
+
+void SlotSelector::addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot)
+{
+    // implementation choise: just one MemoryDevice in one slot/subslot
+    for (Uint8 section=0; section<constSections; section++)
+    {
+        slotLayout[slot][subslot][section] = aMemoryDevice;
+    }
+}
+
 void SlotSelector::addMemoryDevice(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot)
 {
     if (subslot > 0) mSlotExpanded[slot] = true;
 
-    // implementation choise: just one MemoryDevice in one slot/subslot
-    for (Uint8 section=0; section<constSections; section++)
+    if (mSlotExpanded[slot] != 0)
     {
-            slotLayout[slot][subslot][section] = aMemoryDevice;
+        addMemoryDeviceToSlot(aMemoryDevice, slot, subslot);
+    }
+    else
+    {
+        for (Uint8 i=0; i<4; i++)
+        {
+            addMemoryDeviceToSlot(aMemoryDevice, slot, i);
+        }
     }
 }
 

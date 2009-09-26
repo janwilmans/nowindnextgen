@@ -23,12 +23,12 @@ public:
     void addIODevice(IODevice * aIODevice);
     
     // IODevices use this to register
-    void registerReadIO(Uint8 port, IOReadDelegate aDelegate);
-    void registerWriteIO(Uint8 port, IOWriteDelegate aDelegate);
+    void registerReadIO(Uint16 port, IOReadDelegate aDelegate);
+    void registerWriteIO(Uint16 port, IOWriteDelegate aDelegate);
 
     // directory called by the CPU or other bus controller
-    byte readIO(Uint8 port);
-    void writeIO(Uint8 port, byte value);
+    byte readIO(Uint16 port);
+    void writeIO(Uint16 port, byte value);
 
     // the cpu registers its memory delegates with these methods
     void registerMemRead(Uint8 section, MemReadDelegate* aDelegate);

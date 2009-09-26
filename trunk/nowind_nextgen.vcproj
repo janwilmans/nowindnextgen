@@ -260,6 +260,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\NullDevice.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NullDevice.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Scheduler.cpp"
 				>
 			</File>

@@ -2,6 +2,8 @@
 #ifndef TEMPLATE_H
 #define TEMPLATE_H
 
+namespace nowind {
+
 class Template 
 {
 public:
@@ -20,7 +22,9 @@ public:
     virtual void prepare_shutdown();
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
-    virtual ~Template() {}
+    virtual ~Template();
 };
+
+} // namespace nowind
 
 #endif // TEMPLATE_H

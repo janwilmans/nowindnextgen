@@ -42,16 +42,16 @@ void Emulator::initialize(void)
     bus->addIODevice(mapper);
     bus->addIODevice(slotSelector);
 
-    slotSelector->addMemoryDevice(mapper, 3, 2);     // mapper in slot 3-2 
+    slotSelector->addMemoryDevice(mapper, 0, 0);     // mapper in slot 0 (not expanded)
 
     cpu->prepare();
-    // for testing only, the z80 should do this?
-    slotSelector->setPage(0, 3, 2);
-    slotSelector->setPage(1, 3, 2);
-    slotSelector->setPage(2, 3, 2);
-    slotSelector->setPage(3, 3, 2);
+    // for testing only, the setPage method should be deleted
+    slotSelector->setPage(0, 0, 0);
+    slotSelector->setPage(1, 0, 0);
+    slotSelector->setPage(2, 0, 0);
+    slotSelector->setPage(3, 0, 0);
 
-    cpu->initialize();  // load rom, everything should be ready before initialize is called
+    cpu->initialize();  // loads rom, everything should be ready before initialize is called
     cpu->reset();
     cpu->setPC(0x100);
     mScheduler->run(cpu);

@@ -2,13 +2,20 @@
 #include "Scheduler.h"
 #include "Component.h"
 #include "IODevice.h"
+#include "NullDevice.h"
 
 using namespace nowind;
+using namespace fastdelegate;
 
 Bus::Bus(Scheduler& aScheduler) :  
 mScheduler(aScheduler)
 {
-
+    NullDevice* nullDevice = new NullDevice(*this);
+    for (Uint16 port=0; port<256; port++)
+    {
+        registerReadIO(port, MakeDelegate(nullDevice, &NullDevice::readIO));
+        registerWriteIO(port, MakeDelegate(nullDevice, &NullDevice::writeIO));
+    }
 }
 
 Bus::~Bus()
@@ -16,22 +23,22 @@ Bus::~Bus()
 
 }
 
-void Bus::registerReadIO(Uint8 port, IOReadDelegate aDelegate)
+void Bus::registerReadIO(Uint16 port, IOReadDelegate aDelegate)
 {
     mIORead[port] = aDelegate;
 }
 
-void Bus::registerWriteIO(Uint8 port, IOWriteDelegate aDelegate)
+void Bus::registerWriteIO(Uint16 port, IOWriteDelegate aDelegate)
 {
     mIOWrite[port] = aDelegate;
 }
 
-byte Bus::readIO(Uint8 port)
+byte Bus::readIO(Uint16 port)
 {
     return mIORead[port](port);
 }
 
-void Bus::writeIO(Uint8 port, byte value)
+void Bus::writeIO(Uint16 port, byte value)
 {
     mIOWrite[port](port, value);
 }
@@ -53,14 +60,12 @@ void Bus::registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate)
 
 void Bus::activateMemReadSection(Uint8 section, MemReadDelegate aDelegate)
 {
-    MemReadDelegate& temp = *mMemRead[section];
-    temp = aDelegate;
-    //(*mMemRead[section]) = aDelegate;
+    *mMemRead[section] = aDelegate;
 }
 
 void Bus::activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate)
 {
-    (*mMemWrite[section]) = aDelegate;
+    *mMemWrite[section] = aDelegate;
 }
 
 void Bus::registerSSSRRead(SSSRReadDelegate* aDelegate)
