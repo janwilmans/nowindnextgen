@@ -21,7 +21,7 @@ devices.xml:
    <device>
 	<name>nowindInterface</name>
 	<memory begin=0x4000 end=0x6000>
-		<function>mapper</function
+		<function>MemoryMapper</function
 	</memory>
      
    </device>

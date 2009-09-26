@@ -7,9 +7,11 @@
 #include "cpu/Z80.h"
 #include <list>
 
-typedef std::list<Event>::iterator EventIterator;
-
 namespace nowind {
+
+class CPU;
+
+typedef std::list<Event>::iterator EventIterator;
 
 class Scheduler
 {

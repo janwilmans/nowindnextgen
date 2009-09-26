@@ -1,26 +1,34 @@
-//! BusComponent.h
-#ifndef BUSCOMPONENT_H
-#define BUSCOMPONENT_H
+//! MemoryDevice.h
+#ifndef MEMORYDEVICE_H
+#define MEMORYDEVICE_H
 
 #include "Component.h"
-#include "Bus.h"
 
 namespace nowind {
 
+class Bus;
 class SlotSelector;
 
-// an abstract class that defines methods to allow Components to attach to a Bus
-class BusComponent : public Component 
+// an abstract class that defines methods to interact with the SlotSelector to provide memory-mapped-I/O
+class MemoryDevice : public Component 
 {
 protected:
     Bus& mBus;
-    bool mIsMemoryMapped;
+    Uint8 mSlot;
+    Uint8 mSubSlot;
+    SlotSelector* mSlotSelector;
 
 public:
-    BusComponent(Bus& bus);
+    MemoryDevice(Bus& bus);
+
+    void setSlot(SlotSelector* slotSelector, Uint8 slot, Uint8 subslot);
+    bool inExpandedSlot();
+
+    // used to update the Bus for this section's MemoryDevice
+    virtual void activate(Uint8 section) {}
 
     // release any allocated resources (memory/filehandles etc.) during runtime 
-    virtual ~BusComponent() {}
+    virtual ~MemoryDevice() {}
 
     // inherited from Component but not implemented
 
@@ -40,4 +48,4 @@ public:
 
 } // namespace nowind
 
-#endif // BUSCOMPONENT_H
+#endif // MEMORYDEVICE_H

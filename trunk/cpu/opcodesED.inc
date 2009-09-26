@@ -12,7 +12,7 @@ case 0x01:
 
 case 0x02:
     {
-        word addr = readMem16(reg_pc);
+        word addr = READMEM16(reg_pc);
         DBERR("0x%04X: ", addr);
         reg_pc += 2;
         int len = READMEM(reg_pc++);
@@ -24,7 +24,7 @@ case 0x02:
 case 0x05:
 	{
 		char tmp[]="memdumpx";
-		tmp[7] = readMem(reg_pc++) + 48;
+		tmp[7] = READMEM(reg_pc++) + 48;
 		//Debug::Instance()->memFileDump(readBlock,tmp);
 	}
 	break;
@@ -329,30 +329,30 @@ case 0x45: TS(14); reg_pc = reg_wz = READMEM16(reg_sp); reg_sp += 2; IFF1 = IFF2
 
 #define INB(r) reg_f = (reg_f&CFLAG)|flagSZP[r]; reg_wz = reg_bc + 1; TS(2)
 
-case 0x40: TS(10); reg_b = readIo(reg_c); INB(reg_b); break;                          // in b,(c)
-case 0x48: TS(10); reg_c = readIo(reg_c); INB(reg_c); break;                          // in c,(c)
-case 0x50: TS(10); reg_de = LREG(reg_de)|(readIo(reg_c)<<8);INB(reg_d); break;        // in d,(c)
-case 0x58: TS(10); reg_de = HREG(reg_de)|readIo(reg_c);INB(reg_e); break;             // in e,(c)
-case 0x60: TS(10); reg_hl = LREG(reg_hl)|(readIo(reg_c)<<8); INB(reg_h); break;       // in h,(c)
-case 0x68: TS(10); reg_hl = HREG(reg_hl)|readIo(reg_c); INB(reg_l); break;            // in l,(c)
-case 0x70: TS(10); INB(readIo(reg_c)); break; 									      // in (hl),(c)
-case 0x78: TS(10); reg_a = readIo(reg_c); INB(reg_a); break;					      // in a,(c)
+case 0x40: TS(10); reg_b = readIO(reg_c); INB(reg_b); break;                          // in b,(c)
+case 0x48: TS(10); reg_c = readIO(reg_c); INB(reg_c); break;                          // in c,(c)
+case 0x50: TS(10); reg_de = LREG(reg_de)|(readIO(reg_c)<<8);INB(reg_d); break;        // in d,(c)
+case 0x58: TS(10); reg_de = HREG(reg_de)|readIO(reg_c);INB(reg_e); break;             // in e,(c)
+case 0x60: TS(10); reg_hl = LREG(reg_hl)|(readIO(reg_c)<<8); INB(reg_h); break;       // in h,(c)
+case 0x68: TS(10); reg_hl = HREG(reg_hl)|readIO(reg_c); INB(reg_l); break;            // in l,(c)
+case 0x70: TS(10); INB(readIO(reg_c)); break; 									      // in (hl),(c)
+case 0x78: TS(10); reg_a = readIO(reg_c); INB(reg_a); break;					      // in a,(c)
 
-case 0x41: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_b); TS(2); break;        // out (c),b
-case 0x49: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_c); TS(2); break;        // out (c),c
-case 0x51: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_d); TS(2); break;        // out (c),d
-case 0x59: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_e); TS(2); break;        // out (c),e
-case 0x61: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_h); TS(2); break;        // out (c),h
-case 0x69: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_l); TS(2); break;        // out (c),l
-case 0x71: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, 0); TS(2); break;            // out (c),0
-case 0x79: TS(10); reg_wz = reg_bc + 1; writeIo(reg_c, reg_a); TS(2); break;        // out (c),a
+case 0x41: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_b); TS(2); break;        // out (c),b
+case 0x49: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_c); TS(2); break;        // out (c),c
+case 0x51: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_d); TS(2); break;        // out (c),d
+case 0x59: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_e); TS(2); break;        // out (c),e
+case 0x61: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_h); TS(2); break;        // out (c),h
+case 0x69: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_l); TS(2); break;        // out (c),l
+case 0x71: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, 0); TS(2); break;            // out (c),0
+case 0x79: TS(10); reg_wz = reg_bc + 1; writeIO(reg_c, reg_a); TS(2); break;        // out (c),a
 
 // TODO: alle block I/O functies moeten gechecked worden op het aantal states.
 // dus rekening houden met het aantal states voor en na de werkelijke I/O actie 
 // en de M1 cycle die door opcodeFetch wordt toegevoegd.
 
 #define BLOCKIN \
-		reg2 = readIo(reg_c); \
+		reg2 = readIO(reg_c); \
 		WRITEMEM(reg_hl, reg2); \
 		--reg_b &= 255
 
@@ -412,7 +412,7 @@ case 0xBA:      // INDR
 
 
 #define BLOCKOUT \
-        writeIo(reg_c, reg2); \
+        writeIO(reg_c, reg2); \
         --reg_b &= 255; \
         reg_f = flagSZ[reg_b] | ((reg2>>6)&NFLAG); \
 		reg2 += reg_l; \

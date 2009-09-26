@@ -5,9 +5,7 @@
 
 using namespace nowind;
 
-CPU::CPU(Bus& bus) :  mBus(bus)
+CPU::CPU(Bus& bus) : Component(), mBus(bus)
 {
 
 }
-
-

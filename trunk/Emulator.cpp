@@ -3,8 +3,11 @@
 #include "Event.h"
 #include "cpu/DummyCpu.h"
 #include "Bus.h"
+#include "MemoryMapper.h"
+#include "SlotSelector.h"
 
 using namespace fastdelegate;
+using namespace nowind;
 
 emuTimeType Emulator::emuTime = 0;
 
@@ -32,6 +35,16 @@ void Emulator::initialize(void)
 
     Bus* bus = new Bus(*mScheduler);
     Z80* cpu = new Z80(*bus);
+    cpu->initialize();
+
+    MemoryMapper* mapper = new MemoryMapper(*bus, 256);
+    SlotSelector* slotSelector = new SlotSelector(*bus);
+
+    bus->addIODevice(mapper);
+    bus->addIODevice(slotSelector);
+
+    slotSelector->addMemoryDevice(mapper, 3, 2);     // mapper in slot 3-2 
+
     cpu->reset();
     cpu->setPC(0x100);
     mScheduler->run(cpu);

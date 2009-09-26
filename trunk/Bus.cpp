@@ -1,5 +1,7 @@
 #include "Bus.h"
 #include "Scheduler.h"
+#include "Component.h"
+#include "IODevice.h"
 
 using namespace nowind;
 
@@ -14,70 +16,27 @@ Bus::~Bus()
 
 }
 
-void Bus::addBusComponent(BusComponent *)
+void Bus::registerReadIO(Uint8 port, IOReadDelegate aDelegate)
 {
-
+    mIORead[port] = aDelegate;
 }
 
-// memory access
-void Bus::registerMemReadConsumer(Uint8 bank, MemReadDelegate* delegate)
+void Bus::registerWriteIO(Uint8 port, IOWriteDelegate aDelegate)
 {
-
+    mIOWrite[port] = aDelegate;
 }
 
-void Bus::registerMemWriteConsumer(Uint8 bank, MemWriteDelegate* delegate)
+byte Bus::readIO(Uint8 port)
 {
-
+    return 0xff; //mIORead[port]();
 }
 
-// the memory-mapped components should use these methods to register to be called
-void Bus::registerMemReadProvider(Uint8 slot, Uint8 subslot, Uint8 bank, MemReadDelegate delegate)
+void Bus::writeIO(Uint8 port, byte value)
 {
-
-}
-void Bus::registerMemWriteProvider(Uint8 slot, Uint8 subslot, Uint8 bank, MemWriteDelegate delegate)
-{
-
+    //mIOWrite[port](value);
 }
 
-// SSSR (Sub Slot Selection Register 0xFFFF) access
-    // the cpu should use these methods to register itself
-void Bus::registerSSSRReadConsumer(MemReadDelegate* delegate)
+void Bus::addIODevice(IODevice * aIODevice)
 {
-
-}
-void Bus::registerSSSRWriteConsumer(MemWriteDelegate* delegate)
-{
-
-}
-
-    // the memory-mapped components should use these methods to register to be called
-void Bus::registerSSSRReadProvider(MemReadDelegate delegate)
-{
-
-}
-void Bus::registerSSSRWriteProvider(MemWriteDelegate delegate)
-{
-
-}
-
-// IO access
-    // the cpu should use these methods to register itself
-void Bus::registerIOReadConsumer(IOReadDelegate* delegate)
-{
-
-}
-void Bus::registerIOWriteConsumer(IOWriteDelegate* delegate)
-{
-
-}
-
-    // the IO-mapped components should use these methods to register to be called
-void Bus::registerIOReadProvider(Uint8 port, IOReadDelegate delegate)
-{
-
-}
-void Bus::registerIOWriteProvider(Uint8 port, IOWriteDelegate delegate)
-{
-
+    aIODevice->attachIO();
 }

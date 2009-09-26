@@ -12,6 +12,12 @@
 #include "basetypes.h"
 #include "FastDelegate.h"
 #include "Emulator.h"
+#include "debug.h"
+
+#include "Bus.h"
+#include "cpu/CPU.h"
+
+namespace nowind {
 
 typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // returns void 
 
@@ -40,39 +46,77 @@ typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // retur
 
 /* memory read/write macros */
 
-#define READMEM readPage[0]
-//#define READMEM readMem
+#define READMEM readByte
+#define READMEM16 readWord
+#define WRITEMEM writeByte
+#define WRITEMEM16 writeWord
 
-#define READMEM16 readMem16
-#define WRITEMEM writeMem
-#define WRITEMEM16 writeMem16
-
-#include "cpu/CPU.h"
-#include "Bus.h"
-
-
-namespace nowind {
-
-class Z80 : public nowind::CPU {
+class Z80 : public CPU {
 
   public:
     Z80(Bus& aBus);
     virtual ~ Z80();
-  private:
-    Emulator * mEmulator;
 
-    // for testing only
-    byte memblock[64 * 1024];
+protected:
+
+    MemReadDelegate readSection[constSections];
+    MemWriteDelegate writeSection[constSections];
+
+    SSSRReadDelegate readSSSR;
+    SSSRWriteDelegate writeSSSR;
+
+    IOReadDelegate readIOPort;
+    IOWriteDelegate writeIOPort;
+
+    inline byte readByte(word address)
+    {
+        NW_ASSERT(address < 0x10000);
+        if (address == 0xffff) return readSSSR();
+        return readSection[address >> constSectionShift](address & constSectionMask);
+    }
+
+    inline void writeByte(word address, byte value)
+    {   
+        NW_ASSERT(address < 0x10000);
+        NW_ASSERT(value < 0x100);
+        if (address == 0xffff) 
+        {
+            writeSSSR(value);
+        }
+        else
+        {
+            writeSection[address >> constSectionShift](address & constSectionMask, value);
+        }   
+    }
+
+    inline word readWord(word address)
+    {
+        byte lowByte = readByte(address);           // read the low byte first, todo: verify that this is correct!
+        return lowByte | (readByte(address+1) << 8);
+    }
+
+    inline void writeWord(word address, word value)
+    {
+        writeByte(address, value & 0xff);           // write the low byte first, todo: verify that this is correct!
+        writeByte((address + 1) & 0xffff, value >> 8);
+    }
+
+    inline byte readIO(word port);
+    inline void writeIO(word port, byte value);
+public:
+
+    // Component interface
+    virtual void prepare();
+    virtual void initialize();
+    virtual void prepare_shutdown();
+
+private:
 
     float opcodeCounter[256];
     float opcodeCounterCB[256];
     float opcodeCounterDD[256];
     float opcodeCounterED[256];
     float opcodeCounterFD[256];
-
-    /* new memory layout */
-    const byte *readBlock[8];
-    writeDelegate writeFunc[8];
 
     /* interne z80 registers */
     word reg_a;
@@ -110,23 +154,9 @@ class Z80 : public nowind::CPU {
     byte opcodeFetch(word);
     void debugInstuctionCounter();
 
-    void writeIo(word, word);
-    byte readIo(word);
-
-    byte readMem(word);
-    word readMem16(word);
-    void writeMem(word, byte);
-    void writeMem16(word, word);
-
   public:
-    byte readMemPublic(word address);
-    word readMem16Public(word address);
-    void writeMemPublic(word address, byte value);
-    void writeMem16Public(word address, word value);
 
     Uint32 cpuFrequency;
-    word start_test_nr;
-    void initialize();
 
     void reset();
     void nmiCPU();
@@ -134,8 +164,7 @@ class Z80 : public nowind::CPU {
     void intCPU(byte);
     void setPC(word);
 
-    emuTimeType ExecuteInstructions(emuTimeType startTime,
-                                         emuTimeType endTime);
+    emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime);
 
     void saveState();
     void loadState();
@@ -143,7 +172,7 @@ class Z80 : public nowind::CPU {
     emuTimeType mEndTime;
 
     void hijackBdos();
-    void dumpPages();
+    //void dumpPages();
     void dumpSlotSelection();
     void dumpCpuInfo();
     word getSP();

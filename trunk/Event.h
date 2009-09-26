@@ -1,10 +1,12 @@
-#pragma once
+//! Event.h
+#ifndef EVENT_H
+#define EVENT_H
 
 #include "basetypes.h"
 #include "FastDelegate.h"
 #include <string>
 
-using namespace nowind;
+namespace nowind {
 
 static const Uint32 emuTimeSize = sizeof(emuTimeType);
 static const Uint32 emuHalfTime = 2^((8*emuTimeSize)/2);
@@ -40,3 +42,7 @@ protected:
     // exposed callback to allow bind()
     EventDelegate mDelegate;
 };
+
+} // namespace nowind 
+
+#endif // EVENT_H

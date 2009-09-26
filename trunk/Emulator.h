@@ -6,11 +6,9 @@
 #include "Event.h"
 #include "Component.h"
 
-typedef std::list<Event> EventList;
-
 namespace nowind {
 
-//forward declarations
+typedef std::list<Event> EventList;
 class Scheduler;
 
 class Emulator //: public Component

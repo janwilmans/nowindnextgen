@@ -196,14 +196,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BusComponent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BusComponent.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Component.cpp"
 				>
 			</File>
@@ -240,11 +232,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Mapper.cpp"
+				RelativePath=".\IODevice.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Mapper.h"
+				RelativePath=".\IODevice.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryDevice.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryDevice.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryMapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MemoryMapper.h"
 				>
 			</File>
 			<File
@@ -293,6 +301,14 @@
 			</File>
 			<File
 				RelativePath=".\cpu\opcodesED.inc"
+				>
+			</File>
+			<File
+				RelativePath=".\SlotSelector.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SlotSelector.h"
 				>
 			</File>
 			<File
