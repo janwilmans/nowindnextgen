@@ -47,10 +47,15 @@ void Z80::prepare()
     {
         mBus.registerMemRead(section, &readSection[section]);
         mBus.registerMemWrite(section, &writeSection[section]);
+        
+        mBus.registerReadSectionMemory(section, &readSectionMemory[section]);
+        mMemoryMappedSection[section] = true;  // set true to test direct mMemoryMappedSection-reads
     }
 
     mBus.registerSSSRRead(&readSSSR);
     mBus.registerSSSRWrite(&writeSSSR);
+    
+    
 }
 
 void Z80::initialize()

@@ -46,6 +46,11 @@ public:
     void activateSSSRRead(SSSRReadDelegate aDelegate); 
     void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
 
+    //quick and dirty hack
+    void registerReadSectionMemory(Uint8 section, byte** readSectionMemory);
+    void setReadSectionMemory(Uint8 section, byte* memory);
+    byte** mReadSectionMemory[8];
+
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Bus();
 protected:

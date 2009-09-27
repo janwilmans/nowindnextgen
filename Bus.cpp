@@ -87,3 +87,13 @@ void Bus::activateSSSRWrite(SSSRWriteDelegate aDelegate)
 {
    (*mSSSRWrite) = aDelegate;
 }
+
+void Bus::registerReadSectionMemory(Uint8 section, byte** readSectionMemory)
+{
+    mReadSectionMemory[section] = readSectionMemory;
+}
+
+void Bus::setReadSectionMemory(Uint8 section, byte* memory)
+{
+    *mReadSectionMemory[section] = memory;
+}
