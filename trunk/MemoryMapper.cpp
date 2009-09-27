@@ -104,13 +104,20 @@ void MemoryMapper::writeIO(word port, byte value)
 
 void MemoryMapper::activate(Uint8 section)
 {
-    DBERR("MemoryMapper::activate, for section: %d\n", section);
+    DBERR("MemoryMapper::activate section: %d\n", section);
     MemoryDevice::mBus.activateMemReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
     MemoryDevice::mBus.activateMemWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
+    
+    Uint8 page = section >> 1; // 0-3
+    Uint8 currentBank = mSelectedBank[page];
+    Uint32 offset = (currentBank*16*1024) + ((section & 1) * 8*1024);
+    DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
+
+    MemoryDevice::mBus.setReadSectionMemory(section, &mMemory[offset]); 
 
     if (section == constMaxSection)
     {
-        DBERR("MemoryMapper::activate, activate SSSR\n", section);
+        DBERR("MemoryMapper::activate SSSR\n", section);
         MemoryDevice::mBus.activateSSSRRead(MakeDelegate(this, &MemoryMapper::readSSSR));
         MemoryDevice::mBus.activateSSSRWrite(MakeDelegate(this, &MemoryMapper::writeSSSR));
     }
@@ -118,13 +125,17 @@ void MemoryMapper::activate(Uint8 section)
 
 byte MemoryMapper::readByte(word address)
 {
-    Uint32 offset = mSelectedBank[address >> 24];
+    Uint8 page = address >> 30; // 0-3
+    Uint8 currentBank = mSelectedBank[page];
+    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used and offset is updated if a back-switch occurrs
     return mMemory[offset+(address & 0x3fff)];
 }
 
 void MemoryMapper::writeByte(word address, byte value)
 {
-    Uint32 offset = mSelectedBank[address >> 24];
+    Uint8 page = address >> 30; // 0-3
+    Uint8 currentBank = mSelectedBank[page];
+    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used and offset is updated if a back-switch occurrs
     mMemory[offset+(address & 0x3fff)] = value;
     //DBERR("write $%04X = $%02X\n", address, value);
 }
