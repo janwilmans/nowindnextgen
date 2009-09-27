@@ -52,6 +52,8 @@ void Z80::prepare()
         mMemoryMappedSection[section] = true;  // set true to test direct mMemoryMappedSection-reads
     }
 
+    mMemoryMappedSection[0] = false;
+    
     mBus.registerSSSRRead(&readSSSR);
     mBus.registerSSSRWrite(&writeSSSR);
     
