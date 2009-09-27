@@ -39,19 +39,27 @@ void Emulator::initialize(void)
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
     SlotSelector* slotSelector = new SlotSelector(*bus);
 
-    bus->addIODevice(mapper);
-    bus->addIODevice(slotSelector);
-
-    slotSelector->addMemoryDevice(mapper, 0, 0);     // mapper in slot 0 (not expanded)
-
+    /* initialization of all components */ 
+    
+    bus->prepare();
     cpu->prepare();
-    // for testing only, the setPage method should be deleted
-    slotSelector->activatePage(0, 0, 0);
-    slotSelector->activatePage(1, 0, 0);
-    slotSelector->activatePage(2, 0, 0);
-    slotSelector->activatePage(3, 0, 0);
-
-    cpu->initialize();  // loads rom, everything should be ready before initialize is called
+    mapper->prepare();
+    slotSelector->prepare();
+    
+    bus->initialize();
+    cpu->initialize();
+    mapper->initialize();
+    slotSelector->initialize();
+    
+    /* initialization of all components */ 
+ 
+    // attach device to the required ports by calling IODevice::attachIO
+    bus->addIODevice(mapper);           
+    bus->addIODevice(slotSelector);
+    slotSelector->addMemoryDevice(mapper, 0, 0);     // mapper in slot 0 (not expanded)
+    
+    cpu->prepareForZexall(); // loads rom, everything should be ready before initialize is called
+    
     cpu->reset();
     cpu->setPC(0x100);
     mScheduler->run(cpu);
@@ -59,6 +67,16 @@ void Emulator::initialize(void)
 
     // tests the scheduler using a dummy-cpu
     //test();
+    
+    /* shutdown */
+    
+    bus->prepare_shutdown();
+    cpu->prepare_shutdown();
+    mapper->prepare_shutdown();
+    slotSelector->prepare_shutdown();   
+    
+     /* shutdown */
+     exit(0);
 }
 
 // create and initialize _everything_

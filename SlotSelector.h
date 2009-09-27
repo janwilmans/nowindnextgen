@@ -39,9 +39,10 @@ public:
     byte readIO(word port);
     void writeIO(word port, byte value);
 
-    void activatePage(Uint8 page, Uint8 slot, Uint8 subslot);
+    void activatePage(Uint8 page);
 
 private:
+    void activatePage(Uint8 page, Uint8 slot, Uint8 subslot);
     void activateCurrent();
     void addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot);
 

@@ -27,8 +27,8 @@ public:
     void registerWriteIO(Uint16 port, IOWriteDelegate aDelegate);
 
     // directory called by the CPU or other bus controller
-    byte readIO(Uint16 port);
-    void writeIO(Uint16 port, byte value);
+    byte readIO(word port);
+    void writeIO(word port, byte value);
 
     // the cpu registers its memory delegates with these methods
     void registerMemRead(Uint8 section, MemReadDelegate* aDelegate);
@@ -53,6 +53,12 @@ public:
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Bus();
+    
+    // Component
+    virtual void prepare();
+    virtual void initialize();
+    virtual void prepare_shutdown();    
+    
 protected:
     Scheduler& mScheduler;
 private:
@@ -68,6 +74,7 @@ private:
     // I/O access
     IOReadDelegate mIORead[256];
     IOWriteDelegate mIOWrite[256];
+
 };
 
 } // nowind namespace 
