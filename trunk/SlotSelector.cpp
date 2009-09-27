@@ -25,6 +25,8 @@ void SlotSelector::prepare()
 void SlotSelector::initialize()
 {
     // initialize all slots, expanded or not with the 'VoidDevice'
+    MemoryDevice::mBus.activateSSSRRead(MakeDelegate(this, &SlotSelector::readSSSR));
+    MemoryDevice::mBus.activateSSSRWrite(MakeDelegate(this, &SlotSelector::writeSSSR));
 }
 
 void SlotSelector::prepare_shutdown()
@@ -56,12 +58,13 @@ void SlotSelector::writeIO(word /* port */, byte value)
 
 byte SlotSelector::readSSSR()
 {
-    return 0xff;
+    DBERR("read SSSR = $ff\n");
+    return 0xFF;
 }
 
-void SlotSelector::writeSSSR(byte)
+void SlotSelector::writeSSSR(byte value)
 {
-   
+    DBERR("write SSSR = $%02X\n", value);
 }
 
 void SlotSelector::addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot)
@@ -76,7 +79,8 @@ void SlotSelector::addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot
 void SlotSelector::addMemoryDevice(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot)
 {
     if (subslot > 0) mSlotExpanded[slot] = true;
-
+    aMemoryDevice->setSlot(this, slot, subslot);
+    
     if (mSlotExpanded[slot] != 0)
     {
         addMemoryDeviceToSlot(aMemoryDevice, slot, subslot);
@@ -90,24 +94,20 @@ void SlotSelector::addMemoryDevice(MemoryDevice* aMemoryDevice, Uint8 slot, Uint
     }
 }
 
-#define P0PART(x) (x & 0xff)
-#define P1PART(x) ((x >> 8) & 0xff)
-#define P2PART(x) ((x >> 16) & 0xff)
-#define P3PART(x) ((x >> 24) & 0xff)
-
 void SlotSelector::activateCurrent()
 {
-    byte mainSlot = P0PART(mA8Value);
-    activatePage(0, mainSlot, P0PART(mSSSR[mainSlot]));
-    
-    mainSlot = P1PART(mA8Value);
-    activatePage(0, mainSlot, P1PART(mSSSR[mainSlot]));
-    
-    mainSlot = P2PART(mA8Value);
-    activatePage(0, mainSlot, P2PART(mSSSR[mainSlot]));
+    activatePage(0);
+    activatePage(1);
+    activatePage(2);
+    activatePage(3);
+}
 
-    mainSlot = P3PART(mA8Value);
-    activatePage(0, mainSlot, P3PART(mSSSR[mainSlot]));
+void SlotSelector::activatePage(Uint8 page)
+{
+    byte pageShift = page*8;
+    byte mainSlot = (mA8Value >> pageShift) & 0xff;
+    byte subSlot = (mSSSR[mainSlot] >> pageShift) & 0xff;
+    activatePage(page, mainSlot, subSlot);
 }
 
 void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)

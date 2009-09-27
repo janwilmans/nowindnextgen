@@ -23,6 +23,21 @@ Bus::~Bus()
 
 }
 
+void Bus::prepare()
+{
+
+}
+
+void Bus::initialize()
+{
+
+}
+
+void Bus::prepare_shutdown()
+{
+
+}
+
 void Bus::registerReadIO(Uint16 port, IOReadDelegate aDelegate)
 {
     mIORead[port] = aDelegate;
@@ -33,12 +48,12 @@ void Bus::registerWriteIO(Uint16 port, IOWriteDelegate aDelegate)
     mIOWrite[port] = aDelegate;
 }
 
-byte Bus::readIO(Uint16 port)
+byte Bus::readIO(word port)
 {
     return mIORead[port](port);
 }
 
-void Bus::writeIO(Uint16 port, byte value)
+void Bus::writeIO(word port, byte value)
 {
     mIOWrite[port](port, value);
 }

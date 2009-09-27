@@ -39,8 +39,6 @@ public:
     byte readByte(word address);
     void writeByte(word address, byte value);
 
-    byte readSSSR();
-    void writeSSSR(byte value);
 };
 
 } // namespace nowind

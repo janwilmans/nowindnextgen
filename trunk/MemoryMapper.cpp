@@ -1,6 +1,7 @@
 #include "MemoryMapper.h"
 #include "IODevice.h"
 #include "MemoryDevice.h"
+#include "SlotSelector.h"
 
 using namespace nowind;
 using namespace fastdelegate;
@@ -10,7 +11,7 @@ MemoryMapper::MemoryMapper(Bus& bus, Uint16 kilobytes) : IODevice(bus), MemoryDe
     NW_ASSERT(((kilobytes/(16))*(16)) == kilobytes);  // kilobytes is a multiple of 16
     mBanks = kilobytes/16;
     mMemory = new byte[mBanks*16*1024];
-    memset(mMemory, 0, mBanks*16*1024);
+    memset(mMemory, 0xff, mBanks*16*1024);
 
     mSelectedBank[0] = 3;
     mSelectedBank[1] = 2;
@@ -86,20 +87,25 @@ void MemoryMapper::writeIO(word port, byte value)
     {
     case 0xfc:
         mSelectedBank[0] = value;
+        mSlotSelector->activatePage(0);
         break;
     case 0xfd:
         mSelectedBank[1] = value;
+        mSlotSelector->activatePage(1);
         break;
     case 0xfe:
         mSelectedBank[2] = value;
+        mSlotSelector->activatePage(2);
         break;
     case 0xff:
         mSelectedBank[3] = value;
+        mSlotSelector->activatePage(3);
         break;
     default:
         NW_ASSERT(false);
         break;
     } 
+    
 }
 
 void MemoryMapper::activate(Uint8 section)
@@ -114,13 +120,6 @@ void MemoryMapper::activate(Uint8 section)
     DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
 
     MemoryDevice::mBus.setReadSectionMemory(section, &mMemory[offset]); 
-
-    if (section == constMaxSection)
-    {
-        DBERR("MemoryMapper::activate SSSR\n", section);
-        MemoryDevice::mBus.activateSSSRRead(MakeDelegate(this, &MemoryMapper::readSSSR));
-        MemoryDevice::mBus.activateSSSRWrite(MakeDelegate(this, &MemoryMapper::writeSSSR));
-    }
 }
 
 byte MemoryMapper::readByte(word address)
@@ -128,7 +127,10 @@ byte MemoryMapper::readByte(word address)
     Uint8 page = address >> 30; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used and offset is updated if a back-switch occurrs
-    return mMemory[offset+(address & 0x3fff)];
+    
+    byte value = mMemory[offset+(address & 0x3fff)];
+    //DBERR("read $%04X = $%02X\n", address, value);
+    return value;
 }
 
 void MemoryMapper::writeByte(word address, byte value)
@@ -140,12 +142,3 @@ void MemoryMapper::writeByte(word address, byte value)
     //DBERR("write $%04X = $%02X\n", address, value);
 }
 
-byte MemoryMapper::readSSSR()
-{
-    return 0xFF;
-}
-
-void MemoryMapper::writeSSSR(byte value)
-{
-
-}

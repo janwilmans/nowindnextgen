@@ -118,6 +118,7 @@ public:
     virtual void initialize();
     virtual void prepare_shutdown();
 
+    void prepareForZexall();
 private:
 
     float opcodeCounter[256];

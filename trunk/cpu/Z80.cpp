@@ -49,10 +49,17 @@ void Z80::prepare()
         mBus.registerMemWrite(section, &writeSection[section]);
         
         mBus.registerReadSectionMemory(section, &readSectionMemory[section]);
-        mMemoryMappedSection[section] = true;  // set true to test direct mMemoryMappedSection-reads
+        mMemoryMappedSection[section] = true;  // set false to test direct mMemoryMappedSection-reads
     }
 
     mMemoryMappedSection[0] = false;
+    mMemoryMappedSection[1] = false;
+    mMemoryMappedSection[2] = false;
+    mMemoryMappedSection[3] = false;
+    mMemoryMappedSection[4] = false;
+    mMemoryMappedSection[5] = false;
+    mMemoryMappedSection[6] = true;
+    mMemoryMappedSection[7] = true;
     
     mBus.registerSSSRRead(&readSSSR);
     mBus.registerSSSRWrite(&writeSSSR);
@@ -62,11 +69,18 @@ void Z80::prepare()
 
 void Z80::initialize()
 {
-    // move this elsewhere!!!!
+
+}
+
+void Z80::prepareForZexall()
+{
     writeIO(0xFC, 3);
     writeIO(0xFD, 2);
     writeIO(0xFE, 1);
     writeIO(0xFF, 0);
+    
+    writeIO(0xa8, 0);
+    WRITEMEM(0xffff, 0);
 
     // load zexall.com at 0x100 (testing only)
     ifstream romfile("cpu/zexall/zexall.com", ios::binary);
