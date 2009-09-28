@@ -58,8 +58,8 @@ void Z80::prepare()
     mMemoryMappedSection[3] = false;
     mMemoryMappedSection[4] = false;
     mMemoryMappedSection[5] = false;
-    mMemoryMappedSection[6] = true;
-    mMemoryMappedSection[7] = true;
+    mMemoryMappedSection[6] = false;
+    mMemoryMappedSection[7] = false;
     
     mBus.registerSSSRRead(&readSSSR);
     mBus.registerSSSRWrite(&writeSSSR);
@@ -72,7 +72,7 @@ void Z80::initialize()
 
 }
 
-void Z80::prepareForZexall()
+void Z80::setupBdosEnv(const char* filename)
 {
     writeIO(0xFC, 3);
     writeIO(0xFD, 2);
@@ -82,14 +82,14 @@ void Z80::prepareForZexall()
     writeIO(0xa8, 0);
     WRITEMEM(0xffff, 0);
 
-    // load zexall.com at 0x100 (testing only)
-    ifstream romfile("cpu/zexall/zexall.com", ios::binary);
+    // load file at 0x100
+    ifstream romfile(filename, ios::binary);
     bool failed = romfile.fail();
     NW_ASSERT(!failed);
 
     romfile.seekg(0, ios::end);
     Uint32 fileSize = romfile.tellg();
-    DBERR("loaded zexall.com (%u bytes)\n", fileSize);
+    DBERR("loaded %s (%u bytes)\n", filename, fileSize);
 
     char* temp = new char[fileSize];
     romfile.seekg(0);
@@ -109,6 +109,9 @@ void Z80::prepareForZexall()
     writeByte(0x0005, 0xED);
     writeByte(0x0006, 0x0E);
     writeByte(0x0007, 0xC9);
+    
+    // set initial SP 
+    reg_sp = 0xc800;
 }
 
 void Z80::prepare_shutdown()
@@ -251,7 +254,7 @@ byte Z80::opcodeFetch(word address)
     */
 
     byte oc = READMEM(address);
-    //DBERR("0x%04X  0x%02X\n", address, oc);
+    DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 
@@ -336,12 +339,6 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         NW_ASSERT (reg_iy < 0x10000);
         NW_ASSERT (reg_pc < 0x10000);
         NW_ASSERT (reg_sp < 0x10000);
-
-//      NW_ASSERT (reg_sp != 0x0fffe);  // duidt op een stack overflow, vaak wordt dat veroorzaakt door een eerder probleem
-//      NW_ASSERT (reg_sp != 1);        // komt voor in zexall!
-//      NW_ASSERT (reg_sp != 2)         // jan: dat kan ook voorkomen als instructies worden getest die sp gebruiken,
-        // als je maar zorgt dat je sp niet gebruikt op dat moment, gaat dat wel goed.
-
     }
     while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
 
@@ -438,11 +435,6 @@ void Z80::saveState()
 void Z80::loadState()
 {
     //MemoryMapper->loadState();
-}
-
-word Z80::getSP()
-{
-    return reg_sp;
 }
 
 void Z80::hijackBdos()

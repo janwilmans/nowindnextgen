@@ -6,6 +6,7 @@ using namespace fastdelegate;
 
 SlotSelector::SlotSelector(Bus& aBus) : IODevice(aBus), MemoryDevice(aBus)
 {
+    // todo: verify initial values! (random? 0xff ?)
     mSSSR[0] = 0;
     mSSSR[1] = 0;
     mSSSR[2] = 0;
