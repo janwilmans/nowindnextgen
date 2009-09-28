@@ -58,8 +58,8 @@ void Emulator::initialize(void)
     bus->addIODevice(slotSelector);
     slotSelector->addMemoryDevice(mapper, 0, 0);     // mapper in slot 0 (not expanded)
     
-    //cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
-    cpu->setupBdosEnv("asm/maptest.com");
+    cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
+    //cpu->setupBdosEnv("asm/maptest.com");
     
     cpu->reset();
     cpu->setPC(0x100);

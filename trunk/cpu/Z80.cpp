@@ -254,7 +254,7 @@ byte Z80::opcodeFetch(word address)
     */
 
     byte oc = READMEM(address);
-    DBERR("0x%04X  0x%02X\n", address, oc);
+    //DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 
