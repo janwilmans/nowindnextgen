@@ -124,7 +124,7 @@ void MemoryMapper::activate(Uint8 section)
 
 byte MemoryMapper::readByte(word address)
 {
-    Uint8 page = address >> 30; // 0-3
+    Uint8 page = address >> 14; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used
     
@@ -135,10 +135,10 @@ byte MemoryMapper::readByte(word address)
 
 void MemoryMapper::writeByte(word address, byte value)
 {
-    Uint8 page = address >> 30; // 0-3
+    Uint8 page = address >> 14; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate writeByte() per page are used 
     mMemory[offset+(address & 0x3fff)] = value;
-    DBERR("(m) write $%04X = $%02X\n", address, value);
+    //DBERR("(m) write $%04X = $%02X\n", address, value);
 }
 
