@@ -10,8 +10,9 @@ MemoryMapper::MemoryMapper(Bus& bus, Uint16 kilobytes) : IODevice(bus), MemoryDe
 {
     NW_ASSERT(((kilobytes/(16))*(16)) == kilobytes);  // kilobytes is a multiple of 16
     mBanks = kilobytes/16;
-    mMemory = new byte[mBanks*16*1024];
-    memset(mMemory, 0xff, mBanks*16*1024);
+    Uint32 size = mBanks*16*1024;
+    mMemory = new byte[size];       // check basetypes.h to see the ACTUAL type of 'byte'
+    for (Uint32 i=0; i<size;i++) mMemory[i] = 0xff;
 
     mSelectedBank[0] = 3;
     mSelectedBank[1] = 2;
@@ -117,8 +118,7 @@ void MemoryMapper::activate(Uint8 section)
     Uint8 page = section >> 1; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = (currentBank*16*1024) + ((section & 1) * 8*1024);
-    DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
-
+    //DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
     MemoryDevice::mBus.setReadSectionMemory(section, &mMemory[offset]); 
 }
 
@@ -126,10 +126,10 @@ byte MemoryMapper::readByte(word address)
 {
     Uint8 page = address >> 30; // 0-3
     Uint8 currentBank = mSelectedBank[page];
-    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used and offset is updated if a back-switch occurrs
+    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used
     
     byte value = mMemory[offset+(address & 0x3fff)];
-    //DBERR("read $%04X = $%02X\n", address, value);
+    //DBERR("(m) read $%04X = $%02X\n", address, value);
     return value;
 }
 
@@ -137,8 +137,8 @@ void MemoryMapper::writeByte(word address, byte value)
 {
     Uint8 page = address >> 30; // 0-3
     Uint8 currentBank = mSelectedBank[page];
-    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used and offset is updated if a back-switch occurrs
+    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate writeByte() per page are used 
     mMemory[offset+(address & 0x3fff)] = value;
-    //DBERR("write $%04X = $%02X\n", address, value);
+    DBERR("(m) write $%04X = $%02X\n", address, value);
 }
 

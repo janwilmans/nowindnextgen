@@ -80,7 +80,9 @@ protected:
             if (address == 0xffff) return readSSSR();
             return readSection[section](address);
         }
-        return readSectionMemory[section][address & constSectionMask];
+        byte value = readSectionMemory[section][address & constSectionMask];
+        //DBERR("(d) readSectionMemory, address: $%04X, value: $%02X\n", address, value);
+        return value;
     }
 
     inline void writeByte(word address, byte value)
@@ -118,7 +120,7 @@ public:
     virtual void initialize();
     virtual void prepare_shutdown();
 
-    void prepareForZexall();
+    void setupBdosEnv(const char* filename);
 private:
 
     float opcodeCounter[256];
@@ -184,7 +186,6 @@ private:
     //void dumpPages();
     void dumpSlotSelection();
     void dumpCpuInfo();
-    word getSP();
 };
 
 } // namespace nowind
