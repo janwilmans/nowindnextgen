@@ -185,7 +185,7 @@
 				AdditionalLibraryDirectories="D:\project\Qt\lib\$(OutDir),D:\project\Qt\lib"
 				GenerateManifest="true"
 				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Release/qt-simple-test.pdb"
-				SubSystem="1"
+				SubSystem="2"
 				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Release\qt-simple-test.lib"
 			/>
 			<Tool
@@ -281,7 +281,7 @@
 				AdditionalLibraryDirectories="D:\project\Qt\lib\$(OutDir),D:\project\Qt\lib"
 				GenerateManifest="true"
 				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MinSizeRel/qt-simple-test.pdb"
-				SubSystem="1"
+				SubSystem="2"
 				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MinSizeRel\qt-simple-test.lib"
 			/>
 			<Tool
@@ -379,7 +379,7 @@
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/RelWithDebInfo/qt-simple-test.pdb"
-				SubSystem="1"
+				SubSystem="2"
 				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\RelWithDebInfo\qt-simple-test.lib"
 			/>
 			<Tool
