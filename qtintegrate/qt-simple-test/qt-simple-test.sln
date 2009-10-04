@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qt-simple-test", "src\qt-simple-test.vcproj", "{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		MinSizeRel|Win32 = MinSizeRel|Win32
+		Release|Win32 = Release|Win32
+		RelWithDebInfo|Win32 = RelWithDebInfo|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.Debug|Win32.Build.0 = Debug|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.MinSizeRel|Win32.ActiveCfg = MinSizeRel|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.MinSizeRel|Win32.Build.0 = MinSizeRel|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.Release|Win32.ActiveCfg = Release|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.Release|Win32.Build.0 = Release|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
