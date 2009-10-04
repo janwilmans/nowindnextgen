@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="C:\Program Files\gtkmm\MSVC\gtkmm-vc90-2_4.vsprops;C:\Program Files\gtkmm\MSVC\gtkmm-vc90-d-2_4.vsprops"
+			InheritedPropertySheets="C:\Program Files\gtkmm\MSVC\gtkmm-vc90-d-2_4.vsprops;.\sdl.vsprops"
 			CharacterSet="0"
 			>
 			<Tool
@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -93,7 +93,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="C:\Program Files\gtkmm\MSVC\gtkmm-vc90-2_4.vsprops;C:\Program Files\gtkmm\MSVC\gtkmm-vc90-d-2_4.vsprops"
+			InheritedPropertySheets="C:\Program Files\gtkmm\MSVC\gtkmm-vc90-2_4.vsprops;.\sdl.vsprops"
 			UseOfMFC="1"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
@@ -175,6 +175,10 @@
 			>
 			<File
 				RelativePath=".\gtkintegrate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\integrate_example.cpp"
 				>
 			</File>
 		</Filter>
