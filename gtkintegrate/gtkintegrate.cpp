@@ -5,7 +5,7 @@ int main_ex( int argc, char **argv );
 int main( int   argc,
           char *argv[] )
 {
-    return main_ex(argc, argv);
+   // return main_ex(argc, argv);
     
     GtkWidget *window;
     gtk_init (&argc, &argv);
