@@ -56,8 +56,8 @@ case 0xAE: TS(19); reg2 = READMEM(IXPD); XOR(reg2); break;      // xor (ix+d)
 case 0xB6: TS(19); reg2 = READMEM(IXPD); OR(reg2); break;       // or (ix+d)
 case 0xBE: TS(19); reg2 = READMEM(IXPD); CP(reg2); break;       // cp (ix+d)
 
-case 0x34: TS(23); reg1 = IXPD; reg2 = READMEM(reg1); INC((++reg2)&255); WRITEMEM(reg1, reg2); break; // inc (ix+d)
-case 0x35: TS(23); reg1 = IXPD; reg2 = READMEM(reg1); DEC((--reg2)&255); WRITEMEM(reg1, reg2); break; // dec (ix+d)
+case 0x34: TS(23); reg1 = IXPD; reg2 = READMEM(reg1); ++reg2&=255; INC(reg2); WRITEMEM(reg1, reg2); break; // inc (ix+d)
+case 0x35: TS(23); reg1 = IXPD; reg2 = READMEM(reg1); --reg2&=255; DEC(reg2); WRITEMEM(reg1, reg2); break; // dec (ix+d)
 
 
 // 16-bit arithmetic group

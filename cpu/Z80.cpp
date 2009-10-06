@@ -110,7 +110,13 @@ void Z80::setupBdosEnv(const char* filename)
     writeByte(0x0006, 0x0E);
     writeByte(0x0007, 0xC9);
     
-    // set initial SP 
+	word testnr = 0;
+	word testAdres = 0x13A+(testnr*2);
+
+	writeByte(0x120, testAdres & 255);
+	writeByte(0x121, testAdres >> 8);
+	
+	// set initial SP 
     reg_sp = 0xc800;
 }
 
