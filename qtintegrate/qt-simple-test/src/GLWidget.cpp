@@ -23,15 +23,29 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 	glLoadIdentity();									// Reset The Modelview Matrix
 }
 
-int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
+void setup2d(GLsizei width, GLsizei height)
 {
-	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
-	glClearDepth(1.0f);									// Depth Buffer Setup
-	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-	return TRUE;										// Initialization Went OK
+
+//I am setting a state where I am editing the projection matrix...
+  glMatrixMode(GL_PROJECTION);
+
+//Clearing the projection matrix...
+  glLoadIdentity();
+
+//Creating an orthoscopic view matrix going from -1 -> 1 in each
+//dimension on the screen (x, y, z). 
+  glOrtho(-1, 1, -1, 1, -1, 1);
+    
+//Now editing the model-view matrix.
+  glMatrixMode(GL_MODELVIEW);
+
+//Clearing the model-view matrix.
+  glLoadIdentity();
+
+//Disabling the depth test (z will not be used to tell what object 
+//will be shown above another, only the order in which I draw them.)
+  glDisable(GL_DEPTH_TEST);
+
 }
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
@@ -60,7 +74,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 void GLWidget::paintEvent(QPaintEvent *event)
 {
-    ReSizeGLScene(400,300);
+    ReSizeGLScene(this->width(), this->height());
     DrawGLScene();
     swapBuffers();  // actual paint the screen
 }
@@ -68,7 +82,7 @@ void GLWidget::paintEvent(QPaintEvent *event)
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-    InitGL();
+
 }
 
 GLWidget::~GLWidget()
