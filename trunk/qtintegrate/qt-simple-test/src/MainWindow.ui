@@ -48,15 +48,102 @@
     <property name="title" >
      <string>&amp;File</string>
     </property>
+		<addaction name="action_Quit" />
    </widget>
-   <addaction name="menu_File" />
-  </widget>
+
+		<widget class="QMenu" name="menu_Edit" >
+			<property name="title" >
+				<string>&amp;Edit</string>
+			</property>
+		</widget>
+		<widget class="QMenu" name="menu_Advanced" >
+			<property name="title" >
+				<string>&amp;Advanced Options</string>
+			</property>
+			<addaction name="action_foo1" />
+			<addaction name="action_foo2" />
+			<addaction name="action_foo3" />
+			<addaction name="action_foo4" />
+			<addaction name="action_foo5" />
+			<addaction name="action_foo6" />
+			<addaction name="action_foo7" />
+			<addaction name="action_foo8" />
+			<addaction name="action_foo9" />
+		</widget>
+
+		<widget class="QMenu" name="menu_ViewSettings" >
+			<property name="title" >
+				<string>&amp;View Settings</string>
+			</property>
+			<addaction name="action_foo1" />
+			<addaction name="action_foo2" />
+			<addaction name="action_foo3" />
+			<addaction name="action_foo4" />
+			<addaction name="action_foo5" />
+			<addaction name="action_foo6" />
+			<addaction name="action_foo7" />
+			<addaction name="action_foo8" />
+			<addaction name="action_foo9" />
+		</widget>
+
+		<addaction name="menu_File" />
+		<addaction name="menu_Edit" />
+		<addaction name="menu_Advanced" />
+		<addaction name="menu_ViewSettings" />
+	</widget>
   <widget class="QStatusBar" name="statusbar" />
   <action name="action_Quit" >
    <property name="text" >
     <string>&amp;Quit</string>
    </property>
   </action>
+
+	 <action name="action_foo1" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;1</string>
+		 </property>
+	 </action>
+	 <action name="action_foo2" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;2</string>
+		 </property>
+	 </action>
+	 <action name="action_foo3" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;3</string>
+		 </property>
+	 </action>
+	 <action name="action_foo4" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;4</string>
+		 </property>
+	 </action>
+	 <action name="action_foo5" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;5</string>
+		 </property>
+	 </action>
+	 <action name="action_foo6" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;6</string>
+		 </property>
+	 </action>
+	 <action name="action_foo7" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;7</string>
+		 </property>
+	 </action>
+	 <action name="action_foo8" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;8</string>
+		 </property>
+	 </action>
+	 <action name="action_foo9" >
+		 <property name="text" >
+			 <string>foofoofoofoo&amp;9</string>
+		 </property>
+	 </action>
+
  </widget>
  <resources/>
  <connections/>
