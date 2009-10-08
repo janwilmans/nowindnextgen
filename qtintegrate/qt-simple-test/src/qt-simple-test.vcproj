@@ -1,14 +1,19 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="qt-simple-test"
 	ProjectGUID="{15820846-2DA7-4E58-BAC4-4FEF163F2F8D}"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
@@ -16,63 +21,98 @@
 			IntermediateDirectory="qt-simple-test.dir\Debug"
 			ConfigurationType="1"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				BasicRuntimeChecks="3"
-				CompileAs="2"
-				DebugInformationFormat="3"
-				ExceptionHandling="1"
-				InlineFunctionExpansion="0"
-				Optimization="0"
-				RuntimeLibrary="3"
-				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
-				PreprocessorDefinitions="WIN32,_WINDOWS,_DEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_DEBUG,CMAKE_INTDIR=\&quot;Debug\&quot;"
-				AssemblerListingLocation="Debug"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Debug/qt-simple-test.pdb"
-/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				PreprocessorDefinitions="WIN32,_WINDOWS,_DEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_DEBUG,CMAKE_INTDIR=\&quot;Debug\&quot;"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32,_WINDOWS,_DEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_DEBUG,CMAKE_INTDIR=\&quot;Debug\&quot;"
-				MkTypLibCompatible="FALSE"
+				MkTypLibCompatible="false"
 				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
+				GenerateStublessProxies="true"
 				TypeLibraryName="$(InputName).tlb"
 				OutputDirectory="$(IntDir)"
 				HeaderFileName="$(InputName).h"
 				DLLDataFileName=""
 				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"/>
+				ProxyFileName="$(InputName)_p.c"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCCLCompilerTool"
+				AdditionalOptions=" /Zm1000"
+				Optimization="0"
+				InlineFunctionExpansion="0"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+				PreprocessorDefinitions="WIN32,_WINDOWS,_DEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_DEBUG,CMAKE_INTDIR=\&quot;Debug\&quot;"
+				ExceptionHandling="1"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="Debug"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Debug/qt-simple-test.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				CompileAs="2"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="WIN32,_WINDOWS,_DEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_DEBUG,CMAKE_INTDIR=\&quot;Debug\&quot;"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /STACK:10000000 /machine:I386 /debug"
 				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  QtOpenGL4.lib OpenGL32.lib GlU32.lib D:\project\Qt\lib\QtGuid4.lib imm32.lib winmm.lib D:\project\Qt\lib\QtCored4.lib ws2_32.lib "
 				OutputFile="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Debug\qt-simple-test.exe"
 				Version="0.0"
-				GenerateManifest="TRUE"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="D:\project\Qt\lib\$(OutDir),D:\project\Qt\lib"
-				ProgramDataBaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Debug/qt-simple-test.pdb"
-				GenerateDebugInformation="TRUE"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Debug/qt-simple-test.pdb"
 				SubSystem="2"
-				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Debug\qt-simple-test.lib"/>
+				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Debug\qt-simple-test.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -80,60 +120,95 @@
 			IntermediateDirectory="qt-simple-test.dir\Release"
 			ConfigurationType="1"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				CompileAs="2"
-				ExceptionHandling="1"
-				InlineFunctionExpansion="2"
-				Optimization="2"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
-				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;Release\&quot;"
-				AssemblerListingLocation="Release"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Release/qt-simple-test.pdb"
-/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;Release\&quot;"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;Release\&quot;"
-				MkTypLibCompatible="FALSE"
+				MkTypLibCompatible="false"
 				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
+				GenerateStublessProxies="true"
 				TypeLibraryName="$(InputName).tlb"
 				OutputDirectory="$(IntDir)"
 				HeaderFileName="$(InputName).h"
 				DLLDataFileName=""
 				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"/>
+				ProxyFileName="$(InputName)_p.c"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCCLCompilerTool"
+				AdditionalOptions=" /Zm1000"
+				Optimization="2"
+				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;Release\&quot;"
+				ExceptionHandling="1"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="Release"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Release/qt-simple-test.pdb"
+				WarningLevel="3"
+				CompileAs="2"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;Release\&quot;"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /STACK:10000000 /machine:I386"
 				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  QtOpenGL4.lib OpenGL32.lib GlU32.lib D:\project\Qt\lib\QtGui4.lib imm32.lib winmm.lib D:\project\Qt\lib\QtCore4.lib ws2_32.lib "
 				OutputFile="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Release\qt-simple-test.exe"
 				Version="0.0"
-				GenerateManifest="TRUE"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="D:\project\Qt\lib\$(OutDir),D:\project\Qt\lib"
-				ProgramDataBaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Release/qt-simple-test.pdb"
+				GenerateManifest="true"
+				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/Release/qt-simple-test.pdb"
 				SubSystem="2"
-				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Release\qt-simple-test.lib"/>
+				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Release\qt-simple-test.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="MinSizeRel|Win32"
@@ -141,60 +216,95 @@
 			IntermediateDirectory="qt-simple-test.dir\MinSizeRel"
 			ConfigurationType="1"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				CompileAs="2"
-				ExceptionHandling="1"
-				InlineFunctionExpansion="1"
-				Optimization="1"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
-				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
-				AssemblerListingLocation="MinSizeRel"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MinSizeRel/qt-simple-test.pdb"
-/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
-				MkTypLibCompatible="FALSE"
+				MkTypLibCompatible="false"
 				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
+				GenerateStublessProxies="true"
 				TypeLibraryName="$(InputName).tlb"
 				OutputDirectory="$(IntDir)"
 				HeaderFileName="$(InputName).h"
 				DLLDataFileName=""
 				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"/>
+				ProxyFileName="$(InputName)_p.c"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCCLCompilerTool"
+				AdditionalOptions=" /Zm1000"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				ExceptionHandling="1"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="MinSizeRel"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MinSizeRel/qt-simple-test.pdb"
+				WarningLevel="3"
+				CompileAs="2"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /STACK:10000000 /machine:I386"
 				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  QtOpenGL4.lib OpenGL32.lib GlU32.lib D:\project\Qt\lib\QtGui4.lib imm32.lib winmm.lib D:\project\Qt\lib\QtCore4.lib ws2_32.lib "
 				OutputFile="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MinSizeRel\qt-simple-test.exe"
 				Version="0.0"
-				GenerateManifest="TRUE"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="D:\project\Qt\lib\$(OutDir),D:\project\Qt\lib"
-				ProgramDataBaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MinSizeRel/qt-simple-test.pdb"
+				GenerateManifest="true"
+				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MinSizeRel/qt-simple-test.pdb"
 				SubSystem="2"
-				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MinSizeRel\qt-simple-test.lib"/>
+				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MinSizeRel\qt-simple-test.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="RelWithDebInfo|Win32"
@@ -202,166 +312,234 @@
 			IntermediateDirectory="qt-simple-test.dir\RelWithDebInfo"
 			ConfigurationType="1"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				CompileAs="2"
-				DebugInformationFormat="3"
-				ExceptionHandling="1"
-				InlineFunctionExpansion="1"
-				Optimization="2"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
-				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
-				AssemblerListingLocation="RelWithDebInfo"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/RelWithDebInfo/qt-simple-test.pdb"
-/>
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
-				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"/>
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
-				MkTypLibCompatible="FALSE"
+				MkTypLibCompatible="false"
 				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
+				GenerateStublessProxies="true"
 				TypeLibraryName="$(InputName).tlb"
 				OutputDirectory="$(IntDir)"
 				HeaderFileName="$(InputName).h"
 				DLLDataFileName=""
 				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"/>
+				ProxyFileName="$(InputName)_p.c"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCCLCompilerTool"
+				AdditionalOptions=" /Zm1000"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				ExceptionHandling="1"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="RelWithDebInfo"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/RelWithDebInfo/qt-simple-test.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				CompileAs="2"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="WIN32,_WINDOWS,NDEBUG,QT_DLL,QT_DLL,QT_GUI_LIB,QT_CORE_LIB,QT_NO_DEBUG,CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				AdditionalIncludeDirectories="D:\project\Qt\include;D:\project\Qt\include\QtGui;D:\project\Qt\include\QtCore;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src;"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /STACK:10000000 /machine:I386 /debug"
 				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  QtOpenGL4.lib OpenGL32.lib GlU32.lib D:\project\Qt\lib\QtGui4.lib imm32.lib winmm.lib D:\project\Qt\lib\QtCore4.lib ws2_32.lib "
 				OutputFile="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\RelWithDebInfo\qt-simple-test.exe"
 				Version="0.0"
-				GenerateManifest="TRUE"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="D:\project\Qt\lib\$(OutDir),D:\project\Qt\lib"
-				ProgramDataBaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/RelWithDebInfo/qt-simple-test.pdb"
-				GenerateDebugInformation="TRUE"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/RelWithDebInfo/qt-simple-test.pdb"
 				SubSystem="2"
-				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\RelWithDebInfo\qt-simple-test.lib"/>
+				ImportLibrary="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\RelWithDebInfo\qt-simple-test.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
-			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Generating ui_MainWindow.h"
-					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
-					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Generating ui_MainWindow.h"
-					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
-					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="MinSizeRel|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Generating ui_MainWindow.h"
-					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
-					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="RelWithDebInfo|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Generating ui_MainWindow.h"
-					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
-					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
-					Outputs="CMakeFiles\generate.stamp"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
-					Outputs="CMakeFiles\generate.stamp"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="MinSizeRel|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
-					Outputs="CMakeFiles\generate.stamp"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="RelWithDebInfo|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp"
-					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
-					Outputs="CMakeFiles\generate.stamp"/>
-				</FileConfiguration>
-			</File>
 		<Filter
 			Name="Source Files"
-			Filter="">
+			>
 			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Main.cpp">
+				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\GLWidget.cpp"
+				>
 			</File>
 			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.cpp">
+				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\Main.cpp"
+				>
 			</File>
 			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\GLWidget.cpp">
+				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="">
+			>
 			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.h">
+				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\GLWidget.h"
+				>
 			</File>
 			<File
-				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\GLWidget.h">
+				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.h"
+				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Generated Files"
+			>
+			<File
+				RelativePath=".\ui_MainWindow.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
+					Outputs="CMakeFiles\generate.stamp"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
+					Outputs="CMakeFiles\generate.stamp"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="MinSizeRel|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
+					Outputs="CMakeFiles\generate.stamp"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="RelWithDebInfo|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files\CMake 2.6\bin\cmake.exe&quot; -HD:/project/nowindnextgen/qtintegrate/qt-simple-test -BD:/project/nowindnextgen/qtintegrate/qt-simple-test --check-stamp-file CMakeFiles/generate.stamp&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindQt4.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\CheckSymbolExists.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\MacroAddFileDependencies.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\FindPackageMessage.cmake&quot;;&quot;C:\Program Files\CMake 2.6\share\cmake-2.6\Modules\UseQt4.cmake&quot;;D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\CMakeLists.txt;"
+					Outputs="CMakeFiles\generate.stamp"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating ui_MainWindow.h"
+					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
+					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating ui_MainWindow.h"
+					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
+					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="MinSizeRel|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating ui_MainWindow.h"
+					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
+					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="RelWithDebInfo|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating ui_MainWindow.h"
+					CommandLine="D:\project\Qt\bin\uic.exe -o D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/ui_MainWindow.h D:/project/nowindnextgen/qtintegrate/qt-simple-test/src/MainWindow.ui&#x0D;&#x0A;"
+					AdditionalDependencies="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\MainWindow.ui;"
+					Outputs="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\ui_MainWindow.h"
+				/>
+			</FileConfiguration>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
