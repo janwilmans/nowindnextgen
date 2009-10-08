@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'MainWindow.ui'
 **
-** Created: Sun 4. Oct 15:23:24 2009
+** Created: Thu 8. Oct 21:28:43 2009
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -15,12 +15,12 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QHBoxLayout>
-#include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 #include <QtGui/QStatusBar>
 #include <QtGui/QWidget>
+#include <glwidget.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -30,7 +30,7 @@ public:
     QAction *action_Quit;
     QWidget *centralwidget;
     QHBoxLayout *hboxLayout;
-    QLabel *label;
+    GLWidget *globject;
     QMenuBar *menubar;
     QMenu *menu_File;
     QStatusBar *statusbar;
@@ -38,11 +38,8 @@ public:
     void setupUi(QMainWindow *MainWindow)
     {
     if (MainWindow->objectName().isEmpty())
-    {
         MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-    }
-    
-    MainWindow->resize(300, 70);
+    MainWindow->resize(478, 470);
     action_Quit = new QAction(MainWindow);
     action_Quit->setObjectName(QString::fromUtf8("action_Quit"));
     centralwidget = new QWidget(MainWindow);
@@ -51,18 +48,15 @@ public:
     hboxLayout->setSpacing(6);
     hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
     hboxLayout->setContentsMargins(9, 9, 9, 9);
-    
-    /*
-    label = new QLabel(centralwidget);
-    label->setObjectName(QString::fromUtf8("label"));
-    hboxLayout->addWidget(label);
-    */
-    
+    globject = new GLWidget(centralwidget);
+    globject->setObjectName(QString::fromUtf8("globject"));
+
+    hboxLayout->addWidget(globject);
+
     MainWindow->setCentralWidget(centralwidget);
-    
     menubar = new QMenuBar(MainWindow);
     menubar->setObjectName(QString::fromUtf8("menubar"));
-    menubar->setGeometry(QRect(0, 0, 78, 119));
+    menubar->setGeometry(QRect(0, 0, 78, 19));
     menu_File = new QMenu(menubar);
     menu_File->setObjectName(QString::fromUtf8("menu_File"));
     MainWindow->setMenuBar(menubar);
@@ -71,8 +65,6 @@ public:
     MainWindow->setStatusBar(statusbar);
 
     menubar->addAction(menu_File->menuAction());
-    
-    menu_File->addAction(action_Quit);
 
     retranslateUi(MainWindow);
 
@@ -81,10 +73,9 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Nowind MSX Emulator V2 GUI", 0, QApplication::UnicodeUTF8));
-        action_Quit->setText(QApplication::translate("MainWindow", "&Quit", 0, QApplication::UnicodeUTF8));
-        //label->setText(QApplication::translate("MainWindow", "Hello2 World!", 0, QApplication::UnicodeUTF8));
-        menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
+    MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+    action_Quit->setText(QApplication::translate("MainWindow", "&Quit", 0, QApplication::UnicodeUTF8));
+    menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

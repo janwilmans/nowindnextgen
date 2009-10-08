@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>78</width>
-    <height>70</height>
+    <width>478</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -30,10 +30,7 @@
      <number>9</number>
     </property>
     <item>
-     <widget class="QLabel" name="label" >
-      <property name="text" >
-       <string>Hello World!</string>
-      </property>
+     <widget class="GLWidget" name="globject" >
      </widget>
     </item>
    </layout>
