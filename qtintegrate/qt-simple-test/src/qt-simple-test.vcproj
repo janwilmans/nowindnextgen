@@ -412,6 +412,14 @@
 			Name="Source Files"
 			>
 			<File
+				RelativePath=".\debug.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\debug.h"
+				>
+			</File>
+			<File
 				RelativePath="D:\project\nowindnextgen\qtintegrate\qt-simple-test\src\GLWidget.cpp"
 				>
 			</File>
