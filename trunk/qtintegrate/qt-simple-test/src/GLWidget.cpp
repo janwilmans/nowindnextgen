@@ -64,14 +64,10 @@ void setup2d(GLsizei width, GLsizei height)
     
     glShadeModel(GL_FLAT);
     
-    makeCheckImage();
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glGenTextures(1, &texName);
-    glBindTexture(GL_TEXTURE_2D, texName);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
                    GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
@@ -81,25 +77,26 @@ void setup2d(GLsizei width, GLsizei height)
                 checkImage);
 }
 
-int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
+int DrawGLScene_2shapes(GLfloat width, GLfloat height)					// Here's Where We Do All The Drawing
 {
     //glClearColor(0.0f,0.0f,5.0f,1.0f);                // background color
 	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen 
 	glLoadIdentity();									// Reset The Current Modelview Matrix					
 	
-	glTranslatef(200.0f, 200.0f, 1.0f);				    // x,y origin is in the lower-left corner, z is 
-	glScalef(100.0f, 100.0f, 100.0f);
-
-	glBegin(GL_TRIANGLES);								// Drawing Using Triangles
-		glColor3f(1.0f,0.0f,0.0f);						// Set The Color To Red
-		glVertex3f( 0.0f, 1.0f, 0.0f);					// Top
-		glColor3f(0.0f,1.0f,0.0f);						// Set The Color To Green
-		glVertex3f(-1.0f,-1.0f, 0.0f);					// Bottom Left
-		glColor3f(0.0f,0.0f,1.0f);						// Set The Color To Blue
-		glVertex3f( 1.0f,-1.0f, 0.0f);					// Bottom Right
-	glEnd();											// Finished Drawing The Triangle
-						
-	glTranslatef(3.0f,0.0f,0.0f);						// Move Right 3 Units	
+	glTranslatef(20.0f, 20.0f, 1.0f);				    // x,y origin is in the lower-left corner
+    glScalef(100.0f, 100.0f, 1.0f);
+    
+    glBegin(GL_TRIANGLES);	
+	    glColor3f(1.0f,0.0f,0.0f);						// Set The Color To Red
+	    glVertex3f(1.0f, 2.0f, 0.0f);					// Top
+	    glColor3f(0.0f,1.0f,0.0f);						// Set The Color To Green
+	    glVertex3f(0.0f, 0.0f, 0.0f);					// Bottom Left
+	    glColor3f(0.0f,0.0f,1.0f);					    // Set The Color To Blue
+	    glVertex3f(2.0f, 0.0f, 0.0f);					// Bottom Right
+    glEnd();	
+		
+	glTranslatef(3.0f, 1.0f, 0.0f);						// Move Right 3 Units	
+    glScalef(2.0f, 2.0f, 1.0f);
 
     glEnable(GL_TEXTURE_2D);
 
@@ -109,31 +106,55 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	glColor3f(0.5f,0.5f,1.0f);							// Set The Color To Blue One Time Only
 	glBegin(GL_QUADS);									// Draw A Quad
-		glTexCoord2f(0.0, 0.0); glVertex3f(-1.0f, 1.0f, 0.0f);					// Top Left
-		glTexCoord2f(0.0, 1.0); glVertex3f( 1.0f, 1.0f, 0.0f);					// Top Right
-		glTexCoord2f(1.0, 1.0); glVertex3f( 1.0f,-1.0f, 0.0f);					// Bottom Right
-		glTexCoord2f(1.0, 0.0); glVertex3f(-1.0f,-1.0f, 0.0f);					// Bottom Left
+		glTexCoord2f(0.0, 1.0); glVertex3f(0.0f, 1.0f, 0.0f);					// Top Left
+		glTexCoord2f(1.0, 1.0); glVertex3f(1.0f, 1.0f, 0.0f);					// Top Right
+		glTexCoord2f(1.0, 0.0); glVertex3f(1.0f, 0.0f, 0.0f);					// Bottom Right
+		glTexCoord2f(0.0, 0.0); glVertex3f(0.0f, 0.0f, 0.0f);					// Bottom Left
 	glEnd();											// Done Drawing The Quad
 	glFlush();
 	glDisable(GL_TEXTURE_2D);
-
-
 	return TRUE;										// Keep Going
 }
+
+int DrawGLScene(GLfloat width, GLfloat height)
+{
+	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen 
+	glLoadIdentity();									// Reset The Current Modelview Matrix					
+    
+    glScalef(width, height, 1.0f);
+    glEnable(GL_TEXTURE_2D);
+
+    // bind texture	
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texName);
+
+	glBegin(GL_QUADS);									// Draw A Quad
+		glTexCoord2f(0.0, 1.0); glVertex3f(0.0f, 1.0f, 0.0f);					// Top Left
+		glTexCoord2f(1.0, 1.0); glVertex3f(1.0f, 1.0f, 0.0f);					// Top Right
+		glTexCoord2f(1.0, 0.0); glVertex3f(1.0f, 0.0f, 0.0f);					// Bottom Right
+		glTexCoord2f(0.0, 0.0); glVertex3f(0.0f, 0.0f, 0.0f);					// Bottom Left
+	glEnd();											// Done Drawing The Quad
+	glFlush();
+	glDisable(GL_TEXTURE_2D);
+	return TRUE;										// Keep Going
+}
+
+
 
 void GLWidget::paintEvent(QPaintEvent *event)
 {
     setup2d(this->width(), this->height());
     nw_debug("width: %u, height: %u\n", this->width(), this->height());
-    DrawGLScene();
+    DrawGLScene(this->width(), this->height());
     swapBuffers();  // actual paint the screen
 }
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent)
 {
-
-
+    makeCheckImage();
+    glGenTextures(1, &texName);
+    glBindTexture(GL_TEXTURE_2D, texName);    
 }
 
 GLWidget::~GLWidget()
