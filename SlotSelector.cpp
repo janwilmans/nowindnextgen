@@ -106,17 +106,29 @@ void SlotSelector::activateCurrent()
 
 void SlotSelector::activatePage(Uint8 page)
 {
-    byte pageShift = page*8;
-    byte mainSlot = (mA8Value >> pageShift) & 0xff;
-    byte subSlot = (mSSSR[mainSlot] >> pageShift) & 0xff;
+    byte pageShift = page*2;
+    byte mainSlot = (mA8Value >> pageShift) & 0x03;
+    byte subSlot = (mSSSR[mainSlot] >> pageShift) & 0x03;
     activatePage(page, mainSlot, subSlot);
 }
 
 void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)
 {
+
     Uint8 section0 = page*2;
     Uint8 section1 = section0+1;
     
     slotLayout[slot][subslot][section0]->activate(section0);
     slotLayout[slot][subslot][section1]->activate(section1);
+    
+    /*
+    const Uint8 sectionsPerPage = constSections/4;
+    
+    Uint8 section = page * sectionsPerPage;
+    for (int i=0; i<sectionsPerPage;i++)
+    {
+        slotLayout[slot][subslot][section]->activate(section);
+        section++;
+    }
+    */
 }

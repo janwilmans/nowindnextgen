@@ -34,23 +34,27 @@ typedef fastdelegate::FastDelegate2<word, byte> IOWriteDelegate;   // 2 paramete
 //  4 KB     16     4
 //  8 KB     8      3
 
-/*
-template <>
-Uint32 GetOnes(word size) {
-  return GetOnes(size >> 1) + size & 1)
-}
-*/
+
+template <Uint32 N> struct GetShifts
+{
+    enum { value = (N&1) + GetShifts<(N>>1)>::value };
+};
+
+template <> struct GetShifts<0>
+{
+    enum { value = 0 };
+};
 
 // there are always 4x16KB pages in total
 static const Uint32 constPages = 4;
 
-// if constSectionSize is changed, also change constOnes accordingly!
+// if constSectionSize is changed, constOnes is re-calculated compile-time
 static const Uint32 constSectionSize = 8*1024;
-static const Uint32 constOnes = 3;      // amount of 1's in (constSections-1)
 
+static const Uint32 constSections = (64*1024) / constSectionSize;
+static const Uint32 constOnes = GetShifts<constSections-1>::value;      // amount of 1's in (constSections-1)
 static const Uint32 constSectionShift = 16-constOnes;  // amount to shift >> to convert absolute address to section number
 static const Uint32 constSectionMask = constSectionSize-1;   // AND mask to convert absolute address to section address
-static const Uint32 constSections = (64*1024) / constSectionSize;
 static const Uint32 constMaxSection = constSections-1;
 
 } // namespace nowind

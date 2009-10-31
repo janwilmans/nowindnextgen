@@ -17,11 +17,6 @@ Scheduler::~Scheduler(void)
 {
 }
 
-void Scheduler::initialize(void)
-{
-}
-
-
 void Scheduler::addEvent(emuTimeType aEventTime, EventDelegate aCallback)
 {
     // events can (and should) only be scheduled in the future!
