@@ -12,6 +12,8 @@ public:
     GLWidget(QWidget *parent = 0);
     ~GLWidget();
     
+    virtual void animate();
+    
     virtual void paintEvent(QPaintEvent *event);
 
 };

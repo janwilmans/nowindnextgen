@@ -4,7 +4,6 @@
 
 #include "basetypes.h"
 #include "Event.h"
-#include "cpu/Z80.h"
 #include <list>
 
 namespace nowind {

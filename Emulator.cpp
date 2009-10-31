@@ -5,6 +5,8 @@
 #include "Bus.h"
 #include "MemoryMapper.h"
 #include "SlotSelector.h"
+#include "cpu/Z80.h"
+#include "cpu/NewZ80.h"
 
 using namespace fastdelegate;
 using namespace nowind;
@@ -34,7 +36,7 @@ void Emulator::initialize(void)
     // if you want to pass access to an object, use a reference
 
     Bus* bus = new Bus(*mScheduler);
-    Z80* cpu = new Z80(*bus);
+    NewZ80* cpu = new NewZ80(*bus);
 
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
     SlotSelector* slotSelector = new SlotSelector(*bus);
@@ -58,8 +60,8 @@ void Emulator::initialize(void)
     bus->addIODevice(slotSelector);
     slotSelector->addMemoryDevice(mapper, 0, 0);     // mapper in slot 0 (not expanded)
     
-    //cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
-    cpu->setupBdosEnv("asm/maptest.com");
+    cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
+    //cpu->setupBdosEnv("asm/maptest.com");
     
     cpu->reset();
     cpu->setPC(0x100);
