@@ -7,11 +7,11 @@
 
 namespace nowind {
 
-class DummyCpu : public Z80
+class DummyCpu : public CPU
 {
 public:
     // find out why this is needed!!
-    DummyCpu(Bus& bus) : Z80(bus) {}
+    DummyCpu(Bus& bus) : CPU(bus) {}
 
     virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) 
     {
@@ -23,7 +23,13 @@ public:
 		while((endTime - localEmutime) > 0);
 		return localEmutime;
     }
+    virtual void prepare() {}
+    virtual void prepare_shutdown() {}
+    virtual void initialize() {}
+    virtual void reset() {}
 };
+
+
 
 } // namespace nowind
 

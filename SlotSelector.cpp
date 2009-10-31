@@ -5,7 +5,7 @@
 using namespace nowind;
 using namespace fastdelegate;
 
-SlotSelector::SlotSelector(Bus& aBus) : IODevice(aBus), MemoryDevice(aBus)
+SlotSelector::SlotSelector(Bus& aBus) : BusComponent(aBus)
 {
     // todo: verify initial values! (random? 0xff ?)
     mSSSR[0] = 0;
@@ -27,8 +27,8 @@ void SlotSelector::prepare()
 void SlotSelector::initialize()
 {
     // initialize all slots, expanded or not with the 'VoidDevice'
-    MemoryDevice::mBus.activateSSSRRead(MakeDelegate(this, &SlotSelector::readSSSR));
-    MemoryDevice::mBus.activateSSSRWrite(MakeDelegate(this, &SlotSelector::writeSSSR));
+    mBus.activateSSSRRead(MakeDelegate(this, &SlotSelector::readSSSR));
+    mBus.activateSSSRWrite(MakeDelegate(this, &SlotSelector::writeSSSR));
 }
 
 void SlotSelector::prepare_shutdown()
@@ -38,8 +38,8 @@ void SlotSelector::prepare_shutdown()
 
 void SlotSelector::attachIO()
 {
-    IODevice::mBus.registerReadIO(0xa8, MakeDelegate(this, &SlotSelector::readIO));
-    IODevice::mBus.registerWriteIO(0xa8, MakeDelegate(this, &SlotSelector::writeIO));
+    mBus.registerReadIO(0xa8, MakeDelegate(this, &SlotSelector::readIO));
+    mBus.registerWriteIO(0xa8, MakeDelegate(this, &SlotSelector::writeIO));
 }
 
 void SlotSelector::detachIO()
@@ -69,29 +69,29 @@ void SlotSelector::writeSSSR(byte value)
     DBERR("write SSSR = $%02X\n", value);
 }
 
-void SlotSelector::addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot)
+void SlotSelector::addBusComponentToSlot(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot)
 {
-    // implementation choise: just one MemoryDevice in one slot/subslot
+    // implementation choise: just one BusComponent in one slot/subslot
     for (Uint8 section=0; section<constSections; section++)
     {
-        slotLayout[slot][subslot][section] = aMemoryDevice;
+        slotLayout[slot][subslot][section] = aBusComponent;
     }
 }
 
-void SlotSelector::addMemoryDevice(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot)
+void SlotSelector::addBusComponent(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot)
 {
     if (subslot > 0) mSlotExpanded[slot] = true;
-    aMemoryDevice->setSlot(this, slot, subslot);
+    aBusComponent->setSlot(this, slot, subslot);
     
     if (mSlotExpanded[slot] != 0)
     {
-        addMemoryDeviceToSlot(aMemoryDevice, slot, subslot);
+        addBusComponentToSlot(aBusComponent, slot, subslot);
     }
     else
     {
         for (Uint8 i=0; i<4; i++)
         {
-            addMemoryDeviceToSlot(aMemoryDevice, slot, i);
+            addBusComponentToSlot(aBusComponent, slot, i);
         }
     }
 }

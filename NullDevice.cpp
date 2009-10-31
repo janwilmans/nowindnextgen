@@ -4,7 +4,7 @@
 
 using namespace nowind;
 
-NullDevice::NullDevice(Bus& bus) : IODevice(bus), MemoryDevice(bus)
+NullDevice::NullDevice(Bus& bus) : BusComponent(bus)
 {
 
 }
