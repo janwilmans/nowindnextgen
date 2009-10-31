@@ -7833,7 +7833,7 @@ each have their own
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="OwnedDiagrams[4]" type="UMLClassDiagram" guid="lWjXvB4f9US1w1enuC2QRwAA">
-<XPD:ATTR name="Name" type="string">Simpler</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">CurrentDesign</XPD:ATTR>
 <XPD:REF name="DiagramOwner">t5i55Y+tZkG58njOKpbvMAAA</XPD:REF>
 <XPD:OBJ name="DiagramView" type="UMLClassDiagramView" guid="9vT48caGWkSqo91Scy3JEQAA">
 <XPD:REF name="Diagram">lWjXvB4f9US1w1enuC2QRwAA</XPD:REF>
