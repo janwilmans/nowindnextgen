@@ -1,5 +1,6 @@
 #include "SlotSelector.h"
 #include "Bus.h"
+#include "debug.h"
 
 using namespace nowind;
 using namespace fastdelegate;

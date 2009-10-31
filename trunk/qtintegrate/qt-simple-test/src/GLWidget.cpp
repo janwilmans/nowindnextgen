@@ -13,7 +13,7 @@ void setup2d_org(GLsizei width, GLsizei height)
 
     //Creating an orthoscopic view matrix going from -scale -> scale in each
     //dimension on the screen (x, y, z). 
-    int scale = 3.0f;
+    int scale = 1.0f;
     glOrtho(-scale, scale, -scale, scale, -scale, scale);
     
     glMatrixMode(GL_MODELVIEW);   // now editing the model-view matrix.
@@ -47,6 +47,7 @@ void makeCheckImage(void)
    }
 }
 
+
 void setup2d(GLsizei width, GLsizei height)
 {
     glViewport(0, 0, width, height);
@@ -68,10 +69,9 @@ void setup2d(GLsizei width, GLsizei height)
 
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
-                   GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
-                   GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // try GL_LINEAR for bi-linear interpolation
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, 
                 checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
                 checkImage);
@@ -116,6 +116,8 @@ int DrawGLScene_2shapes(GLfloat width, GLfloat height)					// Here's Where We Do
 	return TRUE;										// Keep Going
 }
 
+float theta = 0.0f;
+
 int DrawGLScene(GLfloat width, GLfloat height)
 {
 	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen 
@@ -123,6 +125,8 @@ int DrawGLScene(GLfloat width, GLfloat height)
     
     glScalef(width, height, 1.0f);
     glEnable(GL_TEXTURE_2D);
+    
+    glRotatef( theta, 0.0f, 0.0f, 1.0f );
 
     // bind texture	
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
@@ -139,8 +143,6 @@ int DrawGLScene(GLfloat width, GLfloat height)
 	return TRUE;										// Keep Going
 }
 
-
-
 void GLWidget::paintEvent(QPaintEvent *event)
 {
     setup2d(this->width(), this->height());
@@ -149,12 +151,23 @@ void GLWidget::paintEvent(QPaintEvent *event)
     swapBuffers();  // actual paint the screen
 }
 
+void GLWidget::animate()
+{
+    theta += 1.0f;
+    repaint();
+}
+
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent)
 {
     makeCheckImage();
     glGenTextures(1, &texName);
-    glBindTexture(GL_TEXTURE_2D, texName);    
+    glBindTexture(GL_TEXTURE_2D, texName);   
+    
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
+    timer->start(1);
+ 
 }
 
 GLWidget::~GLWidget()

@@ -220,6 +220,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpu\NewZ80.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cpu\NewZ80.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cpu\opcodes.inc"
 				>
 			</File>

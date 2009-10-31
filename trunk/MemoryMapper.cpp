@@ -2,6 +2,7 @@
 #include "IODevice.h"
 #include "MemoryDevice.h"
 #include "SlotSelector.h"
+#include "debug.h"
 
 using namespace nowind;
 using namespace fastdelegate;

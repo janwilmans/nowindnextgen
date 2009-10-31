@@ -1,4 +1,6 @@
 #include "Scheduler.h"
+#include "Emulator.h"
+#include "cpu/CPU.h"
 #include "Debug.h"
 #include <stdio.h>
 

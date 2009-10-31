@@ -48,7 +48,6 @@ void nw_debug(const char *cFormat, ...)
     #ifdef _MSC_VER
     OutputDebugStringA(scratch);
     #endif
-
 }
 
 void nw_assert(const char* aFilename, int aLine, bool aAssertion, const char* aAssertionText)

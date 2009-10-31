@@ -1,4 +1,5 @@
 #include "NullDevice.h"
+#include "debug.h"
 
 
 using namespace nowind;
