@@ -1,7 +1,7 @@
 #include "Bus.h"
 #include "Scheduler.h"
 #include "Component.h"
-#include "IODevice.h"
+
 #include "NullDevice.h"
 
 using namespace nowind;
@@ -58,7 +58,7 @@ void Bus::writeIO(word port, byte value)
     mIOWrite[port](port, value);
 }
 
-void Bus::addIODevice(IODevice * aIODevice)
+void Bus::addIODevice(BusComponent* aIODevice)
 {
     aIODevice->attachIO();
 }

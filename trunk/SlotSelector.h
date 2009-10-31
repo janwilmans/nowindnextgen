@@ -2,14 +2,14 @@
 #ifndef SLOTSELECTOR_H
 #define SLOTSELECTOR_H
 
-#include "IODevice.h"
-#include "MemoryDevice.h"
+
+#include "BusComponent.h"
 
 namespace nowind {
 
 class Bus;
 
-class SlotSelector : public IODevice, public MemoryDevice
+class SlotSelector : public BusComponent
 {
 public:
     SlotSelector(Bus& bus);
@@ -31,7 +31,7 @@ public:
     void setSlotExpanded(Uint8 slot, bool expanded) { mSlotExpanded[slot] = expanded; }
 
     // add a memory-mapped device
-    void addMemoryDevice(MemoryDevice*, Uint8 slot, Uint8 subslot);
+    void addBusComponent(BusComponent*, Uint8 slot, Uint8 subslot);
 
     byte readSSSR();
     void writeSSSR(byte);
@@ -44,7 +44,7 @@ public:
 private:
     void activatePage(Uint8 page, Uint8 slot, Uint8 subslot);
     void activateCurrent();
-    void addMemoryDeviceToSlot(MemoryDevice* aMemoryDevice, Uint8 slot, Uint8 subslot);
+    void addBusComponentToSlot(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot);
 
     // contains the currently active mainslot and slotsub for each page
     Uint8 mSelectedMainSlot[4];
@@ -53,7 +53,7 @@ private:
     // whether a slot is expanded or not
     bool mSlotExpanded[4];
 
-    MemoryDevice* slotLayout[4][4][constSections]; 
+    BusComponent* slotLayout[4][4][constSections]; 
     byte mA8Value;
     byte mSSSR[4];
     

@@ -12,7 +12,7 @@
 namespace nowind {
 
 class Scheduler;
-class IODevice;
+class BusComponent;
 
 class Bus 
 {
@@ -20,7 +20,7 @@ public:
     Bus(Scheduler&);
 
     // add an IO-mapped device
-    void addIODevice(IODevice * aIODevice);
+    void addIODevice(BusComponent* aIODevice);
     
     // IODevices use this to register
     void registerReadIO(Uint16 port, IOReadDelegate aDelegate);
@@ -34,7 +34,7 @@ public:
     void registerMemRead(Uint8 section, MemReadDelegate* aDelegate);
     void registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate);
 
-    // called by the MemoryDevices (the SlotSelector calls MemoryDevice::activate)
+    // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
     void activateMemReadSection(Uint8 section, MemReadDelegate aDelegate); 
     void activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate);     
 
@@ -42,7 +42,7 @@ public:
     void registerSSSRRead(SSSRReadDelegate* aDelegate);
     void registerSSSRWrite(SSSRWriteDelegate* aDelegate);
 
-    // called by the MemoryDevices (the SlotSelector calls MemoryDevice::activate)
+    // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
     void activateSSSRRead(SSSRReadDelegate aDelegate); 
     void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
 

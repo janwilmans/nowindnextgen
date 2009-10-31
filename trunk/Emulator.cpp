@@ -40,6 +40,8 @@ void Emulator::initialize(void)
 
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
     SlotSelector* slotSelector = new SlotSelector(*bus);
+    
+    //Ppi* ppi = new Ppi(*SlotSelector);
 
     /* initialization of all components */ 
     
@@ -58,7 +60,7 @@ void Emulator::initialize(void)
     // attach device to the required ports by calling IODevice::attachIO
     bus->addIODevice(mapper);           
     bus->addIODevice(slotSelector);
-    slotSelector->addMemoryDevice(mapper, 0, 0);     // mapper in slot 0 (not expanded)
+    slotSelector->addBusComponent(mapper, 0, 0);     // mapper in slot 0 (not expanded)
     
     cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     //cpu->setupBdosEnv("asm/maptest.com");

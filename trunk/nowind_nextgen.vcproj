@@ -316,6 +316,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BusComponent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BusComponent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Component.cpp"
 				>
 			</File>
@@ -337,22 +345,6 @@
 			</File>
 			<File
 				RelativePath=".\Event.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IODevice.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IODevice.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MemoryDevice.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MemoryDevice.h"
 				>
 			</File>
 		</Filter>

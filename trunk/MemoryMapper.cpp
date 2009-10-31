@@ -1,13 +1,13 @@
 #include "MemoryMapper.h"
-#include "IODevice.h"
-#include "MemoryDevice.h"
+#include "BusComponent.h"
 #include "SlotSelector.h"
+#include "Bus.h"
 #include "debug.h"
 
 using namespace nowind;
 using namespace fastdelegate;
 
-MemoryMapper::MemoryMapper(Bus& bus, Uint16 kilobytes) : IODevice(bus), MemoryDevice(bus)
+MemoryMapper::MemoryMapper(Bus& bus, Uint16 kilobytes) : BusComponent(bus)
 {
     NW_ASSERT(((kilobytes/(16))*(16)) == kilobytes);  // kilobytes is a multiple of 16
     mBanks = kilobytes/16;
@@ -43,15 +43,15 @@ MemoryMapper::~MemoryMapper()
 
 void MemoryMapper::attachIO()
 {
-    MemoryDevice::mBus.registerReadIO(0xfc, MakeDelegate(this, &MemoryMapper::readIO));
-    MemoryDevice::mBus.registerReadIO(0xfd, MakeDelegate(this, &MemoryMapper::readIO));
-    MemoryDevice::mBus.registerReadIO(0xfe, MakeDelegate(this, &MemoryMapper::readIO));
-    MemoryDevice::mBus.registerReadIO(0xff, MakeDelegate(this, &MemoryMapper::readIO));
+    mBus.registerReadIO(0xfc, MakeDelegate(this, &MemoryMapper::readIO));
+    mBus.registerReadIO(0xfd, MakeDelegate(this, &MemoryMapper::readIO));
+    mBus.registerReadIO(0xfe, MakeDelegate(this, &MemoryMapper::readIO));
+    mBus.registerReadIO(0xff, MakeDelegate(this, &MemoryMapper::readIO));
     
-    MemoryDevice::mBus.registerWriteIO(0xfc, MakeDelegate(this, &MemoryMapper::writeIO));
-    MemoryDevice::mBus.registerWriteIO(0xfd, MakeDelegate(this, &MemoryMapper::writeIO));
-    MemoryDevice::mBus.registerWriteIO(0xfe, MakeDelegate(this, &MemoryMapper::writeIO));
-    MemoryDevice::mBus.registerWriteIO(0xff, MakeDelegate(this, &MemoryMapper::writeIO));
+    mBus.registerWriteIO(0xfc, MakeDelegate(this, &MemoryMapper::writeIO));
+    mBus.registerWriteIO(0xfd, MakeDelegate(this, &MemoryMapper::writeIO));
+    mBus.registerWriteIO(0xfe, MakeDelegate(this, &MemoryMapper::writeIO));
+    mBus.registerWriteIO(0xff, MakeDelegate(this, &MemoryMapper::writeIO));
 }
 
 void MemoryMapper::detachIO()
@@ -113,14 +113,14 @@ void MemoryMapper::writeIO(word port, byte value)
 void MemoryMapper::activate(Uint8 section)
 {
     DBERR("MemoryMapper::activate section: %d\n", section);
-    MemoryDevice::mBus.activateMemReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
-    MemoryDevice::mBus.activateMemWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
+    mBus.activateMemReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
+    mBus.activateMemWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
     
     Uint8 page = section >> 1; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = (currentBank*16*1024) + ((section & 1) * 8*1024);
     //DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
-    MemoryDevice::mBus.setReadSectionMemory(section, &mMemory[offset]); 
+    mBus.setReadSectionMemory(section, &mMemory[offset]); 
 }
 
 byte MemoryMapper::readByte(word address)

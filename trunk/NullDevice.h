@@ -2,12 +2,12 @@
 #ifndef NULLDEVICE_H
 #define NULLDEVICE_H
 
-#include "IODevice.h"
-#include "MemoryDevice.h"
+
+#include "BusComponent.h"
 
 namespace nowind {
 
-class NullDevice : public IODevice, public MemoryDevice //, public AudioDevice
+class NullDevice : BusComponent //, public AudioDevice
 {
 public:
     NullDevice(Bus& bus);

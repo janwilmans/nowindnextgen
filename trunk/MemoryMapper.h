@@ -3,12 +3,11 @@
 #define MemoryMapper_H
 
 #include "Component.h"
-#include "IODevice.h"
-#include "MemoryDevice.h"
+#include "BusComponent.h"
 
 namespace nowind {
 
-class MemoryMapper : public IODevice, public MemoryDevice 
+class MemoryMapper : public BusComponent 
 {
 private:
     Uint8 mBanks;
@@ -27,7 +26,7 @@ public:
     virtual void attachIO();
     virtual void detachIO();
 
-    // MemoryDevice methods
+    // BusComponent methods
     virtual void activate(Uint8 section);
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
