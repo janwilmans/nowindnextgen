@@ -29,7 +29,6 @@ void Emulator::initialize(void)
     Emulator::emuTime = 0;
 
     mScheduler = new Scheduler();
-    mScheduler->initialize();
 
     // testing rule: 
     // if you pass the ownership of an object, use a pointer

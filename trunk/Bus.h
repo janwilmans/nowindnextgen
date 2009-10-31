@@ -22,7 +22,7 @@ public:
     // add an IO-mapped device
     void addIODevice(BusComponent* aIODevice);
     
-    // IODevices use this to register
+    // IO related BusComponents use this to register
     void registerReadIO(Uint16 port, IOReadDelegate aDelegate);
     void registerWriteIO(Uint16 port, IOWriteDelegate aDelegate);
 
