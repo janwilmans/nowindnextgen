@@ -3,7 +3,7 @@
 #define DUMMY_CPU_H
 
 #include "debug.h"
-#include "cpu/Z80.h"
+#include "cpu/CPU.h"
 
 namespace nowind {
 

@@ -21,36 +21,6 @@ namespace nowind {
 
 typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // returns void 
 
-/* all of these macros are using in opcodes*.inc so they are easely be adapted
-   to used on different platforms and in different configurations */
-
-#define TS(states) localEmuTime += states
-
-#define reg_af ((reg_a << 8) | reg_f)
-#define reg_bc ((reg_b << 8) | reg_c)
-
-#define reg_d (reg_de >> 8)
-#define reg_e (reg_de & 255)
-
-#define reg_h (reg_hl >> 8)
-#define reg_l (reg_hl & 255)
-
-#define SFLAG 0x80
-#define ZFLAG 0x40
-#define YFLAG 0x20
-#define HFLAG 0x10
-#define XFLAG 0x08
-#define PFLAG 0x04
-#define NFLAG 0x02
-#define CFLAG 0x01
-
-/* memory read/write macros */
-
-#define READMEM readByte
-#define READMEM16 readWord
-#define WRITEMEM writeByte
-#define WRITEMEM16 writeWord
-
 class NewZ80 : public CPU {
 
   public:
@@ -130,20 +100,21 @@ private:
     float opcodeCounterFD[256];
 
     /* interne z80 registers */
-    word reg_a;
-    word reg_f;
-    word reg_b;
-    word reg_c;
+    
+    word m_reg_a;
+    word m_reg_f;
+    word m_reg_b;
+    word m_reg_c;
 
-    word reg_i;
-    word reg_r;
-    word reg_de;                // TODO: uitzoeken of DE vaker als 8 bits registers wordt gebruikt
-    word reg_hl;
-    word reg_pc;
-    word reg_sp;
-    word reg_ix;
-    word reg_iy;
-    word reg_wz;
+    word m_reg_i;
+    word m_reg_r;
+    word m_reg_de;                // TODO: uitzoeken of DE vaker als 8 bits registers wordt gebruikt
+    word m_reg_hl;
+    word m_reg_pc;
+    word m_reg_sp;
+    word m_reg_ix;
+    word m_reg_iy;
+    word m_reg_wz;
 
     word shadow_af;
     word shadow_b;
