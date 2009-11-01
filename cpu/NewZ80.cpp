@@ -14,6 +14,37 @@ using namespace std;
 using namespace fastdelegate;
 using namespace nowind;
 
+/* all of these macros are using in opcodes*.inc so they are easely be adapted
+   to used on different platforms and in different configurations */
+
+#define TS(states) localEmuTime += states
+
+#define reg_af ((m_reg_a << 8) | m_reg_f)
+#define reg_bc ((m_reg_b << 8) | m_reg_c)
+
+#define reg_d (m_reg_de >> 8)
+#define reg_e (m_reg_de & 255)
+
+#define reg_h (m_reg_hl >> 8)
+#define reg_l (m_reg_hl & 255)
+
+#define SFLAG 0x80
+#define ZFLAG 0x40
+#define YFLAG 0x20
+#define HFLAG 0x10
+#define XFLAG 0x08
+#define PFLAG 0x04
+#define NFLAG 0x02
+#define CFLAG 0x01
+
+/* memory read/write macros */
+
+#define READMEM readByte
+#define READMEM16 readWord
+#define WRITEMEM writeByte
+#define WRITEMEM16 writeWord
+
+
 //  create read/write mem fp's
 
 NewZ80::NewZ80(Bus& bus) : CPU(bus)
@@ -117,7 +148,7 @@ void NewZ80::setupBdosEnv(const char* filename)
 	writeByte(0x121, testAdres >> 8);
 	
 	// set initial SP 
-    reg_sp = 0xc800;
+    m_reg_sp = 0xc800;
 }
 
 void NewZ80::prepare_shutdown()
@@ -143,27 +174,27 @@ void NewZ80::reset()
     IFF1 = IFF2 = false;  // disable interrupts
     interruptMode = 0;
 
-    reg_pc = 0x0000;
-    reg_a = 0xFF;
-    reg_f = 0xFF;
-    reg_b = 0xFF;
-    reg_c = 0xFF;
-    reg_de = 0xFFFF;
-    reg_hl = 0xFFFF;
-    reg_ix = 0xFFFF;
-    reg_iy = 0xFFFF;
-    reg_sp = 0xFFFF;
+    m_reg_pc = 0x0000;
+    m_reg_a = 0xFF;
+    m_reg_f = 0xFF;
+    m_reg_b = 0xFF;
+    m_reg_c = 0xFF;
+    m_reg_de = 0xFFFF;
+    m_reg_hl = 0xFFFF;
+    m_reg_ix = 0xFFFF;
+    m_reg_iy = 0xFFFF;
+    m_reg_sp = 0xFFFF;
     shadow_af = shadow_de = shadow_hl = 0xFFFF;
     shadow_b = shadow_c = 0xFF;
 
-    reg_i = 0;
-    reg_r = 0;
+    m_reg_i = 0;
+    m_reg_r = 0;
     refreshCounter = 0;
 }
 
 void NewZ80::setPC(word regpc)
 {
-    reg_pc = regpc;
+    m_reg_pc = regpc;
 }
 
 void NewZ80::nmiCPU()
@@ -173,11 +204,11 @@ void NewZ80::nmiCPU()
     IFF1 = false;
 
     // cpu weer wakker maken na een HALT
-    if (READMEM(reg_pc) == 0x76) reg_pc++;
+    if (READMEM(m_reg_pc) == 0x76) m_reg_pc++;
 
-    reg_sp -= 2;
-    WRITEMEM16(reg_sp, reg_pc); //TODO: volgens de documentatie wordt er maar een M1 uitgevoerd???
-    reg_pc = 0x0066;
+    m_reg_sp -= 2;
+    WRITEMEM16(m_reg_sp, m_reg_pc); //TODO: volgens de documentatie wordt er maar een M1 uitgevoerd???
+    m_reg_pc = 0x0066;
 }
 
 bool NewZ80::getIFF1()
@@ -197,15 +228,15 @@ void NewZ80::intCPU(byte interruptVectorOnDataBus)
     IFF2 = false;
 
     // cpu weer wakker maken na een HALT
-    if (unlikely(READMEM(reg_pc) == 0x76)) reg_pc++;
+    if (unlikely(READMEM(m_reg_pc) == 0x76)) m_reg_pc++;
 
     // Interrupt Acknowledge Cycle
     // The NewZ80 generates a special (NOT AN EXTRA) M1 cycle and adds two wait states to
     // this cycle. Futhermore, the MSX-engine adds another wait state to this M1 cycle.
 
     refreshCounter++;
-    reg_sp -= 2;
-    WRITEMEM16(reg_sp, reg_pc);
+    m_reg_sp -= 2;
+    WRITEMEM16(m_reg_sp, m_reg_pc);
 
     switch (interruptMode)
     {
@@ -216,16 +247,16 @@ void NewZ80::intCPU(byte interruptVectorOnDataBus)
         // TODO: hoeveel states...
         switch (interruptVectorOnDataBus)
         {
-        case 0xc7: reg_pc = 0x0000; break;
-        case 0xcf: reg_pc = 0x0008; break;
-        case 0xd7: reg_pc = 0x0010; break;
-        case 0xdf: reg_pc = 0x0018; break;
-        case 0xe7: reg_pc = 0x0020; break;
-        case 0xef: reg_pc = 0x0028; break;
-        case 0xf7: reg_pc = 0x0030; break;
-        case 0xff: reg_pc = 0x0038; break;
+        case 0xc7: m_reg_pc = 0x0000; break;
+        case 0xcf: m_reg_pc = 0x0008; break;
+        case 0xd7: m_reg_pc = 0x0010; break;
+        case 0xdf: m_reg_pc = 0x0018; break;
+        case 0xe7: m_reg_pc = 0x0020; break;
+        case 0xef: m_reg_pc = 0x0028; break;
+        case 0xf7: m_reg_pc = 0x0030; break;
+        case 0xff: m_reg_pc = 0x0038; break;
         default:
-            reg_pc = 0x0038; // just in case...
+            m_reg_pc = 0x0038; // just in case...
             DBERR("Alleen RST-instr. van een interrupt-device worden ondersteund!\n");
         };
         break;
@@ -235,11 +266,11 @@ void NewZ80::intCPU(byte interruptVectorOnDataBus)
         // TODO: dit is onze (stellig) aanname, maar klopt dit ook werkelijk? De redenatie
         // komt overeen met die van Sean met als toevoeging 1 extra state door de engine.
         //mEmuTime += 14;
-        reg_pc = 0x38;
+        m_reg_pc = 0x38;
         break;
     case 2:
         //mEmuTime += 20;
-        reg_pc = READMEM16(interruptVectorOnDataBus | (reg_i << 8));
+        m_reg_pc = READMEM16(interruptVectorOnDataBus | (m_reg_i << 8));
         break;
     default:
         // unknownd interrupt mode, this should never happen
@@ -264,12 +295,183 @@ byte NewZ80::opcodeFetch(word address)
     return oc;
 }
 
+void NewZ80::dumpCpuInfo()
+{
+
+    DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", reg_af, reg_bc, m_reg_de, m_reg_hl);
+    DBERR(" IX:%04X IY:%04X SP:%04X(%04X) F:", m_reg_ix, m_reg_iy, m_reg_sp, 0x1234);//readMem16(reg_sp));
+
+    if (m_reg_f & SFLAG) DBERR("s");
+    else DBERR(".");
+    if (m_reg_f & ZFLAG) DBERR("z");
+    else DBERR(".");
+    if (m_reg_f & 0x20) DBERR("1");
+    else DBERR("0");
+    if (m_reg_f & HFLAG) DBERR("h");
+    else DBERR(".");
+    if (m_reg_f & 0x08) DBERR("1");
+    else DBERR("0");
+    if (m_reg_f & PFLAG) DBERR("p");
+    else DBERR(".");
+    if (m_reg_f & NFLAG) DBERR("n");
+    else DBERR(".");
+    if (m_reg_f & CFLAG) DBERR("c");
+    else DBERR(".");
+
+    /*
+    int slot = ppi->readPortA();
+    for (int i=0;i<4;i++) {
+        int mainSlot = (slot>>(i*2))&3;
+        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
+        DBERR(" %u", mainSlot);
+        if (slotSelector->isExpanded(mainSlot)) {
+            DBERR("%u", subSlot);
+        } else {
+            DBERR("x");
+        }
+    }
+    */
+    DBERR("\n");
+}
+
+/* can return invalid information if the PPI is not yet initialized */
+void NewZ80::dumpSlotSelection()
+{
+
+    /*
+    int slot = ppi->readPortA();
+    DBERR("Slot selection:\n");
+    for (int i=0;i<4;i++) {
+        int mainSlot = (slot>>(i*2))&3;
+        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
+        DBERR(" page%u (%u", i, mainSlot);
+        if (slotSelector->isExpanded(mainSlot)) {
+            DBERR("-%u", subSlot);
+        }
+        DBERR(") %s\n", slotSelector->getDeviceName(i).c_str());
+    }
+    */
+}
+
+/*
+void NewZ80::dumpPages()
+{
+    string filename("dumppages.bin");
+
+    // delete the existing? file
+    ofstream ofs_delete(filename.c_str(), ios::trunc);
+    ofs_delete.close();
+
+    ofstream ofs(filename.c_str(), ios::binary);
+    if (ofs.fail())
+    {
+        DBERR("Error opening file %s!\n", filename.c_str());
+    }
+
+    for (unsigned int b = 0;b < 8;b++)
+    {
+        DBERR("readBlock[%u]: %u\n", b, readBlock[b]);
+        ofs.write((char *)readBlock[b], 8*1024);
+    }
+    ofs.close();
+}
+*/
+
+void NewZ80::saveState()
+{
+    //MemoryMapper->saveState();
+}
+
+void NewZ80::loadState()
+{
+    //MemoryMapper->loadState();
+}
+
+void NewZ80::hijackBdos()
+{
+    long seconds = SDL_GetTicks() / 1000;
+
+    switch (m_reg_c)
+    {
+    case 2:
+        // BDOS function 2 (C_WRITE) - Console output
+        // C=2, E=ASCII character
+        DBERR("%c", reg_e);
+        break;
+    case 9:
+    {
+        // BDOS function 9 (C_WRITESTR) - Output string
+        // C=9, DE=address of string
+        word de = m_reg_de;
+        while (1)
+        {
+            byte c = READMEM(de++);
+            if (c == 0x0A)
+            {
+                DBERR(" (time: %us)\n", seconds);
+                continue;
+            }
+            if (c == 0x24) break;
+            DBERR("%c", c);
+        }
+        break;
+    }
+    default:
+        // no nothing
+        break;
+    }
+}
+
+inline byte NewZ80::readIO(word port)
+{
+    return mBus.readIO(port);
+}
+
+inline void NewZ80::writeIO(word port, byte value)
+{
+    mBus.writeIO(port, value);
+}
+
+
+
 // the amount of cycles actually executed can vary (with max. the cycles-1 of the biggest instruction)
 // because an instruction is always completely executed.
 // if we are called the scheduler has determined that at least 1 instruction needs to be executed.
 emuTimeType NewZ80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime)
 {
     emuTimeType localEmuTime = startTime;
+    
+    word reg_a = m_reg_a;
+    word reg_f = m_reg_f;
+    word reg_b = m_reg_b;
+    word reg_c = m_reg_c;
+
+    word reg_i = m_reg_i;
+    word reg_r = m_reg_r;
+    word reg_de = m_reg_de;
+    word reg_hl = m_reg_hl;
+    word reg_pc = m_reg_pc;
+    word reg_sp = m_reg_sp;
+    word reg_ix = m_reg_ix;
+    word reg_iy = m_reg_iy;
+    word reg_wz = m_reg_wz;
+    
+#undef reg_af
+#undef reg_bc
+#undef reg_d
+#undef reg_e
+#undef reg_h
+#undef reg_l
+    
+#define reg_af ((reg_a << 8) | reg_f)
+#define reg_bc ((reg_b << 8) | reg_c)
+
+#define reg_d (reg_de >> 8)
+#define reg_e (reg_de & 255)
+
+#define reg_h (reg_hl >> 8)
+#define reg_l (reg_hl & 255)
+    
     do
     {
         // define reg1/reg2 more locally! defining them here could prevent use of registers!
@@ -348,142 +550,20 @@ emuTimeType NewZ80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndT
     }
     while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
 
+    m_reg_a = reg_a;
+    m_reg_f = reg_f;
+    m_reg_b = reg_b;
+    m_reg_c = reg_c;
+    
+    m_reg_i = reg_i;
+    m_reg_r = reg_r;
+    m_reg_de = reg_de;
+    m_reg_hl = reg_hl;
+    m_reg_pc = reg_pc;
+    m_reg_sp = reg_sp;
+    m_reg_ix = reg_ix;
+    m_reg_iy = reg_iy;
+    m_reg_wz = reg_wz;
+        
     return localEmuTime;
-}
-
-void NewZ80::dumpCpuInfo()
-{
-
-    DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", reg_af, reg_bc, reg_de, reg_hl);
-    DBERR(" IX:%04X IY:%04X SP:%04X(%04X) F:", reg_ix, reg_iy, reg_sp, 0x1234);//readMem16(reg_sp));
-
-    if (reg_f & SFLAG) DBERR("s");
-    else DBERR(".");
-    if (reg_f & ZFLAG) DBERR("z");
-    else DBERR(".");
-    if (reg_f & 0x20) DBERR("1");
-    else DBERR("0");
-    if (reg_f & HFLAG) DBERR("h");
-    else DBERR(".");
-    if (reg_f & 0x08) DBERR("1");
-    else DBERR("0");
-    if (reg_f & PFLAG) DBERR("p");
-    else DBERR(".");
-    if (reg_f & NFLAG) DBERR("n");
-    else DBERR(".");
-    if (reg_f & CFLAG) DBERR("c");
-    else DBERR(".");
-
-    /*
-    int slot = ppi->readPortA();
-    for (int i=0;i<4;i++) {
-        int mainSlot = (slot>>(i*2))&3;
-        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
-        DBERR(" %u", mainSlot);
-        if (slotSelector->isExpanded(mainSlot)) {
-            DBERR("%u", subSlot);
-        } else {
-            DBERR("x");
-        }
-    }
-    */
-    DBERR("\n");
-}
-
-/* can return invalid information if the PPI is not yet initialized */
-void NewZ80::dumpSlotSelection()
-{
-
-    /*
-    int slot = ppi->readPortA();
-    DBERR("Slot selection:\n");
-    for (int i=0;i<4;i++) {
-        int mainSlot = (slot>>(i*2))&3;
-        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
-        DBERR(" page%u (%u", i, mainSlot);
-        if (slotSelector->isExpanded(mainSlot)) {
-            DBERR("-%u", subSlot);
-        }
-        DBERR(") %s\n", slotSelector->getDeviceName(i).c_str());
-    }
-    */
-}
-
-/*
-void NewZ80::dumpPages()
-{
-    string filename("dumppages.bin");
-
-    // delete the existing? file
-    ofstream ofs_delete(filename.c_str(), ios::trunc);
-    ofs_delete.close();
-
-    ofstream ofs(filename.c_str(), ios::binary);
-    if (ofs.fail())
-    {
-        DBERR("Error opening file %s!\n", filename.c_str());
-    }
-
-    for (unsigned int b = 0;b < 8;b++)
-    {
-        DBERR("readBlock[%u]: %u\n", b, readBlock[b]);
-        ofs.write((char *)readBlock[b], 8*1024);
-    }
-    ofs.close();
-}
-*/
-
-void NewZ80::saveState()
-{
-    //MemoryMapper->saveState();
-}
-
-void NewZ80::loadState()
-{
-    //MemoryMapper->loadState();
-}
-
-void NewZ80::hijackBdos()
-{
-    long seconds = SDL_GetTicks() / 1000;
-
-    switch (reg_c)
-    {
-    case 2:
-        // BDOS function 2 (C_WRITE) - Console output
-        // C=2, E=ASCII character
-        DBERR("%c", reg_e);
-        break;
-    case 9:
-    {
-        // BDOS function 9 (C_WRITESTR) - Output string
-        // C=9, DE=address of string
-        word de = reg_de;
-        while (1)
-        {
-            byte c = READMEM(de++);
-            if (c == 0x0A)
-            {
-                DBERR(" (time: %us)\n", seconds);
-                continue;
-            }
-            if (c == 0x24) break;
-            DBERR("%c", c);
-        }
-        break;
-    }
-    default:
-        // no nothing
-        break;
-    }
-}
-
-inline byte NewZ80::readIO(word port)
-{
-    return mBus.readIO(port);
-}
-
-inline void NewZ80::writeIO(word port, byte value)
-{
-    mBus.writeIO(port, value);
 }
