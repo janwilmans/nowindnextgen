@@ -19,14 +19,21 @@ using namespace nowind;
 
 #define TS(states) localEmuTime += states
 
-#define reg_af ((m_reg_a << 8) | m_reg_f)
-#define reg_bc ((m_reg_b << 8) | m_reg_c)
+// gebruikt BUITEN executeInstructions
+#define m_reg_af ((m_reg_a << 8) | m_reg_f)
+#define m_reg_bc ((m_reg_b << 8) | m_reg_c)
+#define m_reg_d (m_reg_de >> 8)
+#define m_reg_e (m_reg_de & 255)
+#define m_reg_h (m_reg_hl >> 8)
+#define m_reg_l (m_reg_hl & 255)
 
-#define reg_d (m_reg_de >> 8)
-#define reg_e (m_reg_de & 255)
-
-#define reg_h (m_reg_hl >> 8)
-#define reg_l (m_reg_hl & 255)
+// lokaal binnen executeInstructions
+#define reg_af ((reg_a << 8) | reg_f)
+#define reg_bc ((reg_b << 8) | reg_c)
+#define reg_d (reg_de >> 8)
+#define reg_e (reg_de & 255)
+#define reg_h (reg_hl >> 8)
+#define reg_l (reg_hl & 255)
 
 #define SFLAG 0x80
 #define ZFLAG 0x40
@@ -184,7 +191,8 @@ void NewZ80::reset()
     m_reg_ix = 0xFFFF;
     m_reg_iy = 0xFFFF;
     m_reg_sp = 0xFFFF;
-    shadow_af = shadow_de = shadow_hl = 0xFFFF;
+    m_reg_wz = 0xFFFF;
+	shadow_af = shadow_de = shadow_hl = 0xFFFF;
     shadow_b = shadow_c = 0xFF;
 
     m_reg_i = 0;
@@ -221,7 +229,7 @@ void NewZ80::intCPU(byte interruptVectorOnDataBus)
     // ignore interrupt if they are disabled
     if (!IFF1) return;
 
-    NW_ASSERT(reg_pc < 0x10000);
+    NW_ASSERT(m_reg_pc < 0x10000);
 
     // When an interrupt is accepted, the NewZ80 clears IFF1 and IFF2
     IFF1 = false;
@@ -278,17 +286,17 @@ void NewZ80::intCPU(byte interruptVectorOnDataBus)
     }
 }
 
+//todo: fix emutime++ !!!
 byte NewZ80::opcodeFetch(word address)
 {
 
     /*
     // Meer info over extra M1 wait-state:
     // http://www.funet.fi/pub/msx/mirrors/hanso/service_manuals/yamahacx5myis503ts.pdf
-
+	*/
     // M1 wait state (msx engine)
-    emuTime++;
+    //emuTime++;
     refreshCounter++;
-    */
 
     byte oc = READMEM(address);
     //DBERR("0x%04X  0x%02X\n", address, oc);
@@ -298,7 +306,7 @@ byte NewZ80::opcodeFetch(word address)
 void NewZ80::dumpCpuInfo()
 {
 
-    DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", reg_af, reg_bc, m_reg_de, m_reg_hl);
+    DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", m_reg_af, m_reg_bc, m_reg_de, m_reg_hl);
     DBERR(" IX:%04X IY:%04X SP:%04X(%04X) F:", m_reg_ix, m_reg_iy, m_reg_sp, 0x1234);//readMem16(reg_sp));
 
     if (m_reg_f & SFLAG) DBERR("s");
@@ -396,7 +404,7 @@ void NewZ80::hijackBdos()
     case 2:
         // BDOS function 2 (C_WRITE) - Console output
         // C=2, E=ASCII character
-        DBERR("%c", reg_e);
+        DBERR("%c", m_reg_e);
         break;
     case 9:
     {
@@ -441,38 +449,40 @@ emuTimeType NewZ80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndT
 {
     emuTimeType localEmuTime = startTime;
     
-    word reg_a = m_reg_a;
-    word reg_f = m_reg_f;
-    word reg_b = m_reg_b;
-    word reg_c = m_reg_c;
+    //word reg_a = m_reg_a;
+     word reg_f = m_reg_f;
 
-    word reg_i = m_reg_i;
-    word reg_r = m_reg_r;
-    word reg_de = m_reg_de;
-    word reg_hl = m_reg_hl;
-    word reg_pc = m_reg_pc;
-    word reg_sp = m_reg_sp;
-    word reg_ix = m_reg_ix;
-    word reg_iy = m_reg_iy;
-    word reg_wz = m_reg_wz;
-    
-#undef reg_af
-#undef reg_bc
-#undef reg_d
-#undef reg_e
-#undef reg_h
-#undef reg_l
-    
-#define reg_af ((reg_a << 8) | reg_f)
-#define reg_bc ((reg_b << 8) | reg_c)
+//	word reg_b = m_reg_b;
+//	word reg_c = m_reg_c;
 
-#define reg_d (reg_de >> 8)
-#define reg_e (reg_de & 255)
+ //   word reg_i = m_reg_i;
+//    word reg_r = m_reg_r;
 
-#define reg_h (reg_hl >> 8)
-#define reg_l (reg_hl & 255)
-    
-    do
+	//word reg_de = m_reg_de;
+ //   word reg_hl = m_reg_hl;
+      word reg_pc = m_reg_pc;
+ //   word reg_sp = m_reg_sp;
+ //   word reg_ix = m_reg_ix;
+ //   word reg_iy = m_reg_iy;
+ //   word reg_wz = m_reg_wz;
+
+#define reg_a m_reg_a
+//#define reg_f m_reg_f
+#define reg_b m_reg_b
+#define reg_c m_reg_c
+
+#define reg_i m_reg_i
+#define reg_r m_reg_r
+
+#define reg_de m_reg_de
+#define reg_hl m_reg_hl
+//#define reg_pc m_reg_pc
+#define reg_sp m_reg_sp
+#define reg_ix m_reg_ix
+#define reg_iy m_reg_iy
+#define reg_wz m_reg_wz
+	
+	do
     {
         // define reg1/reg2 more locally! defining them here could prevent use of registers!
         word reg1 = 0;      

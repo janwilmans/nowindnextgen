@@ -133,7 +133,7 @@ private:
     word flagInc[256];
     word flagDec[256];
 
-    byte opcodeFetch(word);
+    inline byte opcodeFetch(word);
     void debugInstuctionCounter();
 
   public:
