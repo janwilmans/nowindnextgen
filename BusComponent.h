@@ -47,10 +47,10 @@ public:
     // IODevice methods
 
     // used to attach this component to the Bus
-    virtual void attachIO() = 0;
+	virtual void attachIO() {}
 
     // used to detach this component from the Bus
-    virtual void detachIO() = 0;
+	virtual void detachIO() {}
 
 };
 

@@ -37,15 +37,15 @@ protected:
 
     IOReadDelegate readIOPort;
     IOWriteDelegate writeIOPort;
-    
-    bool mMemoryMappedSection[constSections];
+
+    bool mMemoryMappedIOSection[constSections];
     byte* readSectionMemory[constSections];
 
     inline byte readByte(word address)
     {
         NW_ASSERT(address < 0x10000);
         Uint8 section = address >> constSectionShift;
-        if (mMemoryMappedSection[section])
+        if (mMemoryMappedIOSection[section])
         {
             if (address == 0xffff) return readSSSR();
             return readSection[section](address);
