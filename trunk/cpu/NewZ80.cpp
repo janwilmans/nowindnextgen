@@ -87,17 +87,17 @@ void NewZ80::prepare()
         mBus.registerMemWrite(section, &writeSection[section]);
         
         mBus.registerReadSectionMemory(section, &readSectionMemory[section]);
-        mMemoryMappedSection[section] = false;  // set false to test direct mMemoryMappedSection-reads
+        mMemoryMappedIOSection[section] = false;  // set false to test direct mMemoryMappedIOSection-reads
     }
 
-    mMemoryMappedSection[0] = false;
-    mMemoryMappedSection[1] = false;
-    mMemoryMappedSection[2] = false;
-    mMemoryMappedSection[3] = false;
-    mMemoryMappedSection[4] = false;
-    mMemoryMappedSection[5] = false;
-    mMemoryMappedSection[6] = true;
-    mMemoryMappedSection[7] = true;
+    mMemoryMappedIOSection[0] = false;
+    mMemoryMappedIOSection[1] = false;
+    mMemoryMappedIOSection[2] = false;
+    mMemoryMappedIOSection[3] = false;
+    mMemoryMappedIOSection[4] = false;
+    mMemoryMappedIOSection[5] = false;
+    mMemoryMappedIOSection[6] = true;
+    mMemoryMappedIOSection[7] = true;
     
     mBus.registerSSSRRead(&readSSSR);
     mBus.registerSSSRWrite(&writeSSSR);

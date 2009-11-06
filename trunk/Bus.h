@@ -8,6 +8,7 @@
 //       in context of slot-selection, half a page (so a 8kb region of memory)
 
 #include "Scheduler.h"
+#include "NullDevice.h"
 
 namespace nowind {
 
@@ -38,6 +39,9 @@ public:
     void activateMemReadSection(Uint8 section, MemReadDelegate aDelegate); 
     void activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate);     
 
+	void deactivateMemReadSection(Uint8 section);
+	void deactivateMemWriteSection(Uint8 section);
+
     // the cpu registers its SSSR delegates with these methods
     void registerSSSRRead(SSSRReadDelegate* aDelegate);
     void registerSSSRWrite(SSSRWriteDelegate* aDelegate);
@@ -62,6 +66,8 @@ public:
 protected:
     Scheduler& mScheduler;
 private:
+	// null device
+	NullDevice* mNullDevice;
 
     // memory access
     MemReadDelegate* mMemRead[constSections];

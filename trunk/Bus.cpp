@@ -2,19 +2,16 @@
 #include "Scheduler.h"
 #include "Component.h"
 
-#include "NullDevice.h"
-
 using namespace nowind;
 using namespace fastdelegate;
 
 Bus::Bus(Scheduler& aScheduler) :  
 mScheduler(aScheduler)
 {
-    NullDevice* nullDevice = new NullDevice(*this);     // leaked
     for (Uint16 port=0; port<256; port++)
     {
-        registerReadIO(port, MakeDelegate(nullDevice, &NullDevice::readIO));
-        registerWriteIO(port, MakeDelegate(nullDevice, &NullDevice::writeIO));
+        registerReadIO(port, MakeDelegate(mNullDevice, &NullDevice::readIO));
+        registerWriteIO(port, MakeDelegate(mNullDevice, &NullDevice::writeIO));
     }
 }
 
@@ -30,12 +27,12 @@ void Bus::prepare()
 
 void Bus::initialize()
 {
-
+	mNullDevice = new NullDevice(*this);
 }
 
 void Bus::prepare_shutdown()
 {
-
+	delete mNullDevice;
 }
 
 void Bus::registerReadIO(Uint16 port, IOReadDelegate aDelegate)
@@ -75,6 +72,7 @@ void Bus::registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate)
 
 void Bus::activateMemReadSection(Uint8 section, MemReadDelegate aDelegate)
 {
+	//mMemoryMappedIOSection[section] = true;   // move mMemoryMappedIOSection into Bus
     *mMemRead[section] = aDelegate;
 }
 
@@ -82,6 +80,18 @@ void Bus::activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate)
 {
     *mMemWrite[section] = aDelegate;
 }
+
+void Bus::deactivateMemReadSection(Uint8 section)
+{
+    *mMemRead[section] = MakeDelegate(mNullDevice, &NullDevice::readByte);
+}
+
+
+void Bus::deactivateMemWriteSection(Uint8 section)
+{
+    *mMemWrite[section] = MakeDelegate(mNullDevice, &NullDevice::writeByte);
+}
+
 
 void Bus::registerSSSRRead(SSSRReadDelegate* aDelegate)
 {
@@ -110,5 +120,7 @@ void Bus::registerReadSectionMemory(Uint8 section, byte** readSectionMemory)
 
 void Bus::setReadSectionMemory(Uint8 section, byte* memory)
 {
+	//*mMemRead[section] = 0;	// cause crash if called
+	//mMemoryMappedIOSection[section] = false;
     *mReadSectionMemory[section] = memory;
 }

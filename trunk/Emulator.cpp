@@ -4,12 +4,14 @@
 #include "cpu/DummyCpu.h"
 #include "Bus.h"
 #include "MemoryMapper.h"
+#include "RomMemory.h"
 #include "SlotSelector.h"
 #include "cpu/Z80.h"
 #include "cpu/NewZ80.h"
 
 using namespace fastdelegate;
 using namespace nowind;
+using namespace std;
 
 emuTimeType Emulator::emuTime = 0;
 
@@ -38,6 +40,7 @@ void Emulator::initialize(void)
     NewZ80* cpu = new NewZ80(*bus);
 
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
+	RomMemory* mainRom = new RomMemory(*bus, "mainrom.rom");
     SlotSelector* slotSelector = new SlotSelector(*bus);
     
     //Ppi* ppi = new Ppi(*SlotSelector);
@@ -59,7 +62,8 @@ void Emulator::initialize(void)
     // attach device to the required ports by calling IODevice::attachIO
     bus->addIODevice(mapper);           
     bus->addIODevice(slotSelector);
-    slotSelector->addBusComponent(mapper, 0, 0);     // mapper in slot 0 (not expanded)
+    slotSelector->addBusComponent(mapper, 0, 0);
+	//slotSelector->addBusComponent(mainRom, 0, 0);
     
     cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     //cpu->setupBdosEnv("asm/maptest.com");

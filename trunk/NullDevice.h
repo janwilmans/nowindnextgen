@@ -16,10 +16,6 @@ public:
     virtual void prepare();
     virtual void initialize();
     virtual void prepare_shutdown();
-
-    // IODevice
-    virtual void attachIO();
-    virtual void detachIO();
     
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~NullDevice();

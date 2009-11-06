@@ -24,14 +24,6 @@ void NullDevice::prepare_shutdown()
 {
 }
 
-void NullDevice::attachIO()
-{
-}
-
-void NullDevice::detachIO()
-{
-
-}
 
 byte NullDevice::readIO(word port)
 {
