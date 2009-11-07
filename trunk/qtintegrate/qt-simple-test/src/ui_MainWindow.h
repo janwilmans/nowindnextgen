@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'MainWindow.ui'
 **
-** Created: Thu 8. Oct 22:47:59 2009
+** Created: Sat 7. Nov 16:35:45 2009
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -20,7 +20,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QStatusBar>
 #include <QtGui/QWidget>
-#include "./GLWidget.h"
+#include <glwidget.h>
 
 QT_BEGIN_NAMESPACE
 
