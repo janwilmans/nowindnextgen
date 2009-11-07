@@ -2,11 +2,11 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <assert.h>
 
 #ifdef _MSC_VER
 
 #include <windows.h>
-#include <assert.h>
 
 // sprintf_s (and also _snprintf_s) are not c99 compliant on MSC
 // we implement it by wrapping _vscprintf and _vsnprintf_s
@@ -44,7 +44,7 @@ void nw_debug(const char *cFormat, ...)
     nw_vsnprintf(scratch, MAXMSG, cFormat, arg_list);
     va_end (arg_list);
 
-    fprintf(stderr, scratch);
+    fprintf(stderr, "%s", scratch);
     #ifdef _MSC_VER
     OutputDebugStringA(scratch);
     #endif

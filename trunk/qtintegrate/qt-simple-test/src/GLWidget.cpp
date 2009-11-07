@@ -2,7 +2,7 @@
 #include <QtOpenGL/QtOpenGL>
 
 #include <math.h>
-#include "glwidget.h"
+#include "GLWidget.h"
 #include "debug.h"
 
 void setup2d_org(GLsizei width, GLsizei height)
@@ -12,14 +12,14 @@ void setup2d_org(GLsizei width, GLsizei height)
     glLoadIdentity();               // clear the projection matrix
 
     //Creating an orthoscopic view matrix going from -scale -> scale in each
-    //dimension on the screen (x, y, z). 
+    //dimension on the screen (x, y, z).
     int scale = 1.0f;
     glOrtho(-scale, scale, -scale, scale, -scale, scale);
-    
+
     glMatrixMode(GL_MODELVIEW);   // now editing the model-view matrix.
     glLoadIdentity();         //Clearing the model-view matrix.
 
-    //Disabling the depth test (z will not be used to tell what object 
+    //Disabling the depth test (z will not be used to tell what object
     //will be shown above another, only the order in which I draw them.)
     glDisable(GL_DEPTH_TEST);
 }
@@ -35,7 +35,7 @@ static GLuint texName;
 void makeCheckImage(void)
 {
    int i, j, c;
-    
+
    for (i = 0; i < checkImageHeight; i++) {
       for (j = 0; j < checkImageWidth; j++) {
          c = ((((i&0x8)==0)^((j&0x8))==0))*255;
@@ -54,17 +54,17 @@ void setup2d(GLsizei width, GLsizei height)
     glMatrixMode(GL_PROJECTION);    // first edit the projection matrix
     glLoadIdentity();               // clear the projection matrix
 
-    // creating an orthoscopic view matrix equal in size to 
-    // the projection matrix 
+    // creating an orthoscopic view matrix equal in size to
+    // the projection matrix
     glOrtho(0, width, 0, height, 0, -10);
     glMatrixMode(GL_MODELVIEW);   // now editing the model-view matrix.
-    
-    //Disabling the depth test, z will not be used to tell what object 
+
+    //Disabling the depth test, z will not be used to tell what object
     //will be shown above another, only the order in which I draw them. (painters algorithm)
     glDisable(GL_DEPTH_TEST);
-    
+
     glShadeModel(GL_FLAT);
-    
+
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -72,35 +72,35 @@ void setup2d(GLsizei width, GLsizei height)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // try GL_LINEAR for bi-linear interpolation
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, 
-                checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
+                checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                 checkImage);
 }
 
 int DrawGLScene_2shapes(GLfloat width, GLfloat height)					// Here's Where We Do All The Drawing
 {
     //glClearColor(0.0f,0.0f,5.0f,1.0f);                // background color
-	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen 
-	glLoadIdentity();									// Reset The Current Modelview Matrix					
-	
+	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen
+	glLoadIdentity();									// Reset The Current Modelview Matrix
+
 	glTranslatef(20.0f, 20.0f, 1.0f);				    // x,y origin is in the lower-left corner
     glScalef(100.0f, 100.0f, 1.0f);
-    
-    glBegin(GL_TRIANGLES);	
+
+    glBegin(GL_TRIANGLES);
 	    glColor3f(1.0f,0.0f,0.0f);						// Set The Color To Red
 	    glVertex3f(1.0f, 2.0f, 0.0f);					// Top
 	    glColor3f(0.0f,1.0f,0.0f);						// Set The Color To Green
 	    glVertex3f(0.0f, 0.0f, 0.0f);					// Bottom Left
 	    glColor3f(0.0f,0.0f,1.0f);					    // Set The Color To Blue
 	    glVertex3f(2.0f, 0.0f, 0.0f);					// Bottom Right
-    glEnd();	
-		
-	glTranslatef(3.0f, 1.0f, 0.0f);						// Move Right 3 Units	
+    glEnd();
+
+	glTranslatef(3.0f, 1.0f, 0.0f);						// Move Right 3 Units
     glScalef(2.0f, 2.0f, 1.0f);
 
     glEnable(GL_TEXTURE_2D);
 
-    // bind texture	
+    // bind texture
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
     glBindTexture(GL_TEXTURE_2D, texName);
 
@@ -120,15 +120,15 @@ float theta = 0.0f;
 
 int DrawGLScene(GLfloat width, GLfloat height)
 {
-	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen 
-	glLoadIdentity();									// Reset The Current Modelview Matrix					
-    
+	glClear(GL_COLOR_BUFFER_BIT);	                    // clear Screen
+	glLoadIdentity();									// Reset The Current Modelview Matrix
+
     glScalef(width, height, 1.0f);
     glEnable(GL_TEXTURE_2D);
-    
+
     glRotatef( theta, 0.0f, 0.0f, 1.0f );
 
-    // bind texture	
+    // bind texture
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
     glBindTexture(GL_TEXTURE_2D, texName);
 
@@ -162,12 +162,12 @@ GLWidget::GLWidget(QWidget *parent)
 {
     makeCheckImage();
     glGenTextures(1, &texName);
-    glBindTexture(GL_TEXTURE_2D, texName);   
-    
+    glBindTexture(GL_TEXTURE_2D, texName);
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
     timer->start(1);
- 
+
 }
 
 GLWidget::~GLWidget()
