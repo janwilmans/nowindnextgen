@@ -20,7 +20,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QStatusBar>
 #include <QtGui/QWidget>
-#include <glwidget.h>
+#include "./GLWidget.h"
 
 QT_BEGIN_NAMESPACE
 
