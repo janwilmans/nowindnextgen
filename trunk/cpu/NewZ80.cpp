@@ -191,7 +191,7 @@ void NewZ80::reset()
     m_reg_ix = 0xFFFF;
     m_reg_iy = 0xFFFF;
     m_reg_sp = 0xFFFF;
-    m_reg_wz = 0xFFFF;
+    m_reg_wz = 0;//0xFFFF;
 	shadow_af = shadow_de = shadow_hl = 0xFFFF;
     shadow_b = shadow_c = 0xFF;
 
@@ -299,7 +299,7 @@ byte NewZ80::opcodeFetch(word address)
     refreshCounter++;
 
     byte oc = READMEM(address);
-    //DBERR("0x%04X  0x%02X\n", address, oc);
+    DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 

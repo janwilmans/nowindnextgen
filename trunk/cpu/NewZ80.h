@@ -83,6 +83,7 @@ protected:
 
     inline byte readIO(word port);
     inline void writeIO(word port, byte value);
+    
 public:
 
     // Component interface
@@ -91,6 +92,7 @@ public:
     virtual void prepare_shutdown();
 
     void setupBdosEnv(const char* filename);
+    
 private:
 
     float opcodeCounter[256];

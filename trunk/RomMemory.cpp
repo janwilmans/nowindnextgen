@@ -3,6 +3,7 @@
 #include "SlotSelector.h"
 #include "Bus.h"
 #include "debug.h"
+#include <fstream>
 
 using namespace nowind;
 using namespace fastdelegate;
@@ -15,12 +16,12 @@ RomMemory::RomMemory(Bus& bus, string filename) : BusComponent(bus)
 
 void RomMemory::prepare()
 {
-	//loadRom(mFilename);
+	loadRom(mFilename);
 }
 
 void RomMemory::initialize()
 {
-    
+
 }
 
 void RomMemory::prepare_shutdown()
@@ -33,21 +34,24 @@ RomMemory::~RomMemory()
 
 }
 
-/*
-void RomMemory::loadRom(string theFilename) {
+
+void RomMemory::loadRom(string filename) {
     
-    string filename = Debug::Instance()->getPath()+theFilename;
 	DBERR("MemoryDevice::loadRom: %s\n", filename.c_str());
-    mID = string("RomMemory (") + theFilename + ")";
+
 	ifstream romfile(filename.c_str(),ios::binary);
 	if (romfile.fail()) {
-		DBERR("Error opening file!\n");
-		mFileSize = 0;
-		mSections = 0;
-		assert(false);
+		DBERR("Error opening file %s!\n", filename.c_str());
+		NW_ASSERT(false);
     }
 	romfile.seekg(0, ios::end);
-	fileSize = romfile.tellg();
+	size_t fileSize = romfile.tellg();
+	
+	if (fileSize == 0) {
+		DBERR("Filesize is 0!\n");
+		NW_ASSERT(false);
+		// TODO: maak mechanisme om fout aan gebruiker te door te geven
+	}
 	
 	DBERR(" fileSize: %u\n", fileSize); 
 	
@@ -61,33 +65,33 @@ void RomMemory::loadRom(string theFilename) {
 	romfile.read(newmemChars, fileSize);
 	romfile.close();
 	
-	unsigned int sizeInBlocks = (fileSize / 0x2000);
-	if (fileSize & 0x1fff) {
-		sizeInBlocks += 1;
-	}
+    
+    unsigned int sizeInBlocks = ((fileSize-1) / constSectionSize) + 1;
 	
-    nw_byte * newMem = new nw_byte[sizeInBlocks*BLOCKSIZE];
+    byte * newMem = new byte[sizeInBlocks * constSectionSize];
 	// transfer roms from unsigned char memory to native (faster?) datatype
-	for (unsigned int i=0;i<fileSize;i++) {
+	for (unsigned int i=0; i<fileSize; i++) {
         newMem[i] = newmemChars[i] & 0xff;
     }    
-    memory = newMem;
-    releaseMemory = true;
+    mMemory = newMem;
     delete [] newmemChars;
 }
-*/
 
 void RomMemory::activate(Uint8 section)
 {
     DBERR("RomMemory::activate section: %d\n", section);
     mBus.deactivateMemWriteSection(section);
-    
-	//todo: use mSections to insert device in the right sections!?
-/*
-    Uint8 page = section >> 1; // 0-3
-    Uint8 currentBank = mSelectedBank[page];
-    Uint32 offset = (currentBank*16*1024) + ((section & 1) * 8*1024);
-    //DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
-    mBus.setReadSectionMemory(section, &mMemory[offset]); 
-	*/
+
+    // TODO: make use fileSize & start address of rom
+    Uint32 offset = section * constSectionSize;
+    if (section < 4) {
+        mBus.activateMemReadSection(section, MakeDelegate(this, &RomMemory::readByte));
+        mBus.setReadSectionMemory(section, &mMemory[offset]); 
+    }
+}
+
+byte RomMemory::readByte(word address)
+{
+    // TODO: this function should me removed, as a rom has no memory mapped IO
+    return mMemory[address];
 }

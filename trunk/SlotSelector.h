@@ -2,19 +2,19 @@
 #ifndef SLOTSELECTOR_H
 #define SLOTSELECTOR_H
 
-
 #include "BusComponent.h"
 
 namespace nowind {
 
 class Bus;
+class NullComponent;
 
 class SlotSelector : public BusComponent
 {
 public:
     SlotSelector(Bus& bus);
 
-    // IODevice methods
+    // IO methods
     virtual void attachIO();
     virtual void detachIO();
 
@@ -56,6 +56,8 @@ private:
     BusComponent* slotLayout[4][4][constSections]; 
     byte mA8Value;
     byte mSSSR[4];
+    
+    NullComponent* mNullComponent;
     
 };
 

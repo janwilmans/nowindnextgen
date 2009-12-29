@@ -44,7 +44,7 @@ public:
     // stop threads...etc.
     virtual void prepare_shutdown() = 0;
 
-    // IODevice methods
+    // IO methods
 
     // used to attach this component to the Bus
 	virtual void attachIO() {}

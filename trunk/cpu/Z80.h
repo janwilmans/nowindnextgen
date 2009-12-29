@@ -51,7 +51,7 @@ protected:
             return readSection[section](address);
         }
         byte value = readSectionMemory[section][address & constSectionMask];
-        //DBERR("(d) readSectionMemory, address: $%04X, value: $%02X\n", address, value);
+        DBERR("(d) readSectionMemory, address: $%04X, value: $%02X\n", address, value);
         return value;
     }
 

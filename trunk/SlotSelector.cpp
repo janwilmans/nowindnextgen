@@ -22,18 +22,29 @@ SlotSelector::~SlotSelector()
 
 void SlotSelector::prepare()
 {
-
+    mNullComponent = new NullComponent(mBus);
+    
+    for (int slot=0;slot<4;slot++)
+    {
+        for (int subslot=0;subslot<4;subslot++)
+        {
+            for (int section=0;section<constSections;section++)
+            {
+                slotLayout[slot][subslot][section] = mNullComponent;
+            }
+        }
+    }
 }
+
 void SlotSelector::initialize()
 {
-    // initialize all slots, expanded or not with the 'VoidDevice'
     mBus.activateSSSRRead(MakeDelegate(this, &SlotSelector::readSSSR));
     mBus.activateSSSRWrite(MakeDelegate(this, &SlotSelector::writeSSSR));
 }
 
 void SlotSelector::prepare_shutdown()
 {
-
+    delete mNullComponent;
 }
 
 void SlotSelector::attachIO()
@@ -106,6 +117,7 @@ void SlotSelector::activateCurrent()
 
 void SlotSelector::activatePage(Uint8 page)
 {
+    // if an exception occurs here, slotSelector->addBusComponent was not executed for the calling component
     byte pageShift = page*2;
     byte mainSlot = (mA8Value >> pageShift) & 0x03;
     byte subSlot = (mSSSR[mainSlot] >> pageShift) & 0x03;
