@@ -156,7 +156,7 @@ void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)
     */
 }
 
-Uint8 SlotSelector::getActivateSubslot(Uint8 slot)
+Uint8 SlotSelector::getActivateSubslots(Uint8 slot)
 {
     return mSSSR[slot];
 }

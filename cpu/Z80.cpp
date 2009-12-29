@@ -535,12 +535,12 @@ void Z80::dumpStateInfo()
     for (int page=0;page<4;page++) 
     {
         int mainSlot = (slots>>(page*2))&3;
-        Uint8 subSlot = Emulator::mSlotSelector->getActivateSubslot(mainSlot);
+        Uint8 subSlot = (Emulator::mSlotSelector->getActivateSubslots(mainSlot) >>(page*2))&3;
         DBERR(" %u", mainSlot);
         if (Emulator::mSlotSelector->getSlotExpanded(mainSlot)) {
             DBERR("-%u", subSlot);
         } else {
-            DBERR("-x");
+            DBERR("-.");
         }
     }
     DBERR("\n");
