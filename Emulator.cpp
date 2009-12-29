@@ -16,6 +16,8 @@ using namespace std;
 
 emuTimeType Emulator::emuTime = 0;
 
+SlotSelector* Emulator::mSlotSelector = 0;
+
 Emulator::Emulator(void)
 {
 }
@@ -44,6 +46,13 @@ void Emulator::initialize(void)
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
 	RomMemory* mainRom = new RomMemory(*bus, "mainrom.rom");
     SlotSelector* slotSelector = new SlotSelector(*bus);
+    mSlotSelector = slotSelector;               //todo: remove
+    
+    slotSelector->setSlotExpanded(0, false);
+    slotSelector->setSlotExpanded(1, false);
+    slotSelector->setSlotExpanded(2, false);
+    slotSelector->setSlotExpanded(3, true);
+    
     V9938* vdp = new V9938(*bus);
     
     //Ppi* ppi = new Ppi(*SlotSelector);

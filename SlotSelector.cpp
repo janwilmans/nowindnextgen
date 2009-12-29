@@ -13,6 +13,17 @@ SlotSelector::SlotSelector(Bus& aBus) : BusComponent(aBus)
     mSSSR[2] = 0;
     mSSSR[3] = 0;
     mA8Value = 0;
+
+    for (int slot=0; slot<4; slot++)
+    {
+        for (int subslot=0; subslot<4; subslot++)
+        {   
+            for (int section=0; section<constSections; section++)
+            {   
+                slotLayout[slot][subslot][section] = 0;
+            }
+        }
+    }    
 }
 
 SlotSelector::~SlotSelector()
@@ -22,16 +33,12 @@ SlotSelector::~SlotSelector()
 
 void SlotSelector::prepare()
 {
-    mNullComponent = new NullComponent(mBus);
-    
-    for (int slot=0;slot<4;slot++)
+    for (int slot=0; slot<4; slot++)
     {
-        for (int subslot=0;subslot<4;subslot++)
-        {
-            for (int section=0;section<constSections;section++)
-            {
-                slotLayout[slot][subslot][section] = mNullComponent;
-            }
+        for (int subslot=0; subslot<4; subslot++)
+        {   
+            NullComponent* aNullComponent = new NullComponent(mBus);
+            addBusComponent(aNullComponent, slot, subslot);
         }
     }
 }
@@ -71,18 +78,24 @@ void SlotSelector::writeIO(word /* port */, byte value)
 
 byte SlotSelector::readSSSR()
 {
-    DBERR("read SSSR = $ff\n");
-    return 0xFF;
+    byte mainSlot = mA8Value >> 6;
+    byte value = mSSSR[mainSlot] ^ 0xff;
+    DBERR("read SSSR = $%02X\n", value);
+    return value;
 }
 
 void SlotSelector::writeSSSR(byte value)
 {
+    byte mainSlot = mA8Value >> 6;
+    mSSSR[mainSlot] = value;
     DBERR("write SSSR = $%02X\n", value);
 }
 
 void SlotSelector::addBusComponentToSlot(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot)
 {
     // implementation choise: just one BusComponent in one slot/subslot
+    
+    // todo: figure out lifetime of NullComponents and overwritten components
     for (Uint8 section=0; section<constSections; section++)
     {
         slotLayout[slot][subslot][section] = aBusComponent;
@@ -91,10 +104,9 @@ void SlotSelector::addBusComponentToSlot(BusComponent* aBusComponent, Uint8 slot
 
 void SlotSelector::addBusComponent(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot)
 {
-    if (subslot > 0) mSlotExpanded[slot] = true;
     aBusComponent->setSlot(this, slot, subslot);
     
-    if (mSlotExpanded[slot] != 0)
+    if (mSlotExpanded[slot])
     {
         addBusComponentToSlot(aBusComponent, slot, subslot);
     }
@@ -126,7 +138,6 @@ void SlotSelector::activatePage(Uint8 page)
 
 void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)
 {
-
     Uint8 section0 = page*2;
     Uint8 section1 = section0+1;
     
@@ -143,4 +154,9 @@ void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)
         section++;
     }
     */
+}
+
+Uint8 SlotSelector::getActivateSubslot(Uint8 slot)
+{
+    return mSSSR[slot];
 }

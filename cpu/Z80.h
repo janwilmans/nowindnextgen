@@ -134,6 +134,7 @@ private:
 
     byte opcodeFetch(word);
     void debugInstuctionCounter();
+    void dumpStateInfo();
 
   public:
 

@@ -27,7 +27,7 @@ public:
     virtual ~SlotSelector();
 
     // proposal: get/set methods allowed in the header if they are purely get/setters
-    bool getSlotExpanded(Uint8 slot) { return mSlotExpanded[slot] != 0; }
+    bool getSlotExpanded(Uint8 slot) { return mSlotExpanded[slot]; }
     void setSlotExpanded(Uint8 slot, bool expanded) { mSlotExpanded[slot] = expanded; }
 
     // add a memory-mapped device
@@ -40,6 +40,8 @@ public:
     void writeIO(word port, byte value);
 
     void activatePage(Uint8 page);
+    
+    Uint8 getActivateSubslot(Uint8 slot);
 
 private:
     void activatePage(Uint8 page, Uint8 slot, Uint8 subslot);

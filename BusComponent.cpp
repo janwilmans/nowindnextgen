@@ -5,7 +5,8 @@ using namespace nowind;
 
 BusComponent::BusComponent(Bus& bus) : mBus(bus)
 {
-
+    mSlot = 0;
+    mSubSlot = 0;
 }
 
 void BusComponent::initialize()
