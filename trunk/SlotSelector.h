@@ -41,7 +41,7 @@ public:
 
     void activatePage(Uint8 page);
     
-    Uint8 getActivateSubslot(Uint8 slot);
+    Uint8 getActivateSubslots(Uint8 slot);
 
 private:
     void activatePage(Uint8 page, Uint8 slot, Uint8 subslot);
