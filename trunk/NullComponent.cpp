@@ -7,7 +7,7 @@ using namespace fastdelegate;
 
 NullComponent::NullComponent(Bus& bus) : BusComponent(bus)
 {
-
+    
 }
 
 NullComponent::~NullComponent()
@@ -39,13 +39,13 @@ void NullComponent::writeIO(word port, byte value)
 
 byte NullComponent::readByte(word address)
 {
-    DBERR("NULL read from %u-%u at $%04X ($FF returned)\n", mSlot, mSubSlot, address);
+    //DBERR("NULL read from %u-%u at $%04X ($FF returned)\n", mSlot, mSubSlot, address);
     return 0xff;
 }
 
 void NullComponent::writeByte(word address, byte value)
 {
-    DBERR("NULL write into %u-%u at $%04X = $%02X\n", mSlot, mSubSlot, address, value);
+    //DBERR("NULL write into %u-%u at $%04X = $%02X\n", mSlot, mSubSlot, address, value);
 }
 
 void NullComponent::activate(Uint8 section)

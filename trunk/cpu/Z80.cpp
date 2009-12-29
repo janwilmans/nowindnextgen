@@ -6,6 +6,7 @@
 #include "debug.h"
 #include <SDL.h>
 #include "Bus.h"
+#include "SlotSelector.h"       //todo: remove
 
 #define CONSOLE_DEBUGGING_ON
 #define FULL_SPEED_ON
@@ -281,7 +282,7 @@ byte Z80::opcodeFetch(word address)
     */
 
     byte oc = READMEM(address);
-    DBERR("0x%04X  0x%02X\n", address, oc);
+    //DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 
@@ -298,7 +299,11 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         word reg2 = 0;
         word opcode = 0;
         opcode = opcodeFetch(reg_pc);
+        
+        DBERR("%04X %-15s ", reg_pc, getMnemonics(reg_pc, readWord(reg_pc), readWord(reg_pc+2)).c_str());
         ++reg_pc;
+
+        // todo: assert on all invalid register values
 
         // execute opcode
         switch (opcode)
@@ -355,6 +360,8 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
             NW_ASSERT(false); // opcode > 255 ?!
             break;
         }
+        
+        dumpStateInfo();
 
         NW_ASSERT (reg_a < 256);
         NW_ASSERT (reg_f < 256);
@@ -508,3 +515,34 @@ inline void Z80::writeIO(word port, byte value)
 {
     mBus.writeIO(port, value);
 }
+
+
+void Z80::dumpStateInfo() 
+{
+	DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", reg_af, reg_bc, reg_de, reg_hl);
+    DBERR(" IX:%04X IY:%04X SP:%04X F:", reg_ix, reg_iy, reg_sp);
+
+	if (reg_f & SFLAG) DBERR("s"); else DBERR(".");
+	if (reg_f & ZFLAG) DBERR("z"); else DBERR(".");
+	if (reg_f & 0x20) DBERR("1"); else DBERR("0");
+	if (reg_f & HFLAG) DBERR("h"); else DBERR(".");
+	if (reg_f & 0x08) DBERR("1"); else DBERR("0");
+	if (reg_f & PFLAG) DBERR("p"); else DBERR(".");
+	if (reg_f & NFLAG) DBERR("n"); else DBERR(".");
+	if (reg_f & CFLAG) DBERR("c"); else DBERR(".");
+
+    int slots = readIO(0xa8);        //TODO: create alternative way to read without triggering IO-actions
+    for (int page=0;page<4;page++) 
+    {
+        int mainSlot = (slots>>(page*2))&3;
+        Uint8 subSlot = Emulator::mSlotSelector->getActivateSubslot(mainSlot);
+        DBERR(" %u", mainSlot);
+        if (Emulator::mSlotSelector->getSlotExpanded(mainSlot)) {
+            DBERR("-%u", subSlot);
+        } else {
+            DBERR("-x");
+        }
+    }
+    DBERR("\n");
+}
+
