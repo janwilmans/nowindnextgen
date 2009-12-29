@@ -8,7 +8,7 @@
 //       in context of slot-selection, half a page (so a 8kb region of memory)
 
 #include "Scheduler.h"
-#include "NullDevice.h"
+#include "NullComponent.h"
 
 namespace nowind {
 
@@ -67,7 +67,7 @@ protected:
     Scheduler& mScheduler;
 private:
 	// null device
-	NullDevice* mNullDevice;
+	NullComponent* mNullComponent;
 
     // memory access
     MemReadDelegate* mMemRead[constSections];

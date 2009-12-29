@@ -2,7 +2,6 @@
 #ifndef MemoryMapper_H
 #define MemoryMapper_H
 
-#include "Component.h"
 #include "BusComponent.h"
 
 namespace nowind {
@@ -22,7 +21,7 @@ public:
     virtual void initialize();
     virtual void prepare_shutdown();
 
-    // IODevice methods
+    // IO methods
     virtual void attachIO();
     virtual void detachIO();
 

@@ -79,17 +79,8 @@ void Z80::prepare()
         mBus.registerMemWrite(section, &writeSection[section]);
         
         mBus.registerReadSectionMemory(section, &readSectionMemory[section]);
-        mMemoryMappedIOSection[section] = false;  // set false to test direct mMemoryMappedIOSection-reads
+        mMemoryMappedIOSection[section] = true;  // set false to test direct mMemoryMappedIOSection-reads
     }
-
-    mMemoryMappedIOSection[0] = false;
-    mMemoryMappedIOSection[1] = false;
-    mMemoryMappedIOSection[2] = false;
-    mMemoryMappedIOSection[3] = false;
-    mMemoryMappedIOSection[4] = false;
-    mMemoryMappedIOSection[5] = false;
-    mMemoryMappedIOSection[6] = true;
-    mMemoryMappedIOSection[7] = true;
     
     mBus.registerSSSRRead(&readSSSR);
     mBus.registerSSSRWrite(&writeSSSR);
@@ -290,7 +281,7 @@ byte Z80::opcodeFetch(word address)
     */
 
     byte oc = READMEM(address);
-    //DBERR("0x%04X  0x%02X\n", address, oc);
+    DBERR("0x%04X  0x%02X\n", address, oc);
     return oc;
 }
 

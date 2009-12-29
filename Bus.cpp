@@ -8,11 +8,6 @@ using namespace fastdelegate;
 Bus::Bus(Scheduler& aScheduler) :  
 mScheduler(aScheduler)
 {
-    for (Uint16 port=0; port<256; port++)
-    {
-        registerReadIO(port, MakeDelegate(mNullDevice, &NullDevice::readIO));
-        registerWriteIO(port, MakeDelegate(mNullDevice, &NullDevice::writeIO));
-    }
 }
 
 Bus::~Bus()
@@ -22,17 +17,26 @@ Bus::~Bus()
 
 void Bus::prepare()
 {
+	mNullComponent = new NullComponent(*this);
+    for (Uint16 port=0; port<256; port++)
+    {
+        registerReadIO(port, MakeDelegate(mNullComponent, &NullComponent::readIO));
+        registerWriteIO(port, MakeDelegate(mNullComponent, &NullComponent::writeIO));
+    }
 
 }
 
 void Bus::initialize()
 {
-	mNullDevice = new NullDevice(*this);
+	for (int i=0;i<8;i++)
+	{
+	    deactivateMemReadSection(i);
+	}
 }
 
 void Bus::prepare_shutdown()
 {
-	delete mNullDevice;
+	delete mNullComponent;
 }
 
 void Bus::registerReadIO(Uint16 port, IOReadDelegate aDelegate)
@@ -83,13 +87,13 @@ void Bus::activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate)
 
 void Bus::deactivateMemReadSection(Uint8 section)
 {
-    *mMemRead[section] = MakeDelegate(mNullDevice, &NullDevice::readByte);
+    *mMemRead[section] = MakeDelegate(mNullComponent, &NullComponent::readByte);
 }
 
 
 void Bus::deactivateMemWriteSection(Uint8 section)
 {
-    *mMemWrite[section] = MakeDelegate(mNullDevice, &NullDevice::writeByte);
+    *mMemWrite[section] = MakeDelegate(mNullComponent, &NullComponent::writeByte);
 }
 
 

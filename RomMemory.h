@@ -15,6 +15,9 @@ private:
 	std::string mFilename;
 	std::string mID;
 
+    void loadRom(std::string);
+    byte readByte(word address);
+
 public:
 	RomMemory(Bus& bus, std::string filename);
 

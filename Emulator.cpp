@@ -8,6 +8,7 @@
 #include "SlotSelector.h"
 #include "cpu/Z80.h"
 #include "cpu/NewZ80.h"
+#include "video/V9938.h"
 
 using namespace fastdelegate;
 using namespace nowind;
@@ -37,11 +38,13 @@ void Emulator::initialize(void)
     // if you want to pass access to an object, use a reference
 
     Bus* bus = new Bus(*mScheduler);
-    NewZ80* cpu = new NewZ80(*bus);
+//    NewZ80* cpu = new NewZ80(*bus);
+    Z80* cpu = new Z80(*bus);
 
     MemoryMapper* mapper = new MemoryMapper(*bus, 256);
 	RomMemory* mainRom = new RomMemory(*bus, "mainrom.rom");
     SlotSelector* slotSelector = new SlotSelector(*bus);
+    V9938* vdp = new V9938(*bus);
     
     //Ppi* ppi = new Ppi(*SlotSelector);
 
@@ -51,25 +54,29 @@ void Emulator::initialize(void)
     cpu->prepare();
     mapper->prepare();
     slotSelector->prepare();
+    mainRom->prepare();
+    vdp->prepare();
     
     bus->initialize();
     cpu->initialize();
     mapper->initialize();
     slotSelector->initialize();
+    mainRom->initialize();
+    vdp->initialize();
     
     /* initialization of all components */ 
  
     // attach device to the required ports by calling IODevice::attachIO
     bus->addIODevice(mapper);           
     bus->addIODevice(slotSelector);
-    slotSelector->addBusComponent(mapper, 0, 0);
-	//slotSelector->addBusComponent(mainRom, 0, 0);
+    slotSelector->addBusComponent(mapper, 3, 2);
+	slotSelector->addBusComponent(mainRom, 0, 0);
     
-    cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
+    //cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     //cpu->setupBdosEnv("asm/maptest.com");
     
     cpu->reset();
-    cpu->setPC(0x100);
+    cpu->setPC(0); //0x100 for zexall.com
     mScheduler->run(cpu);
     //mScheduler->runNice(cpu);
 
