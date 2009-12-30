@@ -112,7 +112,7 @@ void MemoryMapper::writeIO(word port, byte value)
 
 void MemoryMapper::activate(Uint8 section)
 {
-    DBERR("MemoryMapper::activate section: %d\n", section);
+    //DBERR("MemoryMapper::activate section: %d\n", section);
     mBus.activateMemReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
     mBus.activateMemWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
     
