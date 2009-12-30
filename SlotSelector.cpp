@@ -89,6 +89,7 @@ void SlotSelector::writeSSSR(byte value)
     byte mainSlot = mA8Value >> 6;
     mSSSR[mainSlot] = value;
     DBERR("write SSSR = $%02X\n", value);
+    activateCurrent();
 }
 
 void SlotSelector::addBusComponentToSlot(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot)
@@ -129,7 +130,6 @@ void SlotSelector::activateCurrent()
 
 void SlotSelector::activatePage(Uint8 page)
 {
-    // if an exception occurs here, slotSelector->addBusComponent was not executed for the calling component
     byte pageShift = page*2;
     byte mainSlot = (mA8Value >> pageShift) & 0x03;
     byte subSlot = (mSSSR[mainSlot] >> pageShift) & 0x03;
@@ -138,22 +138,13 @@ void SlotSelector::activatePage(Uint8 page)
 
 void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)
 {
-    Uint8 section0 = page*2;
-    Uint8 section1 = section0+1;
-    
-    slotLayout[slot][subslot][section0]->activate(section0);
-    slotLayout[slot][subslot][section1]->activate(section1);
-    
-    /*
     const Uint8 sectionsPerPage = constSections/4;
-    
     Uint8 section = page * sectionsPerPage;
     for (int i=0; i<sectionsPerPage;i++)
     {
         slotLayout[slot][subslot][section]->activate(section);
         section++;
     }
-    */
 }
 
 Uint8 SlotSelector::getActivateSubslots(Uint8 slot)

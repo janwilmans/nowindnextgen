@@ -35,12 +35,12 @@ case 0x06:
     break;
 
 case 0x07: 
-	DBERR("PC:%04X ", reg_pc-1);
-    dumpCpuInfo();
+	//DBERR("PC:%04X ", reg_pc-1);
+    //dumpCpuInfo();
     break;
 
 case 0x08:
-    dumpSlotSelection();
+    //dumpSlotSelection();
     break;
 
 case 0x09:
