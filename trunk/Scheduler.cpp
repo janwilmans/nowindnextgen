@@ -26,11 +26,6 @@ void Scheduler::addEvent(emuTimeType aEventTime, EventDelegate aCallback)
     mEventList.sort();
 }
 
-void Scheduler::endOfRange(emuTimeType emuTime, emuTimeType aEventTime)
-{
-    // no longer needed?
-}
-
 void Scheduler::run(CPU *aCpu)
 {
     emuTimeType& emuTime = Emulator::emuTime;
@@ -138,8 +133,6 @@ void Scheduler::testrun(emuTimeType startTime, Uint32 aTimes)
             DBERR("lEvent: %s\n", nextEvent.ToString().c_str());
             nextEvent.Callback(i, i);
             bool lResult = getNextEvent(emuTime, nextEvent, nextEventTime);
-            //if (nextEvent.isEndOfRange())
-
             NW_ASSERT(lResult);
         }
         i++;

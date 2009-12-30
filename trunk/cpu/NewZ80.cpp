@@ -54,7 +54,7 @@ using namespace nowind;
 
 //  create read/write mem fp's
 
-NewZ80::NewZ80(Bus& bus) : CPU(bus)
+NewZ80::NewZ80(Emulator& aEmulator) : CPU(aEmulator)
 {
     DBERR("NewZ80 constructor...\n");
      

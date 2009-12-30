@@ -34,18 +34,18 @@ void Emulator::initialize(void)
     Emulator::emuTime = 0;
 
     mScheduler = new Scheduler();
+    mBus = new Bus(*this);
 
     // testing rule: 
     // if you pass the ownership of an object, use a pointer
     // if you want to pass access to an object, use a reference
 
-    Bus* bus = new Bus(*mScheduler);
 //    NewZ80* cpu = new NewZ80(*bus);
-    Z80* cpu = new Z80(*bus);
+    Z80* cpu = new Z80(*this);
 
-    MemoryMapper* mapper = new MemoryMapper(*bus, 256);
-	RomMemory* mainRom = new RomMemory(*bus, "mainrom.rom");
-    SlotSelector* slotSelector = new SlotSelector(*bus);
+    MemoryMapper* mapper = new MemoryMapper(*this, 256);
+	RomMemory* mainRom = new RomMemory(*this, "mainrom.rom");
+    SlotSelector* slotSelector = new SlotSelector(*this);
     mSlotSelector = slotSelector;               //todo: remove
     
     slotSelector->setSlotExpanded(0, false);
@@ -53,20 +53,20 @@ void Emulator::initialize(void)
     slotSelector->setSlotExpanded(2, false);
     slotSelector->setSlotExpanded(3, true);
     
-    V9938* vdp = new V9938(*bus);
+    V9938* vdp = new V9938(*this);
     
     //Ppi* ppi = new Ppi(*SlotSelector);
 
     /* initialization of all components */ 
     
-    bus->prepare();
+    mBus->prepare();
     cpu->prepare();
     mapper->prepare();
     slotSelector->prepare();
     mainRom->prepare();
     vdp->prepare();
     
-    bus->initialize();
+    mBus->initialize();
     cpu->initialize();
     mapper->initialize();
     slotSelector->initialize();
@@ -76,9 +76,9 @@ void Emulator::initialize(void)
     /* initialization of all components */ 
  
     // attach device to the required ports by calling IODevice::attachIO
-    bus->addIODevice(mapper);           
-    bus->addIODevice(slotSelector);
-    bus->addIODevice(vdp);
+    mBus->addIODevice(mapper);           
+    mBus->addIODevice(slotSelector);
+    mBus->addIODevice(vdp);
     slotSelector->addBusComponent(mapper, 3, 2);
 	slotSelector->addBusComponent(mainRom, 0, 0);
     
@@ -95,13 +95,13 @@ void Emulator::initialize(void)
     
     /* shutdown */
     
-    bus->prepare_shutdown();
+    mBus->prepare_shutdown();
     cpu->prepare_shutdown();
     mapper->prepare_shutdown();
     slotSelector->prepare_shutdown();   
     
-     /* shutdown */
-     exit(0);
+    /* shutdown */
+    exit(0);
 }
 
 // create and initialize _everything_
@@ -117,8 +117,8 @@ void Emulator::test(void)
     Sint64 f = d - e;
     DBERR("test f, should be -2999999999: %lld\n", f);
 
-    Bus* bus = new Bus(*mScheduler);
-    DummyCpu* cpu = new DummyCpu(*bus);
+    Bus* bus = new Bus(*this);
+    DummyCpu* cpu = new DummyCpu(*this);
 
     mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::interruptTestMethod));
     mScheduler->addEvent(-5, MakeDelegate(this, &Emulator::interruptTestMethod));

@@ -19,7 +19,7 @@ protected:
     SlotSelector* mSlotSelector;
 
 public:
-    BusComponent(Bus& bus);
+    BusComponent(Emulator& aEmulator);
 
     void setSlot(SlotSelector* slotSelector, Uint8 slot, Uint8 subslot);
     bool inExpandedSlot();

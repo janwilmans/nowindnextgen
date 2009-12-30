@@ -1,12 +1,13 @@
 #include "Bus.h"
 #include "Scheduler.h"
-#include "Component.h"
+#include "BusComponent.h"
 
 using namespace nowind;
 using namespace fastdelegate;
 
-Bus::Bus(Scheduler& aScheduler) :  
-mScheduler(aScheduler)
+Bus::Bus(Emulator& aEmulator) :  
+mEmulator(aEmulator),
+mScheduler(aEmulator.getScheduler())
 {
 }
 
@@ -17,7 +18,7 @@ Bus::~Bus()
 
 void Bus::prepare()
 {
-	mNullComponent = new NullComponent(*this);
+	mNullComponent = new NullComponent(mEmulator);
     for (Uint16 port=0; port<256; port++)
     {
         registerReadIO(port, MakeDelegate(mNullComponent, &NullComponent::readIO));

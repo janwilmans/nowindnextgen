@@ -9,7 +9,7 @@ using namespace nowind;
 using namespace fastdelegate;
 using namespace std;
 
-RomMemory::RomMemory(Bus& bus, string filename) : BusComponent(bus)
+RomMemory::RomMemory(Emulator& aEmulator, string filename) : BusComponent(aEmulator)
 {
 	mFilename = filename;
 }

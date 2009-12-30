@@ -8,11 +8,11 @@
 
 namespace nowind {
 
-typedef std::list<Event> EventList;
+class Bus;
 class Scheduler;
 class SlotSelector;
 
-class Emulator //: public Component
+class Emulator
 {
 public:
     Emulator(void);
@@ -28,11 +28,13 @@ public:
     void interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime);
 
     static SlotSelector* mSlotSelector; //TODO: REMOVE !!!
+    
+    Bus& getBus() { return *mBus; }
+    Scheduler& getScheduler() { return *mScheduler; }
 
 private:
+    Bus* mBus;
     Scheduler* mScheduler;
-    EventList mEventList;
-    
 
 };
 

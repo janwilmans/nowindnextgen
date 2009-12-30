@@ -9,7 +9,7 @@ namespace nowind {
 class V9938 : public BusComponent 
 {
 public:
-    V9938(Bus& bus);
+    V9938(Emulator& aEmulator);
 
     // the prepare method should create all objects and register them with the broker
     virtual void prepare();

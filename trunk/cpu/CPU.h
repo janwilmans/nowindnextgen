@@ -122,7 +122,7 @@ class Bus;
 class CPU : public Component
 {
 public:
-    CPU(Bus& aBus);
+    CPU(Emulator& aEmulator);
     virtual ~CPU() {}
     virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) = 0;
 

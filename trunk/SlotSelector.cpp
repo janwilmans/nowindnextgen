@@ -5,7 +5,7 @@
 using namespace nowind;
 using namespace fastdelegate;
 
-SlotSelector::SlotSelector(Bus& aBus) : BusComponent(aBus)
+SlotSelector::SlotSelector(Emulator& aEmulator) : BusComponent(aEmulator)
 {
     // todo: verify initial values! (random? 0xff ?)
     mSSSR[0] = 0;
@@ -37,7 +37,7 @@ void SlotSelector::prepare()
     {
         for (int subslot=0; subslot<4; subslot++)
         {   
-            NullComponent* aNullComponent = new NullComponent(mBus);
+            NullComponent* aNullComponent = new NullComponent(mEmulator);
             addBusComponent(aNullComponent, slot, subslot);
         }
     }
