@@ -5,7 +5,7 @@
 using namespace nowind;
 using namespace fastdelegate;
 
-V9938::V9938(Bus& bus) : BusComponent(bus)
+V9938::V9938(Emulator& aEmulator) : BusComponent(aEmulator)
 {
 
 }

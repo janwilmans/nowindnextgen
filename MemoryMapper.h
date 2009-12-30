@@ -14,7 +14,7 @@ private:
     byte mSelectedBank[4];
 
 public:
-    MemoryMapper(Bus& bus, Uint16 kilobytes);
+    MemoryMapper(Emulator& aEmulator, Uint16 kilobytes);
 
     // Component methods
     virtual void prepare();

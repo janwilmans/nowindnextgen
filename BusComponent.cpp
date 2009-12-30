@@ -1,9 +1,11 @@
 #include "BusComponent.h"
+#include "Emulator.h"
 #include "SlotSelector.h"
 
 using namespace nowind;
 
-BusComponent::BusComponent(Bus& bus) : mBus(bus)
+BusComponent::BusComponent(Emulator& aEmulator) : Component(aEmulator), 
+mBus(aEmulator.getBus())
 {
     mSlot = 0;
     mSubSlot = 0;

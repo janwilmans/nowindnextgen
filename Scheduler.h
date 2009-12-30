@@ -21,7 +21,6 @@ class Scheduler
     void addEvent(emuTimeType aIntTime, EventDelegate aCallback);
     bool getNextEvent(emuTimeType, Event&, emuTimeType&);
     void testrun(emuTimeType, Uint32);
-    void endOfRange(emuTimeType emuTime, emuTimeType aEventTime);
     void run(CPU*);
     void runNice(CPU*);
     protected:

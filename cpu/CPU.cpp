@@ -5,7 +5,8 @@
 
 using namespace nowind;
 
-CPU::CPU(Bus& bus) : Component(), mBus(bus)
+CPU::CPU(Emulator& aEmulator) : Component(aEmulator), 
+mBus(aEmulator.getBus())
 {
 
 }

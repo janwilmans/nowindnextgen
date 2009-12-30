@@ -10,7 +10,7 @@ namespace nowind {
 class NullComponent : public BusComponent //, public AudioDevice
 {
 public:
-    NullComponent(Bus& bus);
+    NullComponent(Emulator& aEmulator);
 
     // Component
     virtual void prepare();

@@ -36,9 +36,6 @@ protected:
     emuTimeType mTime;
     bool mHigh;
 
-	// debug
-	char mDebugString[100];
-
     // exposed callback to allow bind()
     EventDelegate mDelegate;
 };

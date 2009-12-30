@@ -14,7 +14,6 @@ Event::Event(emuTimeType aTime, EventDelegate aDelegate)
 {
     mTime = aTime;
     mDelegate = aDelegate;
-    sprintf(mDebugString, "Event at: %i", mTime);
 }
 
 Event::~Event(void)

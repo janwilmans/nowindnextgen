@@ -24,7 +24,7 @@ typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // retur
 class NewZ80 : public CPU {
 
   public:
-    NewZ80(Bus& aBus);
+    NewZ80(Emulator& aEmulator);
     virtual ~NewZ80();
 
 protected:

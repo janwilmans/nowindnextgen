@@ -3,8 +3,12 @@
 #define COMPONENT_H
 
 #include "basetypes.h"
+#include "Emulator.h"
 
 namespace nowind {
+
+class Scheduler;
+class Emulator; // why is this needed?
 
 // a Component is an emulated object that exists in the real world
 // it has a name and can provide a descriptive 'state-string'
@@ -13,7 +17,7 @@ namespace nowind {
 class Component 
 {
 public:
-    Component() {}
+    Component(Emulator& aEmulator);
 
     // the prepare method should create all objects and register them with the broker
     virtual void prepare() = 0;
@@ -29,6 +33,10 @@ public:
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Component() {}
+    
+protected:
+    Emulator& mEmulator;
+    Scheduler& mScheduler;
 };
 
 } // namespace nowind

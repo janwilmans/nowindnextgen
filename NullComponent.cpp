@@ -5,7 +5,7 @@
 using namespace nowind;
 using namespace fastdelegate;
 
-NullComponent::NullComponent(Bus& bus) : BusComponent(bus)
+NullComponent::NullComponent(Emulator& aEmulator) : BusComponent(aEmulator)
 {
     
 }

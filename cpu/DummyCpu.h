@@ -10,8 +10,7 @@ namespace nowind {
 class DummyCpu : public CPU
 {
 public:
-    // find out why this is needed!!
-    DummyCpu(Bus& bus) : CPU(bus) {}
+    DummyCpu(Emulator& aEmulator) : CPU(aEmulator) {}
 
     virtual emuTimeType ExecuteInstructions(emuTimeType startTime, emuTimeType endTime) 
     {

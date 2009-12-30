@@ -7,7 +7,7 @@
 using namespace nowind;
 using namespace fastdelegate;
 
-MemoryMapper::MemoryMapper(Bus& bus, Uint16 kilobytes) : BusComponent(bus)
+MemoryMapper::MemoryMapper(Emulator& aEmulator, Uint16 kilobytes) : BusComponent(aEmulator)
 {
     NW_ASSERT(((kilobytes/(16))*(16)) == kilobytes);  // kilobytes is a multiple of 16
     mBanks = kilobytes/16;

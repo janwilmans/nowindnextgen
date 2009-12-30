@@ -18,7 +18,7 @@ class BusComponent;
 class Bus 
 {
 public:
-    Bus(Scheduler&);
+    Bus(Emulator& aEmulator);
 
     // add an IO-mapped device
     void addIODevice(BusComponent* aIODevice);
@@ -64,6 +64,7 @@ public:
     virtual void prepare_shutdown();    
     
 protected:
+    Emulator& mEmulator;
     Scheduler& mScheduler;
 private:
 	// null device

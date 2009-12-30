@@ -12,7 +12,7 @@ class NullComponent;
 class SlotSelector : public BusComponent
 {
 public:
-    SlotSelector(Bus& bus);
+    SlotSelector(Emulator& aEmulator);
 
     // IO methods
     virtual void attachIO();

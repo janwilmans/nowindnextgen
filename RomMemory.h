@@ -19,7 +19,7 @@ private:
     byte readByte(word address);
 
 public:
-	RomMemory(Bus& bus, std::string filename);
+	RomMemory(Emulator& aEmulator, std::string filename);
 
     // Component methods
     virtual void prepare();
