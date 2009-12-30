@@ -78,6 +78,7 @@ void Emulator::initialize(void)
     // attach device to the required ports by calling IODevice::attachIO
     bus->addIODevice(mapper);           
     bus->addIODevice(slotSelector);
+    bus->addIODevice(vdp);
     slotSelector->addBusComponent(mapper, 3, 2);
 	slotSelector->addBusComponent(mainRom, 0, 0);
     

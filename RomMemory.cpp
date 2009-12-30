@@ -79,7 +79,7 @@ void RomMemory::loadRom(string filename) {
 
 void RomMemory::activate(Uint8 section)
 {
-    DBERR("RomMemory::activate section: %d\n", section);
+    //DBERR("RomMemory::activate section: %d\n", section);
     mBus.deactivateMemWriteSection(section);
 
     // TODO: make use fileSize & start address of rom
