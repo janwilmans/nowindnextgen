@@ -154,9 +154,7 @@ private:
     emuTimeType mEndTime;
 
     void hijackBdos();
-    //void dumpPages();
-    void dumpSlotSelection();
-    void dumpCpuInfo();
+
 };
 
 } // namespace nowind

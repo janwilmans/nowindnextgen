@@ -300,7 +300,7 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         word opcode = 0;
         opcode = opcodeFetch(reg_pc);
         
-        DBERR("%04X %-15s ", reg_pc, getMnemonics(reg_pc, readWord(reg_pc), readWord(reg_pc+2)).c_str());
+        //DBERR("%04X %-15s ", reg_pc, getMnemonics(reg_pc, readWord(reg_pc), readWord(reg_pc+2)).c_str());
         ++reg_pc;
 
         // todo: assert on all invalid register values
@@ -361,7 +361,7 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
             break;
         }
         
-        dumpStateInfo();
+//        dumpStateInfo();
 
         NW_ASSERT (reg_a < 256);
         NW_ASSERT (reg_f < 256);
@@ -377,64 +377,6 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
     while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
 
     return localEmuTime;
-}
-
-void Z80::dumpCpuInfo()
-{
-
-    DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", reg_af, reg_bc, reg_de, reg_hl);
-    DBERR(" IX:%04X IY:%04X SP:%04X(%04X) F:", reg_ix, reg_iy, reg_sp, 0x1234);//readMem16(reg_sp));
-
-    if (reg_f & SFLAG) DBERR("s");
-    else DBERR(".");
-    if (reg_f & ZFLAG) DBERR("z");
-    else DBERR(".");
-    if (reg_f & 0x20) DBERR("1");
-    else DBERR("0");
-    if (reg_f & HFLAG) DBERR("h");
-    else DBERR(".");
-    if (reg_f & 0x08) DBERR("1");
-    else DBERR("0");
-    if (reg_f & PFLAG) DBERR("p");
-    else DBERR(".");
-    if (reg_f & NFLAG) DBERR("n");
-    else DBERR(".");
-    if (reg_f & CFLAG) DBERR("c");
-    else DBERR(".");
-
-    /*
-    int slot = ppi->readPortA();
-    for (int i=0;i<4;i++) {
-        int mainSlot = (slot>>(i*2))&3;
-        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
-        DBERR(" %u", mainSlot);
-        if (slotSelector->isExpanded(mainSlot)) {
-            DBERR("%u", subSlot);
-        } else {
-            DBERR("x");
-        }
-    }
-    */
-    DBERR("\n");
-}
-
-/* can return invalid information if the PPI is not yet initialized */
-void Z80::dumpSlotSelection()
-{
-
-    /*
-    int slot = ppi->readPortA();
-    DBERR("Slot selection:\n");
-    for (int i=0;i<4;i++) {
-        int mainSlot = (slot>>(i*2))&3;
-        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
-        DBERR(" page%u (%u", i, mainSlot);
-        if (slotSelector->isExpanded(mainSlot)) {
-            DBERR("-%u", subSlot);
-        }
-        DBERR(") %s\n", slotSelector->getDeviceName(i).c_str());
-    }
-    */
 }
 
 /*
