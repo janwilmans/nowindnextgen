@@ -29,60 +29,27 @@ class NewZ80 : public CPU {
 
 protected:
 
-    MemReadDelegate readSection[constSections];
-    MemWriteDelegate writeSection[constSections];
-
-    SSSRReadDelegate readSSSR;
-    SSSRWriteDelegate writeSSSR;
-
-    IOReadDelegate readIOPort;
-    IOWriteDelegate writeIOPort;
-    
-    bool mMemoryMappedIOSection[constSections];
-    byte* readSectionMemory[constSections];
-
-    inline byte readByte(word address)
-    {
-        NW_ASSERT(address < 0x10000);
-        Uint8 section = address >> constSectionShift;
-        if (mMemoryMappedIOSection[section])
-        {
-            if (address == 0xffff) return readSSSR();
-            return readSection[section](address);
-        }
-        byte value = readSectionMemory[section][address & constSectionMask];
-        //DBERR("(d) readSectionMemory, address: $%04X, value: $%02X\n", address, value);
-        return value;
-    }
-
-    inline void writeByte(word address, byte value)
-    {   
-        NW_ASSERT(address < 0x10000);
-        NW_ASSERT(value < 0x100);
-        if (address == 0xffff) 
-        {
-            writeSSSR(value);
-        }
-        else
-        {
-            writeSection[address >> constSectionShift](address, value);
-        }   
-    }
-
     inline word readWord(word address)
     {
-        byte lowByte = readByte(address);           // read the low byte first, todo: verify that this is correct!
-        return lowByte | (readByte(address+1) << 8);
+        byte lowByte = mBus.readByte(address);           // read the low byte first, todo: verify that this is correct!
+        return lowByte | (mBus.readByte(address+1) << 8);
     }
 
     inline void writeWord(word address, word value)
     {
-        writeByte(address, value & 0xff);           // write the low byte first, todo: verify that this is correct!
-        writeByte((address + 1) & 0xffff, value >> 8);
+        mBus.writeByte(address, value & 0xff);           // write the low byte first, todo: verify that this is correct!
+        mBus.writeByte((address + 1) & 0xffff, value >> 8);
     }
 
-    inline byte readIO(word port);
-    inline void writeIO(word port, byte value);
+    inline byte readIO(word port)
+    { 
+        return mBus.readIO(port); 
+    }
+    
+    inline void writeIO(word port, byte value)
+    { 
+        mBus.writeIO(port, value); 
+    }
     
 public:
 

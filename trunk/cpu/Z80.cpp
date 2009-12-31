@@ -39,9 +39,9 @@ using namespace nowind;
 #define CFLAG 0x01
 
 /* memory read/write macros */
-#define READMEM readByte
+#define READMEM mBus.readByte
 #define READMEM16 readWord
-#define WRITEMEM writeByte
+#define WRITEMEM mBus.writeByte
 #define WRITEMEM16 writeWord
 
 //  create read/write mem fp's
@@ -73,19 +73,7 @@ Z80::Z80(Emulator& aEmulator) : CPU(aEmulator)
 
 void Z80::prepare()
 {
-    for (Uint8 section=0; section<constSections; section++)
-    {
-        mBus.registerMemRead(section, &readSection[section]);
-        mBus.registerMemWrite(section, &writeSection[section]);
-        
-        mBus.registerReadSectionMemory(section, &readSectionMemory[section]);
-        mMemoryMappedIOSection[section] = true;  // set false to test direct mMemoryMappedIOSection-reads
-    }
-    
-    mBus.registerSSSRRead(&readSSSR);
-    mBus.registerSSSRWrite(&writeSSSR);
-    
-    
+
 }
 
 void Z80::initialize()
@@ -445,16 +433,6 @@ void Z80::hijackBdos()
         // no nothing
         break;
     }
-}
-
-inline byte Z80::readIO(word port)
-{
-    return mBus.readIO(port);
-}
-
-inline void Z80::writeIO(word port, byte value)
-{
-    mBus.writeIO(port, value);
 }
 
 

@@ -19,7 +19,7 @@ Bus::~Bus()
 void Bus::prepare()
 {
 	mNullComponent = new NullComponent(mEmulator);
-    for (Uint16 port=0; port<256; port++)
+    for (Uint16 port=0; port<255; port++)
     {
         registerReadIO(port, MakeDelegate(mNullComponent, &NullComponent::readIO));
         registerWriteIO(port, MakeDelegate(mNullComponent, &NullComponent::writeIO));
@@ -27,9 +27,8 @@ void Bus::prepare()
 
     for (Uint8 section=0; section<constSections; section++)
     {
-        mMemoryMappedIOSection[section] = true;  // set false to test direct mMemoryMappedIOSection-reads
+        mMemoryMappedIOSection[section] = true;
     }    
-
 }
 
 void Bus::initialize()
@@ -67,70 +66,44 @@ void Bus::writeIO(word port, byte value)
 
 void Bus::addIODevice(BusComponent* aIODevice)
 {
+    //todo: add device to a list-of-devices?
     aIODevice->attachIO();
-}
-
-void Bus::registerMemRead(Uint8 section, MemReadDelegate* aDelegate)
-{
-    mMemRead[section] = aDelegate;
-}
-
-void Bus::registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate)
-{
-    mMemWrite[section] = aDelegate;
 }
 
 void Bus::activateMemReadSection(Uint8 section, MemReadDelegate aDelegate)
 {
-	//mMemoryMappedIOSection[section] = true;   // move mMemoryMappedIOSection into Bus
-    *mMemRead[section] = aDelegate;
+	mMemoryMappedIOSection[section] = true;
+	mReadSection[section] = aDelegate;
 }
 
 void Bus::activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate)
 {
-    *mMemWrite[section] = aDelegate;
+	mWriteSection[section] = aDelegate;
 }
 
 void Bus::deactivateMemReadSection(Uint8 section)
 {
-    *mMemRead[section] = MakeDelegate(mNullComponent, &NullComponent::readByte);
+    mMemoryMappedIOSection[section] = true;
+    mReadSection[section] = MakeDelegate(mNullComponent, &NullComponent::readByte);
 }
-
 
 void Bus::deactivateMemWriteSection(Uint8 section)
 {
-    *mMemWrite[section] = MakeDelegate(mNullComponent, &NullComponent::writeByte);
-}
-
-
-void Bus::registerSSSRRead(SSSRReadDelegate* aDelegate)
-{
-    mSSSRRead = aDelegate;
-}
-
-void Bus::registerSSSRWrite(SSSRWriteDelegate* aDelegate)
-{
-    mSSSRWrite = aDelegate;
+    mWriteSection[section] = MakeDelegate(mNullComponent, &NullComponent::writeByte);
 }
 
 void Bus::activateSSSRRead(SSSRReadDelegate aDelegate)
 {
-   (*mSSSRRead) = aDelegate;
+    mSSSRReadDel = aDelegate;
 }
 
 void Bus::activateSSSRWrite(SSSRWriteDelegate aDelegate)
 {
-   (*mSSSRWrite) = aDelegate;
-}
-
-void Bus::registerReadSectionMemory(Uint8 section, byte** readSectionMemory)
-{
-    mReadSectionMemory[section] = readSectionMemory;
+    mSSSRWriteDel = aDelegate;
 }
 
 void Bus::setReadSectionMemory(Uint8 section, byte* memory)
 {
-	//*mMemRead[section] = 0;	// cause crash if called
-	//mMemoryMappedIOSection[section] = false;
-    *mReadSectionMemory[section] = memory;
+	//mMemoryMappedIOSection[section] = false;              //bug:  mMemoryMappedIOSection = false works with zexall, but not for the mainrom?
+    mReadSectionMemory[section] = memory;
 }
