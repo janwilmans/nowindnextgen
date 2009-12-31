@@ -25,6 +25,11 @@ void Bus::prepare()
         registerWriteIO(port, MakeDelegate(mNullComponent, &NullComponent::writeIO));
     }
 
+    for (Uint8 section=0; section<constSections; section++)
+    {
+        mMemoryMappedIOSection[section] = true;  // set false to test direct mMemoryMappedIOSection-reads
+    }    
+
 }
 
 void Bus::initialize()

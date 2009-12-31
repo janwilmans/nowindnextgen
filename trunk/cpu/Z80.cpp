@@ -39,7 +39,6 @@ using namespace nowind;
 #define CFLAG 0x01
 
 /* memory read/write macros */
-
 #define READMEM readByte
 #define READMEM16 readWord
 #define WRITEMEM writeByte
@@ -123,20 +122,20 @@ void Z80::setupBdosEnv(const char* filename)
     for (Uint16 i = 0;i < fileSize;i++)
     {
         byte value = temp[i] & 0xff;    // todo: find out why this fails without the & 0xff!!
-        writeByte(0x100+i, value);
+        WRITEMEM(0x100+i, value);
     }
     delete temp;
 
     // patch bdos call 0x0005
-    writeByte(0x0005, 0xED);
-    writeByte(0x0006, 0x0E);
-    writeByte(0x0007, 0xC9);
+    WRITEMEM(0x0005, 0xED);
+    WRITEMEM(0x0006, 0x0E);
+    WRITEMEM(0x0007, 0xC9);
     
 	word testnr = 0;
 	word testAdres = 0x13A+(testnr*2);
 
-	writeByte(0x120, testAdres & 255);
-	writeByte(0x121, testAdres >> 8);
+	WRITEMEM(0x120, testAdres & 255);
+	WRITEMEM(0x121, testAdres >> 8);
 	
 	// set initial SP 
     reg_sp = 0xc800;
@@ -160,7 +159,7 @@ void Z80::reset()
 
     // todo: remove this, initialize this where it is suppose to be done!
     writeIO(0xa8, 0);
-    writeByte(0xffff, 0);
+    WRITEMEM(0xffff, 0);
 
     IFF1 = IFF2 = false;  // disable interrupts
     interruptMode = 0;

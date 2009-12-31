@@ -29,6 +29,11 @@ class Z80 : public CPU {
 
 protected:
 
+    // new
+    MemReadDelegate mReadByteDel;
+    MemWriteDelegate mWriteByteDel;
+    
+
     MemReadDelegate readSection[constSections];
     MemWriteDelegate writeSection[constSections];
 
@@ -41,6 +46,7 @@ protected:
     bool mMemoryMappedIOSection[constSections];
     byte* readSectionMemory[constSections];
 
+    
     inline byte readByte(word address)
     {
         NW_ASSERT(address < 0x10000);
@@ -68,7 +74,8 @@ protected:
             writeSection[address >> constSectionShift](address, value);
         }   
     }
-
+   
+    
     inline word readWord(word address)
     {
         byte lowByte = readByte(address);           // read the low byte first, todo: verify that this is correct!
