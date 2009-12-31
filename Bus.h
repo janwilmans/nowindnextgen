@@ -31,6 +31,39 @@ public:
     byte readIO(word port);
     void writeIO(word port, byte value);
 
+    bool mMemoryMappedIOSection[constSections];
+    
+    /*
+    //new 
+    inline byte readByte(word address)
+    {
+        NW_ASSERT(address < 0x10000);
+        Uint8 section = address >> constSectionShift;
+        if (mMemoryMappedIOSection[section])
+        {
+            if (address == 0xffff) return readSSSR();
+            return readSection[section](address);
+        }
+        byte value = readSectionMemory[section][address & constSectionMask];
+        DBERR("(d) readSectionMemory, address: $%04X, value: $%02X\n", address, value);
+        return value;
+    }
+
+    inline void writeByte(word address, byte value)
+    {   
+        NW_ASSERT(address < 0x10000);
+        NW_ASSERT(value < 0x100);
+        if (address == 0xffff) 
+        {
+            writeSSSR(value);
+        }
+        else
+        {
+            writeSection[address >> constSectionShift](address, value);
+        }   
+    }
+    */
+    
     // the cpu registers its memory delegates with these methods
     void registerMemRead(Uint8 section, MemReadDelegate* aDelegate);
     void registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate);
@@ -69,6 +102,9 @@ protected:
 private:
 	// null device
 	NullComponent* mNullComponent;
+
+    MemReadDelegate* mMemReadDel;
+    MemWriteDelegate* mMemWriteDel;
 
     // memory access
     MemReadDelegate* mMemRead[constSections];
