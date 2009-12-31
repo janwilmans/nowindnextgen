@@ -9,6 +9,7 @@
 
 #include "Scheduler.h"
 #include "NullComponent.h"
+#include "debug.h"
 
 namespace nowind {
 
@@ -31,9 +32,13 @@ public:
     byte readIO(word port);
     void writeIO(word port, byte value);
 
+    //new
+    MemReadDelegate mReadSection[constSections];
+    MemWriteDelegate mWriteSection[constSections];
+
     bool mMemoryMappedIOSection[constSections];
-    
-    /*
+    byte* mReadSectionMemory[constSections];    
+   
     //new 
     inline byte readByte(word address)
     {
@@ -41,11 +46,11 @@ public:
         Uint8 section = address >> constSectionShift;
         if (mMemoryMappedIOSection[section])
         {
-            if (address == 0xffff) return readSSSR();
-            return readSection[section](address);
+            if (address == 0xffff) return mSSSRReadDel();
+            return mReadSection[section](address);
         }
-        byte value = readSectionMemory[section][address & constSectionMask];
-        DBERR("(d) readSectionMemory, address: $%04X, value: $%02X\n", address, value);
+        byte value = mReadSectionMemory[section][address & constSectionMask];
+        //DBERR("(d) mReadSectionMemory, address: $%04X, value: $%02X\n", address, value);
         return value;
     }
 
@@ -55,19 +60,14 @@ public:
         NW_ASSERT(value < 0x100);
         if (address == 0xffff) 
         {
-            writeSSSR(value);
+            mSSSRWriteDel(value);
         }
         else
         {
-            writeSection[address >> constSectionShift](address, value);
+            mWriteSection[address >> constSectionShift](address, value);
         }   
     }
-    */
-    
-    // the cpu registers its memory delegates with these methods
-    void registerMemRead(Uint8 section, MemReadDelegate* aDelegate);
-    void registerMemWrite(Uint8 section, MemWriteDelegate* aDelegate);
-
+   
     // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
     void activateMemReadSection(Uint8 section, MemReadDelegate aDelegate); 
     void activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate);     
@@ -75,18 +75,11 @@ public:
 	void deactivateMemReadSection(Uint8 section);
 	void deactivateMemWriteSection(Uint8 section);
 
-    // the cpu registers its SSSR delegates with these methods
-    void registerSSSRRead(SSSRReadDelegate* aDelegate);
-    void registerSSSRWrite(SSSRWriteDelegate* aDelegate);
-
-    // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
+     // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
     void activateSSSRRead(SSSRReadDelegate aDelegate); 
     void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
 
-    //quick and dirty hack
-    void registerReadSectionMemory(Uint8 section, byte** readSectionMemory);
     void setReadSectionMemory(Uint8 section, byte* memory);
-    byte** mReadSectionMemory[8];
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Bus();
@@ -106,13 +99,9 @@ private:
     MemReadDelegate* mMemReadDel;
     MemWriteDelegate* mMemWriteDel;
 
-    // memory access
-    MemReadDelegate* mMemRead[constSections];
-    MemWriteDelegate* mMemWrite[constSections];
-
-    // subslot selector access
-    SSSRReadDelegate* mSSSRRead;
-    SSSRWriteDelegate* mSSSRWrite;
+    //new
+    SSSRReadDelegate mSSSRReadDel;
+    SSSRWriteDelegate mSSSRWriteDel;
 
     // I/O access
     IOReadDelegate mIORead[256];

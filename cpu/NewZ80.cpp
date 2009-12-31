@@ -46,9 +46,9 @@ using namespace nowind;
 
 /* memory read/write macros */
 
-#define READMEM readByte
+#define READMEM mBus.readByte
 #define READMEM16 readWord
-#define WRITEMEM writeByte
+#define WRITEMEM mBus.writeByte
 #define WRITEMEM16 writeWord
 
 
@@ -81,27 +81,6 @@ NewZ80::NewZ80(Emulator& aEmulator) : CPU(aEmulator)
 
 void NewZ80::prepare()
 {
-    for (Uint8 section=0; section<constSections; section++)
-    {
-        mBus.registerMemRead(section, &readSection[section]);
-        mBus.registerMemWrite(section, &writeSection[section]);
-        
-        mBus.registerReadSectionMemory(section, &readSectionMemory[section]);
-        mMemoryMappedIOSection[section] = false;  // set false to test direct mMemoryMappedIOSection-reads
-    }
-
-    mMemoryMappedIOSection[0] = false;
-    mMemoryMappedIOSection[1] = false;
-    mMemoryMappedIOSection[2] = false;
-    mMemoryMappedIOSection[3] = false;
-    mMemoryMappedIOSection[4] = false;
-    mMemoryMappedIOSection[5] = false;
-    mMemoryMappedIOSection[6] = true;
-    mMemoryMappedIOSection[7] = true;
-    
-    mBus.registerSSSRRead(&readSSSR);
-    mBus.registerSSSRWrite(&writeSSSR);
-    
     
 }
 
@@ -139,20 +118,20 @@ void NewZ80::setupBdosEnv(const char* filename)
     for (Uint16 i = 0;i < fileSize;i++)
     {
         byte value = temp[i] & 0xff;    // todo: find out why this fails without the & 0xff!!
-        writeByte(0x100+i, value);
+        WRITEMEM(0x100+i, value);
     }
     delete temp;
 
     // patch bdos call 0x0005
-    writeByte(0x0005, 0xED);
-    writeByte(0x0006, 0x0E);
-    writeByte(0x0007, 0xC9);
+    WRITEMEM(0x0005, 0xED);
+    WRITEMEM(0x0006, 0x0E);
+    WRITEMEM(0x0007, 0xC9);
     
 	word testnr = 0;
 	word testAdres = 0x13A+(testnr*2);
 
-	writeByte(0x120, testAdres & 255);
-	writeByte(0x121, testAdres >> 8);
+	WRITEMEM(0x120, testAdres & 255);
+	WRITEMEM(0x121, testAdres >> 8);
 	
 	// set initial SP 
     m_reg_sp = 0xc800;
@@ -176,7 +155,7 @@ void NewZ80::reset()
 
     // todo: remove this, initialize this where it is suppose to be done!
     writeIO(0xa8, 0);
-    writeByte(0xffff, 0);
+    WRITEMEM(0xffff, 0);
 
     IFF1 = IFF2 = false;  // disable interrupts
     interruptMode = 0;
@@ -429,18 +408,6 @@ void NewZ80::hijackBdos()
         break;
     }
 }
-
-inline byte NewZ80::readIO(word port)
-{
-    return mBus.readIO(port);
-}
-
-inline void NewZ80::writeIO(word port, byte value)
-{
-    mBus.writeIO(port, value);
-}
-
-
 
 // the amount of cycles actually executed can vary (with max. the cycles-1 of the biggest instruction)
 // because an instruction is always completely executed.

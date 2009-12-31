@@ -80,7 +80,7 @@ byte SlotSelector::readSSSR()
 {
     byte mainSlot = mA8Value >> 6;
     byte value = mSSSR[mainSlot] ^ 0xff;
-    DBERR("read SSSR = $%02X\n", value);
+    //DBERR("read SSSR = $%02X\n", value);
     return value;
 }
 
@@ -88,7 +88,7 @@ void SlotSelector::writeSSSR(byte value)
 {
     byte mainSlot = mA8Value >> 6;
     mSSSR[mainSlot] = value;
-    DBERR("write SSSR = $%02X\n", value);
+    //DBERR("write SSSR = $%02X\n", value);
     activateCurrent();
 }
 
