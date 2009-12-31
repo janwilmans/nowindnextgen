@@ -27,7 +27,7 @@ public:
     void registerReadIO(Uint16 port, IOReadDelegate aDelegate);
     void registerWriteIO(Uint16 port, IOWriteDelegate aDelegate);
 
-    // directory called by the CPU or other bus controller
+    // called directly by the CPU or other bus controller
     byte readIO(word port);
     void writeIO(word port, byte value);
 
