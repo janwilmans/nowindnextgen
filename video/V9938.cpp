@@ -45,26 +45,60 @@ void V9938::detachIO()
 
 }
 
-byte V9938::readPort0(word port)
+byte V9938::readPort0(word /*port*/)
 {
-    DBERR("readPort0\n");
-    return 0xff;
+    //DBERR("readPort0\n");
+    port1DataLatched = false;
+	byte val = vramLatch;
+	vramLatch = vram[incrementVramPointer()];
+	return val;
 }
 
-byte V9938::readPort1(word port)
+byte V9938::readPort1(word /*port*/)
 {
     DBERR("readPort1\n");
-    return 0xff;
+	return 0xff;
 }
     
 void V9938::writePort0(word port, byte value)
 {
-    DBERR("WritePort0: 0x%02x [%c]\n", value, value);
+    //DBERR("WritePort0: 0x%02x [%c]\n", value, value);
+	port1DataLatched = false;
+	vram[incrementVramPointer()] = value;
+	vramLatch = value;
 }
 
 void V9938::writePort1(word port, byte value)
 {
-    DBERR("WritePort1: 0x%02x [%c]\n", value, value);
+    //DBERR("WritePort1: 0x%02x [%c]\n", value, value);
+	if (port1DataLatched)
+	{
+		port1DataLatched = false;
+		if (value & 0x80)
+		{
+			if (value & 0x40) 
+			{
+				// TODO: check what happens (SNOW26 demo and space manbow/undeadline?)
+				NW_ASSERT(false);
+			}
+			else
+			{
+				//writeRegister(value & 0x3f, dataLatch);
+				DBERR("writeRegister %d [%0x2d]\n", value & 0x3f, dataLatch);
+			}
+		}
+		else
+		{
+			vramPointer = ((value & 0x3f) << 8) | dataLatch;
+			if (!(value & 0x40)) vramLatch = vram[incrementVramPointer()];
+		}
+
+	}
+	else
+	{
+		port1DataLatched = true;
+		dataLatch = value;
+	}
 }
 
 void V9938::writePort2(word port, byte value)
@@ -77,3 +111,12 @@ void V9938::writePort3(word port, byte value)
     DBERR("WritePort3: 0x%02x [%c]\n", value, value);
 }
 
+Uint32 V9938::incrementVramPointer()
+{
+	// Todo: check what really happens with reg14
+	// Is it only incremented in MSX2 screens? Or is it always incremented, but are the high order bits masked in MSX1 modes?
+
+	vramPointer++;
+	vramPointer &= 0x3fff; // Todo: in MSX2 128 kB should be addressable
+	return vramPointer;
+}

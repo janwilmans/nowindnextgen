@@ -39,6 +39,19 @@ private:
     void writePort2(word port, byte value);
     void writePort3(word port, byte value);
 
+	// bus interface
+	byte dataLatch;
+	bool port1DataLatched;
+	bool port2DataLatched;
+	
+	// vram access
+	byte vram[128 * 1024];
+	byte vramLatch;
+	Uint32 vramPointer;
+	Uint32 incrementVramPointer(void);
+
+	// registers
+	byte vdpRegister[64];
 };
 
 } // namespace nowind
