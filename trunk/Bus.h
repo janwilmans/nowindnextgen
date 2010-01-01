@@ -33,8 +33,8 @@ public:
     void writeIO(word port, byte value);
 
     // active read/write bytes methods for each section
-    MemReadDelegate mReadSection[constSections];
-    MemWriteDelegate mWriteSection[constSections];
+    ReadSectionDelegate mReadSection[constSections];
+    WriteSectionDelegate mWriteSection[constSections];
 
     // flag for each section that indicates whether or not 
     // to use the corresponding mReadSection or the faster mReadSectionMemory
@@ -49,7 +49,7 @@ public:
         Uint8 section = address >> constSectionShift;
         if (mMemoryMappedIOSection[section])
         {
-            if (address == 0xffff) return mSSSRReadDel();
+            if (address == 0xffff) return mSSSRRead();
             return mReadSection[section](address);
         }
         byte value = mReadSectionMemory[section][address & constSectionMask];
@@ -63,7 +63,7 @@ public:
         NW_ASSERT(value < 0x100);
         if (address == 0xffff) 
         {
-            mSSSRWriteDel(value);
+            mSSSRWrite(value);
         }
         else
         {
@@ -72,18 +72,16 @@ public:
     }
    
     // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
-    void activateMemReadSection(Uint8 section, MemReadDelegate aDelegate); 
-    void activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate);     
+    void activateReadSection(Uint8 section, ReadSectionDelegate aDelegate); 
+    void activateWriteSection(Uint8 section, WriteSectionDelegate aDelegate);     
 
     // called by the memory BusComponents
-	void deactivateMemReadSection(Uint8 section);
-	void deactivateMemWriteSection(Uint8 section);
+	void deactivateReadSection(Uint8 section);
+	void deactivateWriteSection(Uint8 section);
 
     // called only by the SlotSelector
     void activateSSSRRead(SSSRReadDelegate aDelegate); 
     void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
-
-    void setReadSectionMemory(Uint8 section, byte* memory);
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Bus();
@@ -96,12 +94,18 @@ public:
 protected:
     Emulator& mEmulator;
     Scheduler& mScheduler;
+
 private:
+    
+    // private method, but BusComponent can access it
+    friend void BusComponent::activateReadSectionMemory(Uint8 section, byte* memory);
+    void activateReadSectionMemory(Uint8 section, byte* memory);
+
 	// null device
 	NullComponent* mNullComponent;
 
-    SSSRReadDelegate mSSSRReadDel;
-    SSSRWriteDelegate mSSSRWriteDel;
+    SSSRReadDelegate mSSSRRead;
+    SSSRWriteDelegate mSSSRWrite;
 
     // I/O access
     IOReadDelegate mIORead[256];

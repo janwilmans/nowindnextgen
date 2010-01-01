@@ -19,8 +19,8 @@ typedef Uint32 word;            // should be (at least) an 16 bit type
 typedef Uint32 emuTimeType;     // should be (at least) an 32 bit type
 typedef Uint32 msTimeType;      // should be (at least) an 32 bit type
 
-typedef fastdelegate::FastDelegate1<word, byte> MemReadDelegate;   // 1 parameter, returns byte 
-typedef fastdelegate::FastDelegate2<word, byte> MemWriteDelegate;  // 2 parameters, returns void 
+typedef fastdelegate::FastDelegate1<word, byte> ReadSectionDelegate;   // 1 parameter, returns byte 
+typedef fastdelegate::FastDelegate2<word, byte> WriteSectionDelegate;  // 2 parameters, returns void 
 
 typedef fastdelegate::FastDelegate0<byte> SSSRReadDelegate;        // no parameter, returns byte 
 typedef fastdelegate::FastDelegate1<byte> SSSRWriteDelegate;       // 1 parameter, returns void 

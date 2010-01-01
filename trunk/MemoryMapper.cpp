@@ -113,14 +113,14 @@ void MemoryMapper::writeIO(word port, byte value)
 void MemoryMapper::activate(Uint8 section)
 {
     //DBERR("MemoryMapper::activate section: %d\n", section);
-    mBus.activateMemReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
-    mBus.activateMemWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
+    mBus.activateReadSection(section, MakeDelegate(this, &MemoryMapper::readByte));
+    mBus.activateWriteSection(section, MakeDelegate(this, &MemoryMapper::writeByte));
     
     Uint8 page = section >> 1; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = (currentBank*constPageSize) + ((section & 1) * constSectionSize);
     //DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
-    mBus.setReadSectionMemory(section, &mMemory[offset]); 
+    activateReadSectionMemory(section, &mMemory[offset]); 
 }
 
 byte MemoryMapper::readByte(word address)
