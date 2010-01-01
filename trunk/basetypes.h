@@ -47,6 +47,8 @@ template <> struct GetShifts<0>
 
 // there are always 4x16KB pages in total
 static const Uint32 constPages = 4;
+static const Uint32 constPageSize = 16*1024;
+static const Uint32 constPageMask = constPageSize-1;
 
 // if constSectionSize is changed, constOnes is re-calculated compile-time
 static const Uint32 constSectionSize = 8*1024;

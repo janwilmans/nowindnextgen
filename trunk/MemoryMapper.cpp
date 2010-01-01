@@ -118,7 +118,7 @@ void MemoryMapper::activate(Uint8 section)
     
     Uint8 page = section >> 1; // 0-3
     Uint8 currentBank = mSelectedBank[page];
-    Uint32 offset = (currentBank*16*1024) + ((section & 1) * 8*1024);
+    Uint32 offset = (currentBank*constPageSize) + ((section & 1) * constSectionSize);
     //DBERR("page %u, bank: %u, offset: $%04X\n", page, currentBank, offset);
     mBus.setReadSectionMemory(section, &mMemory[offset]); 
 }
@@ -127,9 +127,9 @@ byte MemoryMapper::readByte(word address)
 {
     Uint8 page = address >> 14; // 0-3
     Uint8 currentBank = mSelectedBank[page];
-    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used
+    Uint32 offset = currentBank*constPageSize;   // todo: re-calucation of offset can be prevented if seporate readByte() per page are used
     
-    byte value = mMemory[offset+(address & 0x3fff)];
+    byte value = mMemory[offset+(address & constPageMask)];
     //DBERR("(m) read $%04X = $%02X\n", address, value);
     return value;
 }
@@ -138,8 +138,7 @@ void MemoryMapper::writeByte(word address, byte value)
 {
     Uint8 page = address >> 14; // 0-3
     Uint8 currentBank = mSelectedBank[page];
-    Uint32 offset = currentBank*16*1024;   // todo: re-calucation of offset can be prevented if seporate writeByte() per page are used 
-    mMemory[offset+(address & 0x3fff)] = value;
+    Uint32 offset = currentBank*constPageSize;   // todo: re-calucation of offset can be prevented if seporate writeByte() per page are used 
+    mMemory[offset+(address & constPageMask)] = value;
     //DBERR("(m) write $%04X = $%02X\n", address, value);
 }
-
