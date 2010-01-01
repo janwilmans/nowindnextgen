@@ -80,18 +80,17 @@ void RomMemory::loadRom(string filename) {
 void RomMemory::activate(Uint8 section)
 {
     //DBERR("RomMemory::activate section: %d\n", section);
-    mBus.deactivateMemWriteSection(section);        // rom cannot be written
+    mBus.deactivateWriteSection(section);        // rom cannot be written
 
     // TODO: make use fileSize & start address of rom
     Uint32 offset = section * constSectionSize;
     if (section < 4) {
-        mBus.activateMemReadSection(section, MakeDelegate(this, &RomMemory::readByte));
-        mBus.setReadSectionMemory(section, &mMemory[offset]); 
+        mBus.activateReadSection(section, MakeDelegate(this, &RomMemory::readByte));
+        activateReadSectionMemory(section, &mMemory[offset]); 
     }
 }
 
 byte RomMemory::readByte(word address)
 {
-    // TODO: this function should me removed, as a rom has no memory mapped IO
     return mMemory[address];
 }

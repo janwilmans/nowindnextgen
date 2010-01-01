@@ -50,6 +50,6 @@ void NullComponent::writeByte(word address, byte value)
 
 void NullComponent::activate(Uint8 section)
 {
-    mBus.activateMemReadSection(section, MakeDelegate(this, &NullComponent::readByte));
-    mBus.activateMemWriteSection(section, MakeDelegate(this, &NullComponent::writeByte));
+    mBus.activateReadSection(section, MakeDelegate(this, &NullComponent::readByte));
+    mBus.activateWriteSection(section, MakeDelegate(this, &NullComponent::writeByte));
 }

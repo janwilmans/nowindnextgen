@@ -35,7 +35,7 @@ void Bus::initialize()
 {
 	for (int i=0;i<8;i++)
 	{
-	    deactivateMemReadSection(i);
+	    deactivateReadSection(i);
 	}
 }
 
@@ -70,40 +70,40 @@ void Bus::addIODevice(BusComponent* aIODevice)
     aIODevice->attachIO();
 }
 
-void Bus::activateMemReadSection(Uint8 section, MemReadDelegate aDelegate)
+void Bus::activateReadSection(Uint8 section, ReadSectionDelegate aDelegate)
 {
 	mMemoryMappedIOSection[section] = true;
 	mReadSection[section] = aDelegate;
 }
 
-void Bus::activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate)
+void Bus::activateWriteSection(Uint8 section, WriteSectionDelegate aDelegate)
 {
 	mWriteSection[section] = aDelegate;
 }
 
-void Bus::deactivateMemReadSection(Uint8 section)
+void Bus::deactivateReadSection(Uint8 section)
 {
     mMemoryMappedIOSection[section] = true;
     mReadSection[section] = MakeDelegate(mNullComponent, &NullComponent::readByte);
 }
 
-void Bus::deactivateMemWriteSection(Uint8 section)
+void Bus::deactivateWriteSection(Uint8 section)
 {
     mWriteSection[section] = MakeDelegate(mNullComponent, &NullComponent::writeByte);
 }
 
 void Bus::activateSSSRRead(SSSRReadDelegate aDelegate)
 {
-    mSSSRReadDel = aDelegate;
+    mSSSRRead = aDelegate;
 }
 
 void Bus::activateSSSRWrite(SSSRWriteDelegate aDelegate)
 {
-    mSSSRWriteDel = aDelegate;
+    mSSSRWrite = aDelegate;
 }
 
-void Bus::setReadSectionMemory(Uint8 section, byte* memory)
+void Bus::activateReadSectionMemory(Uint8 section, byte* memory)
 {
-	//mMemoryMappedIOSection[section] = false;              //bug:  mMemoryMappedIOSection = false works with zexall, but not for the mainrom?
+	mMemoryMappedIOSection[section] = false;
     mReadSectionMemory[section] = memory;
 }

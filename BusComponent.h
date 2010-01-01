@@ -51,6 +51,12 @@ public:
 
     // used to detach this component from the Bus
 	virtual void detachIO() {}
+	
+	// Memory methods
+	// address 0xffff in an expanded slot must always support memory-mapper IO to allow the SlotSelector to switch subslots, 
+	// therefore memory-components must implement readByte/writeByte and can call activateReadSectionMemory in their 
+	// activate() method to allow accelerated reads for all but the last section, even in expanded slots
+	void activateReadSectionMemory(Uint8 section, byte* memory);
 
 };
 

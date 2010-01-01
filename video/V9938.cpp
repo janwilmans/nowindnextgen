@@ -62,7 +62,7 @@ byte V9938::readPort1(word /*port*/)
     
 void V9938::writePort0(word port, byte value)
 {
-    DBERR("WritePort0: 0x%02x [%c]\n", value, value);
+    //DBERR("WritePort0: 0x%02x [%c]\n", value, value);
 	port1DataLatched = false;
 	vram[incrementVramPointer()] = value;
 	vramLatch = value;

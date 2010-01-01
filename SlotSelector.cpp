@@ -78,6 +78,8 @@ void SlotSelector::writeIO(word /* port */, byte value)
 
 byte SlotSelector::readSSSR()
 {
+// return 0xff if slot is not expanded??
+
     byte mainSlot = mA8Value >> 6;
     byte value = mSSSR[mainSlot] ^ 0xff;
     //DBERR("read SSSR = $%02X\n", value);

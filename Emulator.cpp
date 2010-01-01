@@ -18,6 +18,14 @@ emuTimeType Emulator::emuTime = 0;
 
 SlotSelector* Emulator::mSlotSelector = 0;
 
+/*
+XML serialization:
+
+- minixml.org?
+- boost.org?
+*/
+
+
 Emulator::Emulator(void)
 {
 }
