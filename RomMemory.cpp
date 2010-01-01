@@ -80,7 +80,7 @@ void RomMemory::loadRom(string filename) {
 void RomMemory::activate(Uint8 section)
 {
     //DBERR("RomMemory::activate section: %d\n", section);
-    mBus.deactivateMemWriteSection(section);
+    mBus.deactivateMemWriteSection(section);        // rom cannot be written
 
     // TODO: make use fileSize & start address of rom
     Uint32 offset = section * constSectionSize;

@@ -19,8 +19,6 @@
 
 namespace nowind {
 
-typedef fastdelegate::FastDelegate2 < word, byte > writeDelegate;       // returns void 
-
 class NewZ80 : public CPU {
 
   public:

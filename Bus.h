@@ -32,14 +32,17 @@ public:
     byte readIO(word port);
     void writeIO(word port, byte value);
 
-    //new
+    // active read/write bytes methods for each section
     MemReadDelegate mReadSection[constSections];
     MemWriteDelegate mWriteSection[constSections];
 
+    // flag for each section that indicates whether or not 
+    // to use the corresponding mReadSection or the faster mReadSectionMemory
     bool mMemoryMappedIOSection[constSections];
+    
+    // activate direct-read memorySections
     byte* mReadSectionMemory[constSections];    
    
-    //new 
     inline byte readByte(word address)
     {
         NW_ASSERT(address < 0x10000);
@@ -72,10 +75,11 @@ public:
     void activateMemReadSection(Uint8 section, MemReadDelegate aDelegate); 
     void activateMemWriteSection(Uint8 section, MemWriteDelegate aDelegate);     
 
+    // called by the memory BusComponents
 	void deactivateMemReadSection(Uint8 section);
 	void deactivateMemWriteSection(Uint8 section);
 
-     // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
+    // called only by the SlotSelector
     void activateSSSRRead(SSSRReadDelegate aDelegate); 
     void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
 
@@ -96,10 +100,6 @@ private:
 	// null device
 	NullComponent* mNullComponent;
 
-    MemReadDelegate* mMemReadDel;
-    MemWriteDelegate* mMemWriteDel;
-
-    //new
     SSSRReadDelegate mSSSRReadDel;
     SSSRWriteDelegate mSSSRWriteDel;
 

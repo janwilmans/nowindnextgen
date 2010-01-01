@@ -51,7 +51,7 @@ void SlotSelector::initialize()
 
 void SlotSelector::prepare_shutdown()
 {
-    delete mNullComponent;
+    
 }
 
 void SlotSelector::attachIO()
@@ -106,7 +106,6 @@ void SlotSelector::addBusComponentToSlot(BusComponent* aBusComponent, Uint8 slot
 void SlotSelector::addBusComponent(BusComponent* aBusComponent, Uint8 slot, Uint8 subslot)
 {
     aBusComponent->setSlot(this, slot, subslot);
-    
     if (mSlotExpanded[slot])
     {
         addBusComponentToSlot(aBusComponent, slot, subslot);

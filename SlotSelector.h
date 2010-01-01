@@ -59,8 +59,6 @@ private:
     byte mA8Value;
     byte mSSSR[4];
     
-    NullComponent* mNullComponent;
-    
 };
 
 } // namespace nowind
