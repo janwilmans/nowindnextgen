@@ -13,6 +13,10 @@ private:
     byte* mMemory;
     byte mSelectedBank[4];
 
+protected:
+    // BusComponent methods
+    virtual void activate(Uint8 section);
+
 public:
     MemoryMapper(Emulator& aEmulator, Uint16 kilobytes);
 
@@ -24,9 +28,6 @@ public:
     // IO methods
     virtual void attachIO();
     virtual void detachIO();
-
-    // BusComponent methods
-    virtual void activate(Uint8 section);
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~MemoryMapper();

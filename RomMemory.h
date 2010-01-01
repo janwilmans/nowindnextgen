@@ -18,6 +18,10 @@ private:
     void loadRom(std::string);
     byte readByte(word address);
 
+protected:
+    // BusComponent methods
+    virtual void activate(Uint8 section);
+
 public:
 	RomMemory(Emulator& aEmulator, std::string filename);
 
@@ -25,9 +29,6 @@ public:
     virtual void prepare();
     virtual void initialize();
     virtual void prepare_shutdown();
-
-    // BusComponent methods
-    virtual void activate(Uint8 section);
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~RomMemory();
