@@ -18,14 +18,16 @@ protected:
     Uint8 mSubSlot;
     SlotSelector* mSlotSelector;
 
+    // used to update the Bus for this section's BusComponent, called by activateSection
+    virtual void activate(Uint8 section) {}
+
 public:
     BusComponent(Emulator& aEmulator);
 
+    void activateSection(Uint8 section);
+    
     void setSlot(SlotSelector* slotSelector, Uint8 slot, Uint8 subslot);
     bool inExpandedSlot();
-
-    // used to update the Bus for this section's BusComponent
-    virtual void activate(Uint8 section) {}
 
     // release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~BusComponent() {}

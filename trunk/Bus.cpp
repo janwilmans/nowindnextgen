@@ -70,6 +70,12 @@ void Bus::addIODevice(BusComponent* aIODevice)
     aIODevice->attachIO();
 }
 
+void Bus::activateSection(Uint8 section, Uint8 mainslot, Uint8 subslot, bool expanded)
+{
+    mExpandedSlotActive[section] = expanded;
+    //todo: store more section info? for use in readByte?
+}
+
 void Bus::activateReadSection(Uint8 section, ReadSectionDelegate aDelegate)
 {
 	mMemoryMappedIOSection[section] = true;

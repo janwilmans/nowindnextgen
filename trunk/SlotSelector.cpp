@@ -78,8 +78,7 @@ void SlotSelector::writeIO(word /* port */, byte value)
 
 byte SlotSelector::readSSSR()
 {
-// return 0xff if slot is not expanded??
-
+    // not called for un-expanded slots see Bus::readByte
     byte mainSlot = mA8Value >> 6;
     byte value = mSSSR[mainSlot] ^ 0xff;
     //DBERR("read SSSR = $%02X\n", value);
@@ -143,7 +142,7 @@ void SlotSelector::activatePage(Uint8 page, Uint8 slot, Uint8 subslot)
     Uint8 section = page * sectionsPerPage;
     for (int i=0; i<sectionsPerPage;i++)
     {
-        slotLayout[slot][subslot][section]->activate(section);
+        slotLayout[slot][subslot][section]->activateSection(section);
         section++;
     }
 }

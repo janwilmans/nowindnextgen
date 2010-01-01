@@ -49,7 +49,7 @@ public:
         Uint8 section = address >> constSectionShift;
         if (mMemoryMappedIOSection[section])
         {
-            if (address == 0xffff) return mSSSRRead();
+            if (address == 0xffff && mExpandedSlotActive[section]) return mSSSRRead();
             return mReadSection[section](address);
         }
         byte value = mReadSectionMemory[section][address & constSectionMask];
@@ -70,6 +70,9 @@ public:
             mWriteSection[address >> constSectionShift](address, value);
         }   
     }
+
+    // called by BusComponent::preActivate()
+    void activateSection(Uint8 section, Uint8 mainslot, Uint8 subslot, bool expanded);
    
     // called by the memory BusComponents (the SlotSelector calls MemoryDevice::activate)
     void activateReadSection(Uint8 section, ReadSectionDelegate aDelegate); 
@@ -81,7 +84,7 @@ public:
 
     // called only by the SlotSelector
     void activateSSSRRead(SSSRReadDelegate aDelegate); 
-    void activateSSSRWrite(SSSRWriteDelegate aDelegate);     
+    void activateSSSRWrite(SSSRWriteDelegate aDelegate);    
 
     // the destructor should release any allocated resources (memory/filehandles etc.) during runtime 
     virtual ~Bus();
@@ -96,9 +99,9 @@ protected:
     Scheduler& mScheduler;
 
 private:
+    friend class BusComponent;
     
     // private method, but BusComponent can access it
-    friend void BusComponent::activateReadSectionMemory(Uint8 section, byte* memory);
     void activateReadSectionMemory(Uint8 section, byte* memory);
 
 	// null device
@@ -111,6 +114,7 @@ private:
     IOReadDelegate mIORead[256];
     IOWriteDelegate mIOWrite[256];
 
+    bool mExpandedSlotActive[constSections];
 };
 
 } // nowind namespace 

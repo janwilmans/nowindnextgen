@@ -29,9 +29,15 @@ bool BusComponent::inExpandedSlot()
     return mSlotSelector->getSlotExpanded(mSlot);
 }
 
+void BusComponent::activateSection(Uint8 section)
+{
+    mBus.activateSection(section, mSlot, mSubSlot, inExpandedSlot());
+    activate(section);
+}
+
 void BusComponent::activateReadSectionMemory(Uint8 section, byte* memory)
 {
-    if (section ==  constMaxSection && inExpandedSlot())
+    if (section == constMaxSection && inExpandedSlot())
     {
         // do not allow activateReadSectionMemory, because it would disable read/writes to the subslot-selection-register (0xffff)
         return;
