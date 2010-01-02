@@ -85,6 +85,7 @@ byte MemoryMapper::readIO(word port)
 
 void MemoryMapper::writeIO(word port, byte value)
 {
+    DBERR("writeIO, bank: 0x%02X, value: 0x%02X\n", port, value);
     switch(port)
     {
     case 0xfc:
@@ -135,9 +136,23 @@ byte MemoryMapper::readByte(word address)
 
 void MemoryMapper::writeByte(word address, byte value)
 {
+
+    bool print = false;
+    if (address > 0xffff) 
+    {
+        address &= 0xffff;  // appearently after '0' is passed, sometimes 0x10000 is received somehow?
+        print = true;
+    }
+    
     Uint8 page = address >> 14; // 0-3
     Uint8 currentBank = mSelectedBank[page];
     Uint32 offset = currentBank*constPageSize;   // todo: re-calucation of offset can be prevented if seporate writeByte() per page are used 
+    
+    if (print)
+    {
+        DBERR("address > 0xffff!: 0x%04X, offset: 0x%04X, currentBank: %u, page: %u\n", address, offset, currentBank, page);
+    }
+    
     mMemory[offset+(address & constPageMask)] = value;
     //DBERR("(m) write $%04X = $%02X\n", address, value);
 }

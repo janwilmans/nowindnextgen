@@ -87,17 +87,35 @@ void Emulator::initialize(void)
     mBus->addIODevice(mapper);           
     mBus->addIODevice(slotSelector);
     mBus->addIODevice(vdp);
-    slotSelector->addBusComponent(mapper, 3, 2);
-	slotSelector->addBusComponent(mainRom, 0, 0);
-    
-    //cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
-    //cpu->setupBdosEnv("asm/maptest.com");
-    
+
+/*    
+    // todo: find out why assert occurs!? 
+    slotSelector->addBusComponent(mapper, 0, 0);
+    cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     cpu->reset();
     cpu->setPC(0); //0x100 for zexall.com
     mScheduler->run(cpu);
-    //mScheduler->runNice(cpu);
+*/
 
+/*
+    // zexall      
+    slotSelector->addBusComponent(mapper, 0, 0);
+    cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
+    cpu->reset();
+    cpu->setPC(0x100);
+    mScheduler->run(cpu);
+*/
+
+
+    // normal      
+    slotSelector->addBusComponent(mapper, 3, 2);
+	slotSelector->addBusComponent(mainRom, 0, 0);
+    cpu->reset();
+    cpu->setPC(0);
+    mScheduler->run(cpu);
+
+
+    //mScheduler->runNice(cpu);
     // tests the scheduler using a dummy-cpu
     //test();
     
