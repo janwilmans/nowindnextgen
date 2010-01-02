@@ -61,13 +61,14 @@ public:
     {   
         NW_ASSERT(address < 0x10000);
         NW_ASSERT(value < 0x100);
-        if (address == 0xffff) 
+        Uint8 section = address >> constSectionShift;
+        if (address == 0xffff && mExpandedSlotActive[section]) 
         {
             mSSSRWrite(value);
         }
         else
         {
-            mWriteSection[address >> constSectionShift](address, value);
+            mWriteSection[section](address, value);
         }   
     }
 

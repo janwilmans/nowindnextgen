@@ -161,7 +161,7 @@ void Z80::reset()
     reg_hl = 0xFFFF;
     reg_ix = 0xFFFF;
     reg_iy = 0xFFFF;
-    reg_sp = 0xFFFF;
+    reg_sp = 0x0FFF;
     shadow_af = shadow_de = shadow_hl = 0xFFFF;
     shadow_b = shadow_c = 0xFF;
 
@@ -289,8 +289,13 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         
         //DBERR("%04X %-15s ", reg_pc, getMnemonics(reg_pc, readWord(reg_pc), readWord(reg_pc+2)).c_str());
         ++reg_pc;
+        
 
-        // todo: assert on all invalid register values
+        if (reg_pc > 0xffff)
+        {
+            DBERR("reg_pc to high: 0x%04X !\n", reg_pc); //todo: find out why/when this happens ?!
+            reg_pc = 0;
+        }
 
         // execute opcode
         switch (opcode)
@@ -348,7 +353,7 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
             break;
         }
         
-//        dumpStateInfo();
+        //dumpStateInfo();
 
         NW_ASSERT (reg_a < 256);
         NW_ASSERT (reg_f < 256);
@@ -358,7 +363,7 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         NW_ASSERT (reg_hl < 0x10000);
         NW_ASSERT (reg_ix < 0x10000);
         NW_ASSERT (reg_iy < 0x10000);
-        NW_ASSERT (reg_pc < 0x10000);
+        NW_ASSERT (reg_pc < 0x10000); 
         NW_ASSERT (reg_sp < 0x10000);
     }
     while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
