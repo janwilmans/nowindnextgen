@@ -101,7 +101,7 @@ private:
 
     byte opcodeFetch(word);
     void debugInstuctionCounter();
-    void dumpStateInfo();
+    void dumpStateInfo(SlotSelector& slotSelector);
 
   public:
 

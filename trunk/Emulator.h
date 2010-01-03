@@ -22,20 +22,18 @@ public:
 
     void initialize();
     void test();
-    void endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime);
 
     //test methods
     void interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime);
 
-    static SlotSelector* mSlotSelector; //TODO: REMOVE !!!
-    
     Bus& getBus() { return *mBus; }
     Scheduler& getScheduler() { return *mScheduler; }
+    SlotSelector& getSlotSelector() { return *mSlotSelector; }   //todo: remove
 
 private:
     Bus* mBus;
     Scheduler* mScheduler;
-
+    SlotSelector* mSlotSelector;    //todo: remove
 };
 
 } // namespace nowind

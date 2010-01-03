@@ -161,7 +161,7 @@ void Z80::reset()
     reg_hl = 0xFFFF;
     reg_ix = 0xFFFF;
     reg_iy = 0xFFFF;
-    reg_sp = 0x0FFF;
+    reg_sp = 0xFFFF;
     shadow_af = shadow_de = shadow_hl = 0xFFFF;
     shadow_b = shadow_c = 0xFF;
 
@@ -278,6 +278,7 @@ byte Z80::opcodeFetch(word address)
 // if we are called the scheduler has determined that at least 1 instruction needs to be executed.
 emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime)
 {
+    Sint32 emuTimeDiff = 0;
     emuTimeType localEmuTime = startTime;
     do
     {
@@ -289,7 +290,6 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         
         //DBERR("%04X %-15s ", reg_pc, getMnemonics(reg_pc, readWord(reg_pc), readWord(reg_pc+2)).c_str());
         ++reg_pc;
-        
 
         if (reg_pc > 0xffff)
         {
@@ -353,7 +353,7 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
             break;
         }
         
-        //dumpStateInfo();
+        //dumpStateInfo(mEmulator.getSlotSelector());
 
         NW_ASSERT (reg_a < 256);
         NW_ASSERT (reg_f < 256);
@@ -365,8 +365,9 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         NW_ASSERT (reg_iy < 0x10000);
         NW_ASSERT (reg_pc < 0x10000); 
         NW_ASSERT (reg_sp < 0x10000);
+        emuTimeDiff = aEndTime - localEmuTime;
     }
-    while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
+    while (emuTimeDiff > 0); // end of while-not-next-interrupt
 
     return localEmuTime;
 }
@@ -441,7 +442,7 @@ void Z80::hijackBdos()
 }
 
 
-void Z80::dumpStateInfo() 
+void Z80::dumpStateInfo(SlotSelector& slotSelector) 
 {
 	DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", reg_af, reg_bc, reg_de, reg_hl);
     DBERR(" IX:%04X IY:%04X SP:%04X F:", reg_ix, reg_iy, reg_sp);
@@ -459,9 +460,9 @@ void Z80::dumpStateInfo()
     for (int page=0;page<4;page++) 
     {
         int mainSlot = (slots>>(page*2))&3;
-        Uint8 subSlot = (Emulator::mSlotSelector->getActivateSubslots(mainSlot) >>(page*2))&3;
+        Uint8 subSlot = (slotSelector.getActivateSubslots(mainSlot) >>(page*2))&3;
         DBERR(" %u", mainSlot);
-        if (Emulator::mSlotSelector->getSlotExpanded(mainSlot)) {
+        if (slotSelector.getSlotExpanded(mainSlot)) {
             DBERR("-%u", subSlot);
         } else {
             DBERR("-.");

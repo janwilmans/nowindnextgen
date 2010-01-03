@@ -2,14 +2,11 @@
 #ifndef DEBUGGER_H
 #define DEBUGGER_H
 
+#include "basetypes.h"
 #include "Emulator.h"
-#include "Scheduler.h"
-#include "SlotSelector.h"
-#include "cpu/CPU.h"
 
 namespace nowind {
 
-class Emulator;
 class Scheduler;
 class SlotSelector;
 class Z80;
@@ -20,8 +17,11 @@ public:
     Debugger(Emulator& emulator, Scheduler& scheduler, SlotSelector& slotSelector, Z80& z80);
     enum DebugAction { DebugActionEnableInstructionLogger };
 
-    void enableInstructionLogger();
-    void instructionLogEvent();
+    void enableInstructionLogger() { enableInstructionLogger(Emulator::emuTime+1); }
+    void enableInstructionLogger(emuTimeType aTime);
+
+    void preInstructionLogEvent();
+    void instructionLogEvent(emuTimeType emuTime, emuTimeType eventTime);
     
     void eventAtEmutime(emuTimeType, DebugAction);
     void eventAtRegPc(word, DebugAction);
@@ -46,6 +46,8 @@ private:
     Scheduler& mScheduler;
     SlotSelector& mSlotSelector;
     Z80& mZ80;
+
+    char mDebugString[200];
 
     word mRegpc;
     DebugAction mRegpcAction;

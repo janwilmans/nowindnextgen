@@ -17,8 +17,6 @@ using namespace std;
 
 emuTimeType Emulator::emuTime = 0;
 
-SlotSelector* Emulator::mSlotSelector = 0;
-
 /*
 XML serialization:
 
@@ -55,8 +53,7 @@ void Emulator::initialize(void)
     MemoryMapper* mapper = new MemoryMapper(*this, 256);
 	RomMemory* mainRom = new RomMemory(*this, "mainrom.rom");
     SlotSelector* slotSelector = new SlotSelector(*this);
-    mSlotSelector = slotSelector;               //todo: remove
-    
+    mSlotSelector = slotSelector; //todo: remove
     slotSelector->setSlotExpanded(0, false);
     slotSelector->setSlotExpanded(1, false);
     slotSelector->setSlotExpanded(2, false);
@@ -113,7 +110,7 @@ void Emulator::initialize(void)
     
     Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
 
-    debugger->enableInstructionLogger();
+    //debugger->enableInstructionLogger();
     //debugger->EventAtEmutime(10*3579545, DebugAction::EnableInstructionLogger); // after 10 seconds of emutime
     //debugger->EventAtRegPc(0xC000, DebugAction::EnableInstructionLogger);
     
@@ -169,12 +166,6 @@ void Emulator::test(void)
 
     cpu->reset();
     mScheduler->run(cpu);
-}
-
-void Emulator::endOfRangeEvent(emuTimeType emuTime, emuTimeType eventTime)
-{
-    DBERR("I am the endOfRangeEvent for eventTime: %d executed at emutime: %d\n", eventTime, emuTime);
-    mScheduler->addEvent(-1, MakeDelegate(this, &Emulator::endOfRangeEvent));
 }
 
 void Emulator::interruptTestMethod(emuTimeType emuTime, emuTimeType eventTime)
