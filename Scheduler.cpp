@@ -60,9 +60,11 @@ void Scheduler::run(CPU *aCpu)
             {
                 // found expired event
                 DBERR("expired event found: %u, execute!\n", emuTime);
-
-                i->Callback(emuTime, i->GetTime());
-                i = mEventList.erase(i);
+                Event e = *i;   // copy the event, because the Callback may invalidate the iterator
+                mEventList.erase(i);
+                e.Callback(emuTime, e.GetTime());
+                i = mEventList.begin();             // TODO: something goes wrong when a Callback adds new events !
+                continue;
             }
         }
         //DBERR("execute from %u (%i) until: %u (%i)\n", emuTime, emuTime, nextEventTime, nextEventTime);
