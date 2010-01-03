@@ -21,7 +21,9 @@ namespace nowind {
 
 class Z80 : public CPU {
 
-  public:
+friend class Debugger;
+    
+public:
     Z80(Emulator& aEmulator);
     virtual ~Z80();
 
