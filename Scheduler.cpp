@@ -35,11 +35,13 @@ void Scheduler::run(CPU *aCpu)
         // todo: verify if 2^31-1 is a good default
         emuTimeType nextEventTime = emuTime + 200000;
         Sint32 diff = 0;
-        for (EventIterator i = mEventList.begin();i != mEventList.end(); i++)
+
+        EventIterator i = mEventList.begin();
+        while(i != mEventList.end())
         {
             emuTimeType eventEmuTime = i->GetTime();
             diff = eventEmuTime - emuTime;
-            DBERR(" eventEmuTime: %u (%i), diff: %i\n", eventEmuTime, eventEmuTime, diff);
+            //DBERR("eventEmuTime: %u (%i), diff: %i\n", eventEmuTime, eventEmuTime, diff);
 
             if (diff > 0)
             {
@@ -49,9 +51,9 @@ void Scheduler::run(CPU *aCpu)
                 {
                     // event closer then current next-event
                     nextEventTime = eventEmuTime;
-                    DBERR("possible next event: %u continue...\n", nextEventTime);
-                    continue;
+                    //DBERR("possible next event: %u, there could be a more urgent event, continue looking\n", nextEventTime);
                 }
+                i++;
                 continue;
             }
             // -2000 is arbitrary, it must be at least -(x+1) where x is the maximum
@@ -59,14 +61,18 @@ void Scheduler::run(CPU *aCpu)
             if (diff > -2000)
             {
                 // found expired event
-                DBERR("expired event found: %u, execute!\n", emuTime);
+                //DBERR("expired event found: %u, execute!\n", emuTime);
                 Event e = *i;   // copy the event, because the Callback may invalidate the iterator
                 mEventList.erase(i);
                 e.Callback(emuTime, e.GetTime());
-                i = mEventList.begin();             // TODO: something goes wrong when a Callback adds new events !
+
+                // restart the search, the callback can add new events
+                i = mEventList.begin();
                 continue;
             }
-        }
+            i++;
+        } // while
+
         //DBERR("execute from %u (%i) until: %u (%i)\n", emuTime, emuTime, nextEventTime, nextEventTime);
         emuTime = aCpu->ExecuteInstructions(emuTime, nextEventTime);
     }
