@@ -28,12 +28,10 @@ public:
 
     Bus& getBus() { return *mBus; }
     Scheduler& getScheduler() { return *mScheduler; }
-    SlotSelector& getSlotSelector() { return *mSlotSelector; }   //todo: remove
 
 private:
     Bus* mBus;
     Scheduler* mScheduler;
-    SlotSelector* mSlotSelector;    //todo: remove
 };
 
 } // namespace nowind

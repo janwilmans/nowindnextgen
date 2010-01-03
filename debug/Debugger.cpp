@@ -36,7 +36,13 @@ void Debugger::instructionLogEvent(emuTimeType emuTime, emuTimeType eventTime)
 
 void Debugger::eventAtEmutime(emuTimeType aTime, DebugAction action)
 {
+    mDebugAction = action;
+    mScheduler.addEvent(aTime, MakeDelegate(this, &Debugger::debugEvent));
+}
 
+void Debugger::debugEvent(emuTimeType emuTime, emuTimeType eventTime)
+{
+    executeDebugAction(mDebugAction);
 }
 
 void Debugger::eventAtRegPc(word value, DebugAction action)
@@ -44,14 +50,16 @@ void Debugger::eventAtRegPc(word value, DebugAction action)
     //todo: schedule event checkEventRegPc
     mRegpc = value;
     mRegpcAction = action;
+    mScheduler.addEvent(Emulator::emuTime+1, MakeDelegate(this, &Debugger::checkEventRegPc));
 }
 
-void Debugger::checkEventRegPc()
+void Debugger::checkEventRegPc(emuTimeType emuTime, emuTimeType eventTime)
 {
     if (mZ80.reg_pc == mRegpc) 
     {
         executeDebugAction(mRegpcAction);
     }
+    mScheduler.addEvent(Emulator::emuTime+1, MakeDelegate(this, &Debugger::checkEventRegPc));
 }
 
 void Debugger::executeDebugAction(DebugAction action)

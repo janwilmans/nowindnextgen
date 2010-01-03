@@ -24,9 +24,10 @@ public:
     void instructionLogEvent(emuTimeType emuTime, emuTimeType eventTime);
     
     void eventAtEmutime(emuTimeType, DebugAction);
-    void eventAtRegPc(word, DebugAction);
+    void debugEvent(emuTimeType emuTime, emuTimeType eventTime);
 
-    void checkEventRegPc();
+    void eventAtRegPc(word, DebugAction);
+    void checkEventRegPc(emuTimeType emuTime, emuTimeType eventTime);
     void executeDebugAction(DebugAction action);
     
     // the initialize method should create relations to other objects 
@@ -49,6 +50,7 @@ private:
 
     char mDebugString[200];
 
+    DebugAction mDebugAction;
     word mRegpc;
     DebugAction mRegpcAction;
 

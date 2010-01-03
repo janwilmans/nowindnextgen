@@ -282,88 +282,6 @@ byte NewZ80::opcodeFetch(word address)
     return oc;
 }
 
-void NewZ80::dumpCpuInfo()
-{
-
-    DBERR(" AF:%04X BC:%04X DE:%04X HL:%04X", m_reg_af, m_reg_bc, m_reg_de, m_reg_hl);
-    DBERR(" IX:%04X IY:%04X SP:%04X(%04X) F:", m_reg_ix, m_reg_iy, m_reg_sp, 0x1234);//readMem16(reg_sp));
-
-    if (m_reg_f & SFLAG) DBERR("s");
-    else DBERR(".");
-    if (m_reg_f & ZFLAG) DBERR("z");
-    else DBERR(".");
-    if (m_reg_f & 0x20) DBERR("1");
-    else DBERR("0");
-    if (m_reg_f & HFLAG) DBERR("h");
-    else DBERR(".");
-    if (m_reg_f & 0x08) DBERR("1");
-    else DBERR("0");
-    if (m_reg_f & PFLAG) DBERR("p");
-    else DBERR(".");
-    if (m_reg_f & NFLAG) DBERR("n");
-    else DBERR(".");
-    if (m_reg_f & CFLAG) DBERR("c");
-    else DBERR(".");
-
-    /*
-    int slot = ppi->readPortA();
-    for (int i=0;i<4;i++) {
-        int mainSlot = (slot>>(i*2))&3;
-        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
-        DBERR(" %u", mainSlot);
-        if (slotSelector->isExpanded(mainSlot)) {
-            DBERR("%u", subSlot);
-        } else {
-            DBERR("x");
-        }
-    }
-    */
-    DBERR("\n");
-}
-
-/* can return invalid information if the PPI is not yet initialized */
-void NewZ80::dumpSlotSelection()
-{
-
-    /*
-    int slot = ppi->readPortA();
-    DBERR("Slot selection:\n");
-    for (int i=0;i<4;i++) {
-        int mainSlot = (slot>>(i*2))&3;
-        Uint8 subSlot = slotSelector->getSelectedSubSlot(i);
-        DBERR(" page%u (%u", i, mainSlot);
-        if (slotSelector->isExpanded(mainSlot)) {
-            DBERR("-%u", subSlot);
-        }
-        DBERR(") %s\n", slotSelector->getDeviceName(i).c_str());
-    }
-    */
-}
-
-/*
-void NewZ80::dumpPages()
-{
-    string filename("dumppages.bin");
-
-    // delete the existing? file
-    ofstream ofs_delete(filename.c_str(), ios::trunc);
-    ofs_delete.close();
-
-    ofstream ofs(filename.c_str(), ios::binary);
-    if (ofs.fail())
-    {
-        DBERR("Error opening file %s!\n", filename.c_str());
-    }
-
-    for (unsigned int b = 0;b < 8;b++)
-    {
-        DBERR("readBlock[%u]: %u\n", b, readBlock[b]);
-        ofs.write((char *)readBlock[b], 8*1024);
-    }
-    ofs.close();
-}
-*/
-
 void NewZ80::saveState()
 {
     //MemoryMapper->saveState();
@@ -525,7 +443,7 @@ emuTimeType NewZ80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndT
         NW_ASSERT (reg_pc < 0x10000);
         NW_ASSERT (reg_sp < 0x10000);
     }
-    while ((aEndTime - localEmuTime) > 0); // end of while-not-next-interrupt
+    while ( ((Sint32)(aEndTime - localEmuTime)) > 0);
 
     m_reg_a = reg_a;
     m_reg_f = reg_f;

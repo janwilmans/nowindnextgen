@@ -287,8 +287,6 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         word reg2 = 0;
         word opcode = 0;
         opcode = opcodeFetch(reg_pc);
-        
-        //DBERR("%04X %-15s ", reg_pc, getMnemonics(reg_pc, readWord(reg_pc), readWord(reg_pc+2)).c_str());
         ++reg_pc;
 
         if (reg_pc > 0xffff)
@@ -365,10 +363,8 @@ emuTimeType Z80::ExecuteInstructions(emuTimeType startTime, emuTimeType aEndTime
         NW_ASSERT (reg_iy < 0x10000);
         NW_ASSERT (reg_pc < 0x10000); 
         NW_ASSERT (reg_sp < 0x10000);
-        emuTimeDiff = aEndTime - localEmuTime;
     }
-    while (emuTimeDiff > 0); // end of while-not-next-interrupt
-
+    while ( ((Sint32)(aEndTime - localEmuTime)) > 0);
     return localEmuTime;
 }
 
