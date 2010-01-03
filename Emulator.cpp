@@ -9,6 +9,7 @@
 #include "cpu/Z80.h"
 #include "cpu/NewZ80.h"
 #include "video/V9938.h"
+#include "debug/Debugger.h"
 
 using namespace fastdelegate;
 using namespace nowind;
@@ -94,7 +95,6 @@ void Emulator::initialize(void)
     cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     cpu->reset();
     cpu->setPC(0); //0x100 for zexall.com
-    mScheduler->run(cpu);
 */
 
 /*
@@ -103,18 +103,21 @@ void Emulator::initialize(void)
     cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     cpu->reset();
     cpu->setPC(0x100);
-    mScheduler->run(cpu);
 */
-
 
     // normal      
     slotSelector->addBusComponent(mapper, 3, 2);
 	slotSelector->addBusComponent(mainRom, 0, 0);
     cpu->reset();
     cpu->setPC(0);
+    
+    Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
+
+    debugger->enableInstructionLogger();
+    //debugger->EventAtEmutime(10*3579545, DebugAction::EnableInstructionLogger); // after 10 seconds of emutime
+    //debugger->EventAtRegPc(0xC000, DebugAction::EnableInstructionLogger);
+    
     mScheduler->run(cpu);
-
-
     //mScheduler->runNice(cpu);
     // tests the scheduler using a dummy-cpu
     //test();
