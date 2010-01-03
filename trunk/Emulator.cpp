@@ -53,7 +53,6 @@ void Emulator::initialize(void)
     MemoryMapper* mapper = new MemoryMapper(*this, 256);
 	RomMemory* mainRom = new RomMemory(*this, "mainrom.rom");
     SlotSelector* slotSelector = new SlotSelector(*this);
-    mSlotSelector = slotSelector; //todo: remove
     slotSelector->setSlotExpanded(0, false);
     slotSelector->setSlotExpanded(1, false);
     slotSelector->setSlotExpanded(2, false);
@@ -111,8 +110,8 @@ void Emulator::initialize(void)
     Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
 
     //debugger->enableInstructionLogger();
-    //debugger->EventAtEmutime(10*3579545, DebugAction::EnableInstructionLogger); // after 10 seconds of emutime
-    //debugger->EventAtRegPc(0xC000, DebugAction::EnableInstructionLogger);
+    debugger->eventAtEmutime(10*3579545, Debugger::DebugActionEnableInstructionLogger); // after 10 seconds of emutime
+    //debugger->eventAtRegPc(0x35f, Debugger::DebugActionEnableInstructionLogger);
     
     mScheduler->run(cpu);
     //mScheduler->runNice(cpu);
