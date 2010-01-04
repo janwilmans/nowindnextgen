@@ -9,6 +9,7 @@
 #include "cpu/Z80.h"
 #include "cpu/NewZ80.h"
 #include "video/V9938.h"
+#include "clockChip.h"
 #include "debug/Debugger.h"
 
 using namespace fastdelegate;
@@ -51,14 +52,18 @@ void Emulator::initialize(void)
     Z80* cpu = new Z80(*this);
 
     MemoryMapper* mapper = new MemoryMapper(*this, 256);
-	RomMemory* mainRom = new RomMemory(*this, "mainrom.rom");
-    SlotSelector* slotSelector = new SlotSelector(*this);
+	//RomMemory* mainRom = new RomMemory(*this, "mainrom.rom");
+	RomMemory* mainRom = new RomMemory(*this, "MSX2.ROM");
+	RomMemory* subRom = new RomMemory(*this, "MSX2EXT.ROM");
+    
+	SlotSelector* slotSelector = new SlotSelector(*this);
     slotSelector->setSlotExpanded(0, false);
     slotSelector->setSlotExpanded(1, false);
     slotSelector->setSlotExpanded(2, false);
     slotSelector->setSlotExpanded(3, true);
     
     V9938* vdp = new V9938(*this);
+	ClockChip* clockChip = new ClockChip(*this);
     
     //Ppi* ppi = new Ppi(*SlotSelector);
 
@@ -69,14 +74,18 @@ void Emulator::initialize(void)
     mapper->prepare();
     slotSelector->prepare();
     mainRom->prepare();
+	subRom->prepare();
     vdp->prepare();
+	clockChip->prepare();
     
     mBus->initialize();
     cpu->initialize();
     mapper->initialize();
     slotSelector->initialize();
     mainRom->initialize();
+	subRom->initialize();
     vdp->initialize();
+	clockChip->initialize();
     
     /* initialization of all components */ 
  
@@ -84,6 +93,7 @@ void Emulator::initialize(void)
     mBus->addIODevice(mapper);           
     mBus->addIODevice(slotSelector);
     mBus->addIODevice(vdp);
+	mBus->addIODevice(clockChip);
 
 /*    
     // todo: find out why assert occurs!? 
@@ -104,13 +114,14 @@ void Emulator::initialize(void)
     // normal      
     slotSelector->addBusComponent(mapper, 3, 2);
 	slotSelector->addBusComponent(mainRom, 0, 0);
+	slotSelector->addBusComponent(subRom, 3, 0);
     cpu->reset();
     cpu->setPC(0);
     
-    Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
+    //Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
 
     //debugger->enableInstructionLogger();
-    debugger->eventAtEmutime(10*3579545, Debugger::DebugActionEnableInstructionLogger); // after 10 seconds of emutime
+    //debugger->eventAtEmutime(10*3579545, Debugger::DebugActionEnableInstructionLogger); // after 10 seconds of emutime
     //debugger->eventAtRegPc(0x35f, Debugger::DebugActionEnableInstructionLogger);
     
     mScheduler->run(cpu);
