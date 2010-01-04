@@ -1,7 +1,9 @@
 cmake_minimum_required (VERSION 2.6) 
 project (NOWINDV2)
 
-add_subdirectory (cpu)
+add_subdirectory(cpu)
+add_subdirectory(debug)
+add_subdirectory(video)
 
 add_executable(nowind 
 
@@ -20,23 +22,19 @@ Event.cpp
 Event.h
 EventUnitTest.cpp
 EventUnitTest.h
-FastDelegateDemo.cpp
 FastDelegate.h
 MemoryMapper.cpp
 MemoryMapper.h
 nowind_nextgen.cpp
-NullDevice.cpp
-NullDevice.h
+NullComponent.cpp
+NullComponent.h
 RomMemory.cpp
 RomMemory.h
 Scheduler.cpp
 Scheduler.h
 SlotSelector.cpp
 SlotSelector.h
-Template.cpp
-Template.h
-
+ClockChip.cpp
+ClockChip.h
+${CPU_SRCS}
 )
-
-
-
