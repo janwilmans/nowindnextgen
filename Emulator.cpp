@@ -95,13 +95,13 @@ void Emulator::initialize(void)
     mBus->addIODevice(vdp);
 	mBus->addIODevice(clockChip);
 
-/*    
+    
     // todo: find out why assert occurs!? 
     slotSelector->addBusComponent(mapper, 0, 0);
     cpu->setupBdosEnv("cpu/zexall/zexall.com"); // loads rom, everything should be ready before initialize is called
     cpu->reset();
     cpu->setPC(0); //0x100 for zexall.com
-*/
+
 
 /*
     // zexall      
@@ -111,18 +111,19 @@ void Emulator::initialize(void)
     cpu->setPC(0x100);
 */
 
+/*
     // normal      
     slotSelector->addBusComponent(mapper, 3, 2);
 	slotSelector->addBusComponent(mainRom, 0, 0);
 	slotSelector->addBusComponent(subRom, 3, 0);
     cpu->reset();
     cpu->setPC(0);
-    
-    //Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
+*/    
+    Debugger* debugger = new Debugger(*this, *mScheduler, *slotSelector, *cpu);
 
     //debugger->enableInstructionLogger();
     //debugger->eventAtEmutime(10*3579545, Debugger::DebugActionEnableInstructionLogger); // after 10 seconds of emutime
-    //debugger->eventAtRegPc(0x35f, Debugger::DebugActionEnableInstructionLogger);
+    //debugger->eventAtRegPc(0x03, Debugger::DebugActionEnableInstructionLogger);
     
     mScheduler->run(cpu);
     //mScheduler->runNice(cpu);
