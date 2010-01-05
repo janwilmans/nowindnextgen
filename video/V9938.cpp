@@ -63,6 +63,10 @@ byte V9938::readPort1(word /*port*/)
 void V9938::writePort0(word port, byte value)
 {
     //DBERR("WritePort0: 0x%02x [%c]\n", value, value);
+	if ((value > 31) && (value < 128))
+	{
+		DBERR("VRAM [%c]\n", value);
+	}
 	port1DataLatched = false;
 	vram[incrementVramPointer()] = value;
 	vramLatch = value;
@@ -70,7 +74,7 @@ void V9938::writePort0(word port, byte value)
 
 void V9938::writePort1(word port, byte value)
 {
-    //DBERR("WritePort1: 0x%02x [%c]\n", value, value);
+    DBERR("WritePort1: 0x%02x [%c]\n", value, value);
 	if (port1DataLatched)
 	{
 		port1DataLatched = false;
@@ -84,7 +88,7 @@ void V9938::writePort1(word port, byte value)
 			else
 			{
 				//writeRegister(value & 0x3f, dataLatch);
-				DBERR("writeRegister %d [%0x2d]\n", value & 0x3f, dataLatch);
+				DBERR("writeRegister %d [0x%02x]\n", value & 0x3f, dataLatch);
 			}
 		}
 		else
