@@ -2,6 +2,7 @@
 #ifndef CLOCKCHIP_H
 #define CLOCKCHIP_H
 
+#include <time.h>
 #include "BusComponent.h"
 
 namespace nowind {
@@ -36,6 +37,12 @@ private:
 	void writeData(word port, byte value);
 
 	byte address;
+	time_t timeDiff;
+
+	byte modeRegister;
+	byte testRegister;
+	byte resetRegister;
+	byte dataRegister[13][3];
 };
 
 } // namespace nowind
