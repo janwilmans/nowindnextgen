@@ -41,7 +41,6 @@ private:
 
 	byte modeRegister;
 	byte testRegister;
-	byte resetRegister;
 	byte dataRegister[13][3];
 };
 

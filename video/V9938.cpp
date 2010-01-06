@@ -65,7 +65,7 @@ void V9938::writePort0(word port, byte value)
     //DBERR("WritePort0: 0x%02x [%c]\n", value, value);
 	if ((value > 31) && (value < 128))
 	{
-		DBERR("VRAM [%c]\n", value);
+		//DBERR("VRAM [%c]\n", value);
 	}
 	port1DataLatched = false;
 	vram[incrementVramPointer()] = value;
@@ -83,12 +83,12 @@ void V9938::writePort1(word port, byte value)
 			if (value & 0x40) 
 			{
 				// TODO: check what happens (SNOW26 demo and space manbow/undeadline?)
-				NW_ASSERT(false);
+				DBERR("BBBBIGGGGGGGGG TODOOOOOOOOOO, what really happens here?!\n");
+				//NW_ASSERT(false);
 			}
 			else
 			{
-				//writeRegister(value & 0x3f, dataLatch);
-				DBERR("writeRegister %d [0x%02x]\n", value & 0x3f, dataLatch);
+				writeRegister(value & 0x3f);
 			}
 		}
 		else
@@ -107,12 +107,35 @@ void V9938::writePort1(word port, byte value)
 
 void V9938::writePort2(word port, byte value)
 {
-    DBERR("WritePort2: 0x%02x [%c]\n", value, value);
+    //DBERR("WritePort2: 0x%02x [%c]\n", value, value);
+	if (port2DataLatched)
+	{
+		DBERR("write pallette[%u] value=0x%02x latch=0x%02x\n", vdpRegister[16], value, dataLatch);
+		vdpRegister[16]++;
+		port2DataLatched = false;
+	}
+	else
+	{
+		dataLatch = value;
+		port2DataLatched = true;
+	}
 }
 
 void V9938::writePort3(word port, byte value)
 {
-    DBERR("WritePort3: 0x%02x [%c]\n", value, value);
+	dataLatch = value;
+	byte index = vdpRegister[17] & 0x3f;
+	if (index != 17)
+	{
+		DBERR("indirect register write (using reg17\n");
+		writeRegister(index);
+	}
+	if ((vdpRegister[17] & 0x80) == 0)
+	{
+		// autoincrement
+		index++;
+		vdpRegister[17] = index & 0x3f;
+	}
 }
 
 Uint32 V9938::incrementVramPointer()
@@ -123,4 +146,10 @@ Uint32 V9938::incrementVramPointer()
 	vramPointer++;
 	vramPointer &= 0x3fff; // Todo: in MSX2 128 kB should be addressable
 	return vramPointer;
+}
+
+void V9938::writeRegister(byte reg)
+{
+	DBERR("writeRegister %d [0x%02x]\n", reg & 0x3f, dataLatch);
+	vdpRegister[reg & 0x3f] = dataLatch;
 }

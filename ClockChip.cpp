@@ -12,7 +12,7 @@ ClockChip::ClockChip(Emulator& aEmulator) : BusComponent(aEmulator)
 
 	modeRegister = 0;	// todo: verify initial values
 	testRegister = 0;
-	resetRegister = 0;
+	//resetRegister = 0; // todo: bijhouden?
 
 	for (int i=0;i<3;i++)
 	{
@@ -56,6 +56,7 @@ void ClockChip::detachIO()
 
 byte ClockChip::readData(word /*port*/)
 {
+	// mask unused bits (block0 and 1)
 	//DBERR("RTC: read[%u] (emuTime %d)\n", address, Emulator::emuTime);
 	//return 255;
 	switch(address)
@@ -107,7 +108,7 @@ byte ClockChip::readData(word /*port*/)
 	if ((block == 1) && (address = 0x0b)) {
 		// todo: update leap year (in alarm block)
 	}
-	DBERR("RTC: read register[%u][%u] value=0x%02x\n", address, modeRegister&3, dataRegister[address][block-1] | 0xf0);
+	DBERR("RTC: read register[%u][%u] value=0x%02x\n", address, block, dataRegister[address][block-1] | 0xf0);
 	return dataRegister[address][block-1] | 0xf0;
 }
 
@@ -134,10 +135,15 @@ void ClockChip::writeData(word /*port*/, byte value)
 		break;
 	case 0x0f:
 		DBERR("RTC: write resetRegister[0x%02x]\n", value);
-		resetRegister = value;
+		if (value & 1)
+		{
+			// reset ALARM
+			for (int i=2;i<=8;i++) dataRegister[i][0] = 0;
+		}
+		// todo: reset seconds?
 		break;
 	default:
-		DBERR("RTC: write register[%u][%u] with 0x%02x\n", address, modeRegister&3, value);
+		DBERR("RTC: write register[0x%02x][%u] with 0x%02x\n", address, modeRegister&3, value);
 		dataRegister[address][(modeRegister & 3)-1] = value;
 	}
 }
