@@ -39,6 +39,8 @@ private:
     void writePort2(word port, byte value);
     void writePort3(word port, byte value);
 
+	void writeRegister(byte reg);
+
 	// bus interface
 	byte dataLatch;
 	bool port1DataLatched;
