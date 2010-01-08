@@ -20,6 +20,8 @@ ENDIF()
 SET(EXTRA_FILES mainrom.rom MSX2.ROM MSX2EXT.ROM)
 
 add_executable(nowind 
+   WIN32  # Only if you don't want the DOS prompt to appear in the background in Windows
+   MACOSX_BUNDLE
 
 basetypes.h
 BusComponent.cpp
@@ -76,3 +78,4 @@ SOURCE_GROUP("debugger" REGULAR_EXPRESSION debugger/.* )
 SOURCE_GROUP("tests" FILES EventUnitTest.cpp EventUnitTest.h )
 SOURCE_GROUP("main" FILES basetypes.h briljant_ideas.txt debug.cpp debug.h FastDelegate.h nowind_nextgen.cpp )
 SOURCE_GROUP("infrastructure" FILES BusComponent.cpp BusComponent.h Bus.cpp Bus.h Event.cpp Event.h Emulator.cpp Emulator.h)
+
