@@ -1,1 +1,4 @@
-cmake -G "Visual Studio 9 2008"
+mkdir release
+cd release
+cmake -G "Visual Studio 9 2008" ..
+pause
