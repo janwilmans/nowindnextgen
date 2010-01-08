@@ -50,8 +50,6 @@ Scheduler.cpp
 Scheduler.h
 SlotSelector.cpp
 SlotSelector.h
-ClockChip.cpp
-ClockChip.h
 cpu/CPU.cpp
 cpu/CPU.h
 cpu/Z80.cpp
