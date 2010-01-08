@@ -9,3 +9,7 @@ NewZ80.h
 Z80.cpp
 Z80.h
 )
+
+
+SOURCE_GROUP(*.cpp *.h *.inc)
+

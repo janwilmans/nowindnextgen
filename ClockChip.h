@@ -36,12 +36,12 @@ private:
 	void writeAddress(word port, byte value);
 	void writeData(word port, byte value);
 
-	byte address;
-	time_t timeDiff;
+	byte mAddress;
+	time_t mTimeDiff;
 
-	byte modeRegister;
-	byte testRegister;
-	byte dataRegister[13][3];
+	byte mModeRegister;
+	byte mTestRegister;
+	byte mDataRegister[13][3];
 };
 
 } // namespace nowind
