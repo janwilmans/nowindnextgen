@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6) 
-project (NOWINDV2)
+project (NOWIND_EMUV2)
 
 add_subdirectory(cpu)
 add_subdirectory(debug)
