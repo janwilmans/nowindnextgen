@@ -1,43 +1,6 @@
 cmake_minimum_required (VERSION 2.6) 
 project (NOWIND_EMUV2)
 
-   MACRO(COPY_IF_DIFFERENT FROM_DIR TO_DIR FILES TARGETS TAGS)
-   # Macro to implement copy_if_different for a list of files
-   # Arguments - 
-   #   FROM_DIR - this is the source directory
-   #   TO_DIR   - this is the destination directory
-   #   FILES    - names of the files to copy 
-   #              TODO: add globing. 
-   #   TARGETS  - List of targets
-   #   TAGS     - Since only the file name is used
-   #              to generate rules, pre-pend a user 
-   #              supplied tag to prevent duplicate rule errors. 
-   SET(AddTargets "")
-   FOREACH(SRC ${FILES})
-       GET_FILENAME_COMPONENT(SRCFILE ${SRC} NAME) 
-       # Command to copy the files to ${STEP1}/src, if changed.
-       SET(TARGET  "${TAGS}/${SRCFILE}")
-       IF("${FROM_DIR}" STREQUAL "")
-           SET(FROM ${SRC})
-       ELSE("${FROM_DIR}" STREQUAL "")
-           SET(FROM ${FROM_DIR}/${SRC})
-       ENDIF("${FROM_DIR}" STREQUAL "")        
-       IF("${TO_DIR}" STREQUAL "")
-           SET(TO ${SRCFILE})
-       ELSE("${TO_DIR}" STREQUAL "")
-           SET(TO   ${TO_DIR}/${SRCFILE})
-       ENDIF("${TO_DIR}" STREQUAL "")
-       ADD_CUSTOM_COMMAND(
-           OUTPUT  ${TARGET}
-           COMMAND ${CMAKE_COMMAND}
-           ARGS    -E copy_if_different ${FROM} ${TO}
-           COMMENT "Copying ${SRCFILE} ${TO_DIR}"
-           )
-       SET(AddTargets ${AddTargets} ${TARGET})
-   ENDFOREACH(SRC ${FILES})
-   SET(${TARGETS} ${AddTargets})
-   ENDMACRO(COPY_IF_DIFFERENT FROM_DIR TO_DIR FILES TARGETS TAGS)
-
 INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}")
 INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/SDL/include")
 
@@ -102,9 +65,16 @@ cpu/opcodesDDCB.inc
 cpu/opcodesED.inc
 video/V9938.cpp
 video/V9938.h
+debug/Debugger.cpp
+debug/Debugger.h
 
 )
 
 TARGET_LINK_LIBRARIES(nowind ${SDL_LIBRARY}) 
 
 SOURCE_GROUP("cpu" REGULAR_EXPRESSION cpu/.* )
+SOURCE_GROUP("video" REGULAR_EXPRESSION video/.* )
+SOURCE_GROUP("debugger" REGULAR_EXPRESSION debugger/.* )
+SOURCE_GROUP("tests" FILES EventUnitTest.cpp EventUnitTest.h )
+SOURCE_GROUP("main" FILES basetypes.h briljant_ideas.txt debug.cpp debug.h FastDelegate.h nowind_nextgen.cpp )
+SOURCE_GROUP("infrastructure" FILES BusComponent.cpp BusComponent.h Bus.cpp Bus.h Event.cpp Event.h Emulator.cpp Emulator.h)
