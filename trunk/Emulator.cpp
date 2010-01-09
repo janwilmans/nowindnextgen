@@ -9,7 +9,7 @@
 #include "cpu/Z80.h"
 #include "cpu/NewZ80.h"
 #include "video/V9938.h"
-#include "clockChip.h"
+#include "ClockChip.h"
 #include "debug/Debugger.h"
 
 using namespace fastdelegate;
