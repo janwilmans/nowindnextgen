@@ -1,7 +1,7 @@
 #include "Scheduler.h"
 #include "Emulator.h"
 #include "cpu/CPU.h"
-#include "Debug.h"
+#include "debug.h"
 #include <stdio.h>
 
 static Uint32 Ranges = 4;
