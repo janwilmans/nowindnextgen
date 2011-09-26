@@ -5,8 +5,31 @@
 #include "GLWidget.h"
 #include "debug.h"
 
+// OpenGL limitation: a textures width and height need to be powers of 2
+//
+
 void setup2d_org(GLsizei width, GLsizei height)
 {
+
+/*
+_glFormat = GL_RGB;  // Better since QImage RGBA is BGRA
+_glType = GL_UNSIGNED_BYTE;
+
+QGL::setPreferredPaintEngine(QPaintEngine::OpenGL2);
+
+QGLFormat glFmt;
+glFmt.setSwapInterval(1); // 1= vsync on 
+glFmt.setAlpha(GL_RGBA==_glFormat);
+glFmt.setRgba(GL_RGBA==_glFormat); 
+glFmt.setDoubleBuffer(true); // default
+glFmt.setOverlay(false);
+glFmt.setSampleBuffers(false);
+QGLFormat::setDefaultFormat(glFmt);
+
+setAttribute(Qt::WA_OpaquePaintEvent,true);
+setAttribute(Qt::WA_PaintOnScreen,true);   
+*/
+
     glViewport(0,0,width,height);
     glMatrixMode(GL_PROJECTION);    // first edit the projection matrix
     glLoadIdentity();               // clear the projection matrix
@@ -26,14 +49,26 @@ void setup2d_org(GLsizei width, GLsizei height)
 
 
 /*  Create checkerboard texture  */
-#define checkImageWidth 64
-#define checkImageHeight 64
+#define checkImageWidth 512
+#define checkImageHeight 424
 static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 
 static GLuint texName;
+QImage myTexture, myImage;
 
 void makeCheckImage(void)
 {
+   bool result = myImage.load("./aleste21.png");
+   if (result)
+   {
+        myTexture = QGLWidget::convertToGLFormat(myImage);
+       nw_debug("image loaded!\n");
+   }
+   else
+   {
+       nw_debug("image not found!\n");
+   }
+
    int i, j, c;
 
    for (i = 0; i < checkImageHeight; i++) {
@@ -72,9 +107,14 @@ void setup2d(GLsizei width, GLsizei height)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // try GL_LINEAR for bi-linear interpolation
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+    /*
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
                 checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                 checkImage);
+    */
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, myTexture.width(),
+        myTexture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+        myTexture.bits());
 }
 
 int DrawGLScene_2shapes(GLfloat width, GLfloat height)					// Here's Where We Do All The Drawing
@@ -116,7 +156,7 @@ int DrawGLScene_2shapes(GLfloat width, GLfloat height)					// Here's Where We Do
 	return TRUE;										// Keep Going
 }
 
-float theta = 0.0f;
+float theta = 0.0;
 
 int DrawGLScene(GLfloat width, GLfloat height)
 {
@@ -128,8 +168,9 @@ int DrawGLScene(GLfloat width, GLfloat height)
 
     glRotatef( theta, 0.0f, 0.0f, 1.0f );
 
-    // bind texture
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+    // bind texture
     glBindTexture(GL_TEXTURE_2D, texName);
 
 	glBegin(GL_QUADS);									// Draw A Quad
@@ -138,7 +179,8 @@ int DrawGLScene(GLfloat width, GLfloat height)
 		glTexCoord2f(1.0, 0.0); glVertex3f(1.0f, 0.0f, 0.0f);					// Bottom Right
 		glTexCoord2f(0.0, 0.0); glVertex3f(0.0f, 0.0f, 0.0f);					// Bottom Left
 	glEnd();											// Done Drawing The Quad
-	glFlush();
+
+    glFlush();
 	glDisable(GL_TEXTURE_2D);
 	return TRUE;										// Keep Going
 }
@@ -150,6 +192,14 @@ void GLWidget::paintEvent(QPaintEvent *event)
     DrawGLScene(this->width(), this->height());
     swapBuffers();  // actual paint the screen
 }
+
+
+/*
+void GLWidget::resizeEvent(QResizeEvent* event)
+{
+    nw_debug("resizeEvent width: %u, height: %u\n", this->width(), this->height());
+}
+*/
 
 void GLWidget::animate()
 {

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'MainWindow.ui'
 **
-** Created: Sat 7. Nov 16:35:45 2009
+** Created: Sun Sep 25 21:20:26 2011
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -43,36 +43,37 @@ public:
     QMenuBar *menubar;
     QMenu *menu_File;
     QMenu *menu_Edit;
+    QMenu *menu_Debugger;
     QMenu *menu_Advanced;
     QMenu *menu_ViewSettings;
     QStatusBar *statusbar;
 
-    void setupUi(QMainWindow *MainWindow)
+    void setupUi(QMainWindow *Nowind_Emulator__The_Next_Generation)
     {
-    if (MainWindow->objectName().isEmpty())
-        MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-    MainWindow->resize(478, 470);
-    action_Quit = new QAction(MainWindow);
+    if (Nowind_Emulator__The_Next_Generation->objectName().isEmpty())
+        Nowind_Emulator__The_Next_Generation->setObjectName(QString::fromUtf8("Nowind_Emulator__The_Next_Generation"));
+    Nowind_Emulator__The_Next_Generation->resize(640, 480);
+    action_Quit = new QAction(Nowind_Emulator__The_Next_Generation);
     action_Quit->setObjectName(QString::fromUtf8("action_Quit"));
-    action_foo1 = new QAction(MainWindow);
+    action_foo1 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo1->setObjectName(QString::fromUtf8("action_foo1"));
-    action_foo2 = new QAction(MainWindow);
+    action_foo2 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo2->setObjectName(QString::fromUtf8("action_foo2"));
-    action_foo3 = new QAction(MainWindow);
+    action_foo3 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo3->setObjectName(QString::fromUtf8("action_foo3"));
-    action_foo4 = new QAction(MainWindow);
+    action_foo4 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo4->setObjectName(QString::fromUtf8("action_foo4"));
-    action_foo5 = new QAction(MainWindow);
+    action_foo5 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo5->setObjectName(QString::fromUtf8("action_foo5"));
-    action_foo6 = new QAction(MainWindow);
+    action_foo6 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo6->setObjectName(QString::fromUtf8("action_foo6"));
-    action_foo7 = new QAction(MainWindow);
+    action_foo7 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo7->setObjectName(QString::fromUtf8("action_foo7"));
-    action_foo8 = new QAction(MainWindow);
+    action_foo8 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo8->setObjectName(QString::fromUtf8("action_foo8"));
-    action_foo9 = new QAction(MainWindow);
+    action_foo9 = new QAction(Nowind_Emulator__The_Next_Generation);
     action_foo9->setObjectName(QString::fromUtf8("action_foo9"));
-    centralwidget = new QWidget(MainWindow);
+    centralwidget = new QWidget(Nowind_Emulator__The_Next_Generation);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
     hboxLayout = new QHBoxLayout(centralwidget);
     hboxLayout->setSpacing(6);
@@ -83,25 +84,28 @@ public:
 
     hboxLayout->addWidget(globject);
 
-    MainWindow->setCentralWidget(centralwidget);
-    menubar = new QMenuBar(MainWindow);
+    Nowind_Emulator__The_Next_Generation->setCentralWidget(centralwidget);
+    menubar = new QMenuBar(Nowind_Emulator__The_Next_Generation);
     menubar->setObjectName(QString::fromUtf8("menubar"));
     menubar->setGeometry(QRect(0, 0, 78, 19));
     menu_File = new QMenu(menubar);
     menu_File->setObjectName(QString::fromUtf8("menu_File"));
     menu_Edit = new QMenu(menubar);
     menu_Edit->setObjectName(QString::fromUtf8("menu_Edit"));
+    menu_Debugger = new QMenu(menubar);
+    menu_Debugger->setObjectName(QString::fromUtf8("menu_Debugger"));
     menu_Advanced = new QMenu(menubar);
     menu_Advanced->setObjectName(QString::fromUtf8("menu_Advanced"));
     menu_ViewSettings = new QMenu(menubar);
     menu_ViewSettings->setObjectName(QString::fromUtf8("menu_ViewSettings"));
-    MainWindow->setMenuBar(menubar);
-    statusbar = new QStatusBar(MainWindow);
+    Nowind_Emulator__The_Next_Generation->setMenuBar(menubar);
+    statusbar = new QStatusBar(Nowind_Emulator__The_Next_Generation);
     statusbar->setObjectName(QString::fromUtf8("statusbar"));
-    MainWindow->setStatusBar(statusbar);
+    Nowind_Emulator__The_Next_Generation->setStatusBar(statusbar);
 
     menubar->addAction(menu_File->menuAction());
     menubar->addAction(menu_Edit->menuAction());
+    menubar->addAction(menu_Debugger->menuAction());
     menubar->addAction(menu_Advanced->menuAction());
     menubar->addAction(menu_ViewSettings->menuAction());
     menu_File->addAction(action_Quit);
@@ -124,14 +128,14 @@ public:
     menu_ViewSettings->addAction(action_foo8);
     menu_ViewSettings->addAction(action_foo9);
 
-    retranslateUi(MainWindow);
+    retranslateUi(Nowind_Emulator__The_Next_Generation);
 
-    QMetaObject::connectSlotsByName(MainWindow);
+    QMetaObject::connectSlotsByName(Nowind_Emulator__The_Next_Generation);
     } // setupUi
 
-    void retranslateUi(QMainWindow *MainWindow)
+    void retranslateUi(QMainWindow *Nowind_Emulator__The_Next_Generation)
     {
-    MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+    Nowind_Emulator__The_Next_Generation->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
     action_Quit->setText(QApplication::translate("MainWindow", "&Quit", 0, QApplication::UnicodeUTF8));
     action_foo1->setText(QApplication::translate("MainWindow", "foofoofoofoo&1", 0, QApplication::UnicodeUTF8));
     action_foo2->setText(QApplication::translate("MainWindow", "foofoofoofoo&2", 0, QApplication::UnicodeUTF8));
@@ -144,7 +148,8 @@ public:
     action_foo9->setText(QApplication::translate("MainWindow", "foofoofoofoo&9", 0, QApplication::UnicodeUTF8));
     menu_File->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
     menu_Edit->setTitle(QApplication::translate("MainWindow", "&Edit", 0, QApplication::UnicodeUTF8));
-    menu_Advanced->setTitle(QApplication::translate("MainWindow", "&Advanced Options", 0, QApplication::UnicodeUTF8));
+    menu_Debugger->setTitle(QApplication::translate("MainWindow", "&Debugger", 0, QApplication::UnicodeUTF8));
+    menu_Advanced->setTitle(QApplication::translate("MainWindow", "&Advanced Settings", 0, QApplication::UnicodeUTF8));
     menu_ViewSettings->setTitle(QApplication::translate("MainWindow", "&View Settings", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

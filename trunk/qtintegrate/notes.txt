@@ -1,5 +1,14 @@
 
 
+http://www.gamasutra.com/view/feature/3361/understanding_and_using_opengl_.php?page=2
+http://labs.qt.nokia.com/2010/01/11/qt-graphics-and-performance-the-cost-of-convenience/
+
+http://www.100fps.com/how_many_frames_can_humans_see.htm
+http://stackoverflow.com/questions/2861478/2d-hud-not-drawing-properly-over-qglwidget-using-qpainter
+
+
 http://www.digitalfanatics.org/projects/qt_tutorial/chapter14.html
 
 
+ OpenGL limitation: a textures width and height need to be powers of 2
+ 

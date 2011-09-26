@@ -1,150 +1,155 @@
 <ui version="4.0" >
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>478</width>
-    <height>470</height>
-   </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>MainWindow</string>
-  </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QHBoxLayout" >
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <property name="leftMargin" >
-     <number>9</number>
-    </property>
-    <property name="topMargin" >
-     <number>9</number>
-    </property>
-    <property name="rightMargin" >
-     <number>9</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>9</number>
-    </property>
-    <item>
-     <widget class="GLWidget" name="globject" >
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>78</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu_File" >
-    <property name="title" >
-     <string>&amp;File</string>
-    </property>
-		<addaction name="action_Quit" />
-   </widget>
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="Nowind Emulator, The Next Generation" >
+        <property name="geometry" >
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>640</width>
+                <height>480</height>
+            </rect>
+        </property>
+        <property name="windowTitle" >
+            <string>MainWindow</string>
+        </property>
+        <widget class="QWidget" name="centralwidget" >
+            <layout class="QHBoxLayout" >
+                <property name="spacing" >
+                    <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                    <number>9</number>
+                </property>
+                <property name="topMargin" >
+                    <number>9</number>
+                </property>
+                <property name="rightMargin" >
+                    <number>9</number>
+                </property>
+                <property name="bottomMargin" >
+                    <number>9</number>
+                </property>
+                <item>
+                    <widget class="GLWidget" name="globject" >
+                    </widget>
+                </item>
+            </layout>
+        </widget>
+        <widget class="QMenuBar" name="menubar" >
+            <property name="geometry" >
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>78</width>
+                    <height>19</height>
+                </rect>
+            </property>
+            <widget class="QMenu" name="menu_File" >
+                <property name="title" >
+                    <string>&amp;File</string>
+                </property>
+                <addaction name="action_Quit" />
+            </widget>
+            <widget class="QMenu" name="menu_Edit" >
+                <property name="title" >
+                    <string>&amp;Edit</string>
+                </property>
+            </widget>
+            <widget class="QMenu" name="menu_Debugger" >
+                <property name="title" >
+                    <string>&amp;Debugger</string>
+                </property>
+            </widget>
+            <widget class="QMenu" name="menu_Advanced" >
+                <property name="title" >
+                    <string>&amp;Advanced Settings</string>
+                </property>
+                <addaction name="action_foo1" />
+                <addaction name="action_foo2" />
+                <addaction name="action_foo3" />
+                <addaction name="action_foo4" />
+                <addaction name="action_foo5" />
+                <addaction name="action_foo6" />
+                <addaction name="action_foo7" />
+                <addaction name="action_foo8" />
+                <addaction name="action_foo9" />
+            </widget>
 
-		<widget class="QMenu" name="menu_Edit" >
-			<property name="title" >
-				<string>&amp;Edit</string>
-			</property>
-		</widget>
-		<widget class="QMenu" name="menu_Advanced" >
-			<property name="title" >
-				<string>&amp;Advanced Options</string>
-			</property>
-			<addaction name="action_foo1" />
-			<addaction name="action_foo2" />
-			<addaction name="action_foo3" />
-			<addaction name="action_foo4" />
-			<addaction name="action_foo5" />
-			<addaction name="action_foo6" />
-			<addaction name="action_foo7" />
-			<addaction name="action_foo8" />
-			<addaction name="action_foo9" />
-		</widget>
+            <widget class="QMenu" name="menu_ViewSettings" >
+                <property name="title" >
+                    <string>&amp;View Settings</string>
+                </property>
+                <addaction name="action_foo1" />
+                <addaction name="action_foo2" />
+                <addaction name="action_foo3" />
+                <addaction name="action_foo4" />
+                <addaction name="action_foo5" />
+                <addaction name="action_foo6" />
+                <addaction name="action_foo7" />
+                <addaction name="action_foo8" />
+                <addaction name="action_foo9" />
+            </widget>
 
-		<widget class="QMenu" name="menu_ViewSettings" >
-			<property name="title" >
-				<string>&amp;View Settings</string>
-			</property>
-			<addaction name="action_foo1" />
-			<addaction name="action_foo2" />
-			<addaction name="action_foo3" />
-			<addaction name="action_foo4" />
-			<addaction name="action_foo5" />
-			<addaction name="action_foo6" />
-			<addaction name="action_foo7" />
-			<addaction name="action_foo8" />
-			<addaction name="action_foo9" />
-		</widget>
+            <addaction name="menu_File" />
+            <addaction name="menu_Edit" />
+            <addaction name="menu_Debugger" />
+            <addaction name="menu_Advanced" />
+            <addaction name="menu_ViewSettings" />
+        </widget>
+        <widget class="QStatusBar" name="statusbar" />
+        <action name="action_Quit" >
+            <property name="text" >
+                <string>&amp;Quit</string>
+            </property>
+        </action>
 
-		<addaction name="menu_File" />
-		<addaction name="menu_Edit" />
-		<addaction name="menu_Advanced" />
-		<addaction name="menu_ViewSettings" />
-	</widget>
-  <widget class="QStatusBar" name="statusbar" />
-  <action name="action_Quit" >
-   <property name="text" >
-    <string>&amp;Quit</string>
-   </property>
-  </action>
+        <action name="action_foo1" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;1</string>
+            </property>
+        </action>
+        <action name="action_foo2" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;2</string>
+            </property>
+        </action>
+        <action name="action_foo3" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;3</string>
+            </property>
+        </action>
+        <action name="action_foo4" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;4</string>
+            </property>
+        </action>
+        <action name="action_foo5" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;5</string>
+            </property>
+        </action>
+        <action name="action_foo6" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;6</string>
+            </property>
+        </action>
+        <action name="action_foo7" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;7</string>
+            </property>
+        </action>
+        <action name="action_foo8" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;8</string>
+            </property>
+        </action>
+        <action name="action_foo9" >
+            <property name="text" >
+                <string>foofoofoofoo&amp;9</string>
+            </property>
+        </action>
 
-	 <action name="action_foo1" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;1</string>
-		 </property>
-	 </action>
-	 <action name="action_foo2" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;2</string>
-		 </property>
-	 </action>
-	 <action name="action_foo3" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;3</string>
-		 </property>
-	 </action>
-	 <action name="action_foo4" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;4</string>
-		 </property>
-	 </action>
-	 <action name="action_foo5" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;5</string>
-		 </property>
-	 </action>
-	 <action name="action_foo6" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;6</string>
-		 </property>
-	 </action>
-	 <action name="action_foo7" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;7</string>
-		 </property>
-	 </action>
-	 <action name="action_foo8" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;8</string>
-		 </property>
-	 </action>
-	 <action name="action_foo9" >
-		 <property name="text" >
-			 <string>foofoofoofoo&amp;9</string>
-		 </property>
-	 </action>
-
- </widget>
- <resources/>
- <connections/>
+    </widget>
+    <resources/>
+    <connections/>
 </ui>

@@ -13,8 +13,10 @@ public:
     ~GLWidget();
     
     virtual void animate();
-    
     virtual void paintEvent(QPaintEvent *event);
+
+protected:
+    //virtual void resizeEvent(QResizeEvent* event);
 
 };
 
