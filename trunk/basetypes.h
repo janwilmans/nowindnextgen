@@ -63,5 +63,6 @@ static const Uint32 constMaxSection = constSections-1;
 
 #endif // BASETYPES_H
 
-// todo: use SDL types for Uint16/Uint32 through out the emulator
-//       instead of windows specific types or unsigned long / unsigned int
+// todo: 
+// - use nowind::byte/nowind::word -in all and only in- methods that deal with emulated cpu data, so data from registers, io ports etc.
+// - otherwise default to 'int', use 'unsigned int' only when it matters.

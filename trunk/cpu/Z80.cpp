@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include "Bus.h"
 #include "SlotSelector.h"       //todo: remove
+#include "Emulator.h"
 
 #define CONSOLE_DEBUGGING_ON
 #define FULL_SPEED_ON
@@ -73,7 +74,7 @@ Z80::Z80(Emulator& aEmulator) : CPU(aEmulator)
 
 void Z80::prepare()
 {
-
+    DBERR("z80 prepare\n");
 }
 
 void Z80::initialize()
@@ -131,7 +132,7 @@ void Z80::setupBdosEnv(const char* filename)
 
 void Z80::prepare_shutdown()
 {
-
+    DBERR("z80 prepare_shutdown\n");
 }
 
 Z80::~Z80()

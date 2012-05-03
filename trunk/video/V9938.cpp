@@ -74,7 +74,7 @@ void V9938::writePort0(word port, byte value)
 
 void V9938::writePort1(word port, byte value)
 {
-    DBERR("WritePort1: 0x%02x [%c]\n", value, value);
+    //DBERR("WritePort1: 0x%02x [%c]\n", value, value);
 	if (port1DataLatched)
 	{
 		port1DataLatched = false;
