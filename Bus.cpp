@@ -1,6 +1,7 @@
 #include "Bus.h"
 #include "Scheduler.h"
 #include "BusComponent.h"
+#include "Emulator.h"
 
 using namespace nowind;
 using namespace fastdelegate;

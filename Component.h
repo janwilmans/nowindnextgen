@@ -3,12 +3,11 @@
 #define COMPONENT_H
 
 #include "basetypes.h"
-#include "Emulator.h"
 
 namespace nowind {
 
 class Scheduler;
-class Emulator; // why is this needed?
+class Emulator;
 
 // a Component is an emulated object that exists in the real world
 // it has a name and can provide a descriptive 'state-string'

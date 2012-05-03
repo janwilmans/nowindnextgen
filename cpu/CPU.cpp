@@ -2,6 +2,7 @@
 
 #include "debug.h"
 #include "cpu/CPU.h"
+#include "Emulator.h"
 
 using namespace nowind;
 

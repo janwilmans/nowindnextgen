@@ -36,6 +36,16 @@ Emulator* Emulator::Instance()
     return &lInstance;
 }
 
+/*
+todo: verify this claim:
+ windows thread scheduler causes acccuracy of Sleep() to be around 15ms (so Sleep can easily wait for 20ms, even if scheduled to wait just for 1ms).
+ with sleep() you specify a _minimum_ sleep time, then it's up to the scheduler to wake up your thread after that
+ or in another way:
+ "The thread will not be scheduled for execution by the operating system for the amount of time specified. ", but you get no guarantees, 
+ about when it _will_ be scheduled again. (it is however very likely to happen in the upcoming 16-20ms after the specified time.)
+*/
+
+
 // create and initialize _everything_
 void Emulator::initialize(void)
 {

@@ -11,13 +11,14 @@
 
 #include "basetypes.h"
 #include "FastDelegate.h"
-#include "Emulator.h"
 #include "debug.h"
 
 #include "Bus.h"
 #include "cpu/CPU.h"
 
 namespace nowind {
+
+class Emulator;
 
 class Z80 : public CPU {
 
