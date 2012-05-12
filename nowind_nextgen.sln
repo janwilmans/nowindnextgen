@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nowind_nextgen", "nowind_nextgen.vcproj", "{585903A2-D2A4-432D-BD1F-6CBC6B947A9D}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nowind_nextgen", "nowind_nextgen.vcxproj", "{585903A2-D2A4-432D-BD1F-6CBC6B947A9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
