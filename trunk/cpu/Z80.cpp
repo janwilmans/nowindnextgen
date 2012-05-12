@@ -47,9 +47,28 @@ using namespace nowind;
 
 //  create read/write mem fp's
 
+// int* a = new int[3] { 1, 2, 0 }; //C++11 only // NOT OK
+// vector<string> vs={ "first", "second", "third"};  // NOT OK
+
+ std::tr1::shared_ptr<int>  f;  // OK
+
+ /*
+class C
+{
+ int a=7; //C++11 only  // not OK
+public:
+ C();
+};
+
+*/
+
 Z80::Z80(Emulator& aEmulator) : CPU(aEmulator)
 {
     DBERR("Z80 constructor...\n");
+
+    // test C++11 
+    auto x=0;       //OK
+
      
     /* set the CPU frequency to MSX's normal 3,57 Mhz */
     cpuFrequency = 3579545;

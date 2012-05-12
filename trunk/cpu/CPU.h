@@ -135,6 +135,9 @@ protected:
     virtual void prepare_shutdown() = 0;  
     
     std::string getMnemonics(word pc, word w1, word w2);
+
+    // test
+    static const int test = 0;  //OK
 };
 
 } // namespace nowind
