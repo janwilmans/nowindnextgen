@@ -1,0 +1,1 @@
+A new effort implementing MSX hardware in multi-platform software. This new effort was started after roughly five years of meddling around with the first version (1.x) that will never see the light of day :) We will now strife to create a working emulator asap. (even if features will be limited at first)
